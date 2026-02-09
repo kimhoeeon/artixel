@@ -1,0 +1,123 @@
+package com.mtf.artixel.controller;
+
+import com.mtf.artixel.mapper.GameMapper;
+import com.mtf.artixel.service.GameDataService;
+import com.mtf.artixel.service.GameMngService;
+import com.mtf.artixel.vo.GameVO;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+
+@Slf4j
+@Controller
+@RequestMapping("/mng/game")
+@RequiredArgsConstructor
+public class GameMngController {
+
+    private final GameDataService gameDataService;
+    private final GameMngService gameMngService;
+    private final GameMapper gameMapper;
+
+    /**
+     * 경기 데이터 관리 페이지 (목록 + 동기화 버튼)
+     */
+    @GetMapping("/syncPage")
+    public String syncPage(Model model,
+                           @RequestParam(value = "year", required = false) String year,
+                           @RequestParam(value = "month", required = false) String month) {
+
+        // 기본값: 현재 날짜
+        LocalDate now = LocalDate.now();
+        if (year == null) year = String.valueOf(now.getYear());
+        if (month == null) month = String.format("%02d", now.getMonthValue());
+
+        // 목록 조회
+        String yearMonth = year + "-" + month;
+        List<GameVO> games = gameMapper.selectGameListByMonth(yearMonth);
+
+        model.addAttribute("games", games);
+        model.addAttribute("curYear", year);
+        model.addAttribute("curMonth", month);
+
+        return "mng/game/game_list";
+    }
+
+    /**
+     * [액션] 월간 데이터 동기화
+     */
+    @GetMapping("/syncMonthly")
+    @ResponseBody
+    public String manualSync(@RequestParam String year, @RequestParam String month) {
+        try {
+            gameDataService.syncMonthlyData(year, month);
+            return "ok";
+        } catch (Exception e) {
+            log.error("동기화 실패", e);
+            return "fail: " + e.getMessage();
+        }
+    }
+
+    /**
+     * [액션] 연간 데이터 동기화
+     */
+    @GetMapping("/syncYearly")
+    @ResponseBody
+    public String syncYearlyData(@RequestParam String year) {
+        try {
+            gameDataService.syncYearlyData(year);
+            return "ok";
+        } catch (Exception e) {
+            log.error("연간 동기화 실패", e);
+            return "fail: " + e.getMessage();
+        }
+    }
+
+    // 경기 관리 목록 (동기화 페이지 겸용)
+    // 목록 페이지
+    @GetMapping("/list")
+    public String gameList(Model model, @RequestParam(value = "ym", required = false) String ym) {
+        if (ym == null) {
+            ym = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM"));
+        }
+
+        List<GameVO> list = gameMngService.getGameList(ym);
+        model.addAttribute("list", list);
+        model.addAttribute("ym", ym);
+
+        return "mng/game/game_list";
+    }
+
+    // 상세 조회 (AJAX)
+    @GetMapping("/get")
+    @ResponseBody
+    public GameVO getGame(@RequestParam("gameId") Long gameId) {
+        return gameMngService.getGame(gameId);
+    }
+
+    // 저장
+    @PostMapping("/save")
+    public String saveGame(GameVO game) {
+        gameMngService.saveGame(game);
+        String ym = game.getGameDate().substring(0, 7); // yyyy-MM
+        return "redirect:/mng/game/list?ym=" + ym;
+    }
+
+    // 삭제
+    @PostMapping("/delete")
+    @ResponseBody
+    public String deleteGame(@RequestParam("gameId") Long gameId) {
+        try {
+            gameMngService.deleteGame(gameId);
+            return "ok";
+        } catch (Exception e) {
+            return "fail";
+        }
+    }
+
+}

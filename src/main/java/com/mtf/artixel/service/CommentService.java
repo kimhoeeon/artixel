@@ -1,0 +1,46 @@
+package com.mtf.artixel.service;
+
+import com.mtf.artixel.dto.CommentDTO;
+import com.mtf.artixel.mapper.CommentMapper;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+public class CommentService {
+
+    private final CommentMapper commentMapper;
+
+    /**
+     * 내가 쓴 댓글 목록
+     */
+    public List<CommentDTO> getMyComments(Long memberId) {
+        return commentMapper.selectMyCommentList(memberId);
+    }
+
+    /**
+     * 댓글 삭제 (작성자 본인 OR 일기 주인)
+     */
+    @Transactional
+    public void deleteComment(Long commentId, Long requestMemberId) throws Exception {
+        int deletedCount = commentMapper.deleteComment(commentId, requestMemberId);
+
+        if (deletedCount == 0) {
+            throw new Exception("삭제 권한이 없거나 이미 삭제된 댓글입니다.");
+        }
+    }
+
+    // 일기별 댓글 조회
+    public List<CommentDTO> getCommentsByDiaryId(Long diaryId) {
+        return commentMapper.selectCommentListByDiaryId(diaryId);
+    }
+
+    // 댓글 작성
+    @Transactional
+    public void writeComment(CommentDTO comment) {
+        commentMapper.insertComment(comment);
+    }
+
+}

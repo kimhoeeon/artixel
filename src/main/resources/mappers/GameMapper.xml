@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mtf.artixel.mapper.GameMapper">
+
+    <insert id="upsertGame" parameterType="com.mtf.artixel.vo.GameVO">
+        INSERT INTO games (api_game_id,
+                           season,
+                           game_type,
+                           game_date,
+                           game_time,
+                           dh_code,
+                           stadium_id,
+                           home_team_code,
+                           away_team_code,
+                           home_starter,
+                           away_starter,
+                           score_home,
+                           score_away,
+                           winning_team,
+                           status,
+                           cancel_reason,
+                           mvp_player,
+                           data_source,
+                           created_at,
+                           updated_at)
+        VALUES (#{apiGameId},
+                #{season},
+                #{gameType},
+                #{gameDate},
+                #{gameTime},
+                #{dhCode},
+                #{stadiumId},
+                #{homeTeamCode},
+                #{awayTeamCode},
+                #{homeStarter},
+                #{awayStarter},
+                #{scoreHome},
+                #{scoreAway},
+                #{winningTeam},
+                #{status},
+                #{cancelReason},
+                #{mvpPlayer},
+                #{dataSource},
+                NOW(),
+                NOW())
+        ON DUPLICATE KEY UPDATE season         = VALUES(season),
+                                game_type      = VALUES(game_type),
+                                game_date      = VALUES(game_date),
+                                game_time      = VALUES(game_time),
+                                dh_code        = VALUES(dh_code),
+                                stadium_id     = VALUES(stadium_id),
+                                home_team_code = VALUES(home_team_code),
+                                away_team_code = VALUES(away_team_code),
+                                home_starter   = VALUES(home_starter),
+                                away_starter   = VALUES(away_starter),
+                                score_home     = VALUES(score_home),
+                                score_away     = VALUES(score_away),
+                                winning_team   = VALUES(winning_team),
+                                status         = VALUES(status),
+                                cancel_reason  = VALUES(cancel_reason),
+                                mvp_player     = VALUES(mvp_player),
+                                updated_at     = NOW()
+    </insert>
+
+    <select id="selectGamesByDate" resultType="com.mtf.artixel.vo.GameVO">
+        SELECT
+            g.game_id,
+            g.api_game_id,
+            g.game_date,
+            g.game_time,
+            g.game_type,
+            g.status,
+            g.score_home,
+            g.score_away,
+            g.home_team_code,
+            g.away_team_code,
+            g.stadium_id,
+
+            -- 선발투수 및 취소사유
+            g.home_starter,
+            g.away_starter,
+            g.cancel_reason,
+
+            -- [홈팀 정보]
+            ht.name_kr AS homeTeamName,
+            ht.logo_image_url AS homeTeamLogo,
+
+            -- [원정팀 정보]
+            at.name_kr AS awayTeamName,
+            at.logo_image_url AS awayTeamLogo,
+
+            s.name AS stadiumName,
+
+            -- 내 일기 ID (작성 여부 확인용)
+            d.diary_id AS diaryId,
+
+            d.hero_name AS myHero
+
+        FROM games g
+                 -- 1. 홈팀 조인
+                 LEFT JOIN teams ht ON g.home_team_code = ht.team_code
+            -- 2. 원정팀 조인
+                 LEFT JOIN teams at ON g.away_team_code = at.team_code
+            -- 3. 구장 정보 조인
+                 LEFT JOIN stadiums s ON g.stadium_id = s.stadium_id
+            -- 4. 내 일기 조인 (로그인한 멤버의 해당 경기 일기 확인)
+                 LEFT JOIN diaries d ON g.game_id = d.game_id AND d.member_id = #{memberId}
+
+        WHERE g.game_date = #{date}
+        ORDER BY g.game_time ASC
+    </select>
+
+    <select id="selectGameByDateAndTeams" resultType="com.mtf.artixel.vo.GameVO">
+        SELECT * FROM games
+        WHERE game_date = #{gameDate}
+          AND home_team_code = #{homeTeam}
+          AND away_team_code = #{awayTeam}
+    </select>
+
+    <select id="selectGameByDateAndTeam" resultType="com.mtf.artixel.vo.GameVO">
+        SELECT * FROM games
+        WHERE game_date = #{gameDate}
+          AND (home_team_code = #{teamCode} OR away_team_code = #{teamCode})
+        LIMIT 1
+    </select>
+
+    <select id="selectTodayGameByTeam" resultType="com.mtf.artixel.vo.GameVO">
+        SELECT * FROM games
+        WHERE (home_team_code = #{teamCode} OR away_team_code = #{teamCode})
+          AND game_date = CURDATE()
+        LIMIT 1
+    </select>
+
+    <select id="selectTodayGame" resultType="com.mtf.artixel.vo.GameVO">
+        SELECT g.*,
+               t1.name_kr        AS homeTeamName,
+               t2.name_kr        AS awayTeamName,
+               s.name            AS stadiumName,
+               t1.logo_image_url AS homeTeamLogo,
+               t2.logo_image_url AS awayTeamLogo
+        FROM games g
+                 JOIN teams t1 ON g.home_team_code = t1.team_code
+                 JOIN teams t2 ON g.away_team_code = t2.team_code
+                 JOIN stadiums s ON g.stadium_id = s.stadium_id
+        WHERE g.game_date = CURRENT_DATE()
+          AND (g.home_team_code = #{teamCode} OR g.away_team_code = #{teamCode})
+    </select>
+
+    <select id="selectGameById" resultType="com.mtf.artixel.vo.GameVO">
+        SELECT
+            g.*,
+            s.name AS stadiumName,
+            t1.name_kr AS homeTeamName,
+            t2.name_kr AS awayTeamName
+        FROM games g
+                 LEFT JOIN stadiums s ON g.stadium_id = s.stadium_id
+                 LEFT JOIN teams t1 ON g.home_team_code = t1.team_code
+                 LEFT JOIN teams t2 ON g.away_team_code = t2.team_code
+        WHERE g.game_id = #{gameId}
+    </select>
+
+    <update id="updateGameScoreAndStatus">
+        UPDATE games
+        SET score_home = #{scoreHome},
+            score_away = #{scoreAway},
+            status = #{status},
+            /* winningTeam 파라미터 값("HOME" 등)을 무시하고, 실제 팀 코드를 넣는 로직 */
+            winning_team = CASE
+                               WHEN #{status} = 'FINISHED' AND #{scoreHome} > #{scoreAway} THEN home_team_code
+                               WHEN #{status} = 'FINISHED' AND #{scoreAway} > #{scoreHome} THEN away_team_code
+                               WHEN #{status} = 'FINISHED' AND #{scoreHome} = #{scoreAway} THEN 'DRAW'
+                               ELSE NULL
+                END,
+            updated_at = NOW()
+        WHERE api_game_id = #{apiGameId}
+    </update>
+
+    <select id="selectGameByApiId" resultType="com.mtf.artixel.vo.GameVO">
+        SELECT * FROM games WHERE api_game_id = #{apiGameId}
+    </select>
+
+    <select id="selectStadiumById" resultType="com.mtf.artixel.vo.StadiumVO">
+        SELECT * FROM stadiums WHERE stadium_id = #{stadiumId}
+    </select>
+
+    <select id="selectGameListByMonth" resultType="com.mtf.artixel.vo.GameVO">
+        SELECT
+            g.*,
+            s.name AS stadiumName,
+            t1.name_kr AS homeTeamName,
+            t2.name_kr AS awayTeamName
+        FROM games g
+                 LEFT JOIN stadiums s ON g.stadium_id = s.stadium_id
+                 LEFT JOIN teams t1 ON g.home_team_code = t1.team_code
+                 LEFT JOIN teams t2 ON g.away_team_code = t2.team_code
+        WHERE g.game_date LIKE CONCAT(#{yearMonth}, '%')
+        ORDER BY g.game_date ASC, g.game_time ASC
+    </select>
+
+    <select id="countTodayGames" resultType="int">
+        SELECT COUNT(*) FROM games WHERE game_date = CURDATE()
+    </select>
+
+</mapper>

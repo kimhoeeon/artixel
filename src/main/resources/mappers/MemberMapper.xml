@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mtf.artixel.mapper.MemberMapper">
+
+    <insert id="insertMember" parameterType="com.mtf.artixel.vo.MemberVO" useGeneratedKeys="true" keyProperty="memberId">
+        INSERT INTO members (email,
+                             password,
+                             nickname,
+                             phone_number,
+                             birthdate,
+                             gender,
+                             my_team_code,
+                             social_provider,
+                             social_uid,
+                             role,
+                             status,
+                             marketing_agree, created_at,
+                             updated_at)
+        VALUES (#{email},
+                #{password},
+                #{nickname},
+                #{phoneNumber},
+                #{birthdate},
+                #{gender},
+                #{myTeamCode},
+                IFNULL(#{socialProvider}, 'NONE'),
+                #{socialUid},
+                'USER',
+                'ACTIVE',
+                IFNULL(#{marketingAgree}, 'N'), NOW(),
+                NOW())
+    </insert>
+
+    <select id="selectMemberByEmail" parameterType="string" resultType="com.mtf.artixel.vo.MemberVO">
+        SELECT * FROM members WHERE email = #{email}
+    </select>
+
+    <select id="countByNickname" parameterType="string" resultType="int">
+        SELECT COUNT(*) FROM members WHERE nickname = #{nickname}
+    </select>
+
+    <select id="selectMemberById" parameterType="long" resultType="com.mtf.artixel.vo.MemberVO">
+        SELECT
+            m.*,
+            t.name_kr AS myTeamName
+        FROM members m
+        LEFT JOIN teams t ON m.my_team_code = t.team_code
+        WHERE m.member_id = #{memberId}
+    </select>
+
+    <update id="updateLastLogin" parameterType="long">
+        UPDATE members
+        SET last_login_at = NOW()
+        WHERE member_id = #{memberId}
+    </update>
+
+    <update id="updateMemberInfo" parameterType="com.mtf.artixel.vo.MemberVO">
+        UPDATE members
+        SET
+        nickname = #{nickname},
+        updated_at = NOW()
+        <if test="profileImage != null">
+            , profile_image = #{profileImage}
+        </if>
+        WHERE member_id = #{memberId}
+    </update>
+
+    <update id="updatePassword">
+        UPDATE members
+        SET
+            password = #{newPassword},
+            updated_at = NOW()
+        WHERE
+            member_id = #{memberId}
+    </update>
+
+    <update id="updateMemberTeam" parameterType="com.mtf.artixel.vo.MemberVO">
+        UPDATE members
+        SET
+            my_team_code = #{myTeamCode},
+            team_change_date = NOW(),
+            updated_at = NOW()
+        WHERE
+            member_id = #{memberId}
+    </update>
+
+    <update id="withdrawMember">
+        UPDATE members
+        SET
+            status = 'WITHDRAWN',
+            updated_at = NOW()
+        WHERE
+            member_id = #{memberId}
+    </update>
+
+    <select id="selectMemberList" resultType="com.mtf.artixel.vo.MemberVO">
+        SELECT
+        member_id,
+        email,
+        nickname,
+        my_team_code,
+        social_provider,
+        role,
+        status,
+        created_at,
+        last_login_at
+        FROM members
+        <where>
+            <if test="keyword != null and keyword != ''">
+                <choose>
+                    <when test="searchType == 'email'">
+                        AND email LIKE CONCAT('%', #{keyword}, '%')
+                    </when>
+                    <when test="searchType == 'nickname'">
+                        AND nickname LIKE CONCAT('%', #{keyword}, '%')
+                    </when>
+                    <otherwise>
+                        AND (email LIKE CONCAT('%', #{keyword}, '%')
+                        OR nickname LIKE CONCAT('%', #{keyword}, '%'))
+                    </otherwise>
+                </choose>
+            </if>
+        </where>
+        ORDER BY created_at DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <select id="countMemberList" resultType="int">
+        SELECT COUNT(*)
+        FROM members
+        <where>
+            <if test="keyword != null and keyword != ''">
+                <choose>
+                    <when test="searchType == 'email'">
+                        AND email LIKE CONCAT('%', #{keyword}, '%')
+                    </when>
+                    <when test="searchType == 'nickname'">
+                        AND nickname LIKE CONCAT('%', #{keyword}, '%')
+                    </when>
+                    <otherwise>
+                        AND (email LIKE CONCAT('%', #{keyword}, '%')
+                        OR nickname LIKE CONCAT('%', #{keyword}, '%'))
+                    </otherwise>
+                </choose>
+            </if>
+        </where>
+    </select>
+
+    <delete id="deleteAuthCode">
+        DELETE FROM auth_codes WHERE phone_number = #{phoneNumber}
+    </delete>
+
+    <insert id="insertAuthCode">
+        INSERT INTO auth_codes (phone_number, code, type, is_verified, expires_at, created_at)
+        VALUES (#{phoneNumber}, #{authCode}, #{type}, 0, DATE_ADD(NOW(), INTERVAL 3 MINUTE), NOW())
+    </insert>
+
+    <select id="selectAuthCode" resultType="string">
+        SELECT code FROM auth_codes
+        WHERE phone_number = #{phoneNumber}
+          AND is_verified = 0
+        ORDER BY auth_id DESC LIMIT 1
+    </select>
+
+    <select id="selectAuthCodeExpireTime" resultType="java.time.LocalDateTime">
+        SELECT expires_at FROM auth_codes
+        WHERE phone_number = #{phoneNumber}
+        ORDER BY auth_id DESC LIMIT 1
+    </select>
+
+    <update id="updateAuthCodeVerified">
+        UPDATE auth_codes SET is_verified = 1 WHERE phone_number = #{phoneNumber}
+    </update>
+
+    <select id="findMemberByBirthAndPhone" resultType="com.mtf.artixel.vo.MemberVO">
+        SELECT email, nickname
+        FROM members
+        WHERE birthdate = #{birthdate}
+          AND phone_number = #{phoneNumber}
+          AND status = 'ACTIVE'
+    </select>
+
+    <select id="findMemberByNameAndPhone" resultType="com.mtf.artixel.vo.MemberVO">
+        SELECT * FROM members
+        WHERE nickname = #{userName}  AND phone_number = #{phoneNumber}
+          AND status = 'ACTIVE'
+    </select>
+
+    <select id="findMemberByEmailAndPhone" resultType="com.mtf.artixel.vo.MemberVO">
+        SELECT * FROM members
+        WHERE email = #{email}
+          AND phone_number = #{phoneNumber}
+          AND status = 'ACTIVE'
+    </select>
+
+    <update id="updateNickname">
+        UPDATE members
+        SET nickname = #{nickname},
+            updated_at = NOW()
+        WHERE member_id = #{memberId}
+    </update>
+
+    <update id="updateAlarmSetting" parameterType="com.mtf.artixel.vo.MemberVO">
+        UPDATE members
+        SET push_yn         = #{pushYn},
+            game_alarm      = #{gameAlarm},
+            friend_alarm    = #{friendAlarm},
+            marketing_agree = #{marketingAgree},
+            updated_at      = NOW()
+        WHERE member_id = #{memberId}
+    </update>
+
+    <update id="updatePushToken">
+        UPDATE members
+        SET fcm_token = #{token}
+        WHERE member_id = #{memberId}
+    </update>
+
+    <update id="updateDeviceInfo" parameterType="com.mtf.artixel.vo.MemberVO">
+        UPDATE members
+        SET
+            device_platform = #{devicePlatform},
+            device_model    = #{deviceModel},
+            os_version      = #{osVersion},
+            app_version     = #{appVersion},
+            device_uuid     = #{deviceUuid},
+            updated_at      = NOW()
+        WHERE member_id = #{memberId}
+    </update>
+
+    <select id="selectFollowingList" resultType="com.mtf.artixel.dto.FollowDTO">
+        SELECT
+            m.member_id,
+            m.nickname,
+            m.my_team_code AS teamCode,
+            1 AS isFollowing -- 팔로잉 목록이므로 무조건 true
+        FROM follows f
+        JOIN members m ON f.following_id = m.member_id
+        WHERE f.follower_id = #{targetMemberId}
+        ORDER BY f.created_at DESC
+    </select>
+
+    <select id="selectFollowerList" resultType="com.mtf.artixel.dto.FollowDTO">
+        SELECT
+            m.member_id,
+            m.nickname,
+            m.my_team_code AS teamCode,
+            -- 맞팔 여부 확인 (나도 그 사람을 팔로우 중인가?)
+            (SELECT COUNT(*) FROM follows f2
+             WHERE f2.follower_id = #{myMemberId} AND f2.following_id = m.member_id) AS isFollowing
+        FROM follows f
+        JOIN members m ON f.follower_id = m.member_id
+        WHERE f.following_id = #{targetMemberId}
+        ORDER BY f.created_at DESC
+    </select>
+
+    <insert id="insertFollow">
+        INSERT IGNORE INTO follows (follower_id, following_id, created_at)
+        VALUES (#{myMemberId}, #{targetMemberId}, NOW())
+    </insert>
+
+    <delete id="deleteFollow">
+        DELETE FROM follows
+        WHERE follower_id = #{myMemberId} AND following_id = #{targetMemberId}
+    </delete>
+
+    <select id="checkFollow" resultType="int">
+        SELECT COUNT(*)
+        FROM follows
+        WHERE follower_id = #{followerId}
+          AND following_id = #{followingId}
+    </select>
+
+    <select id="searchMembers" resultType="com.mtf.artixel.vo.MemberVO">
+        SELECT
+            member_id, nickname, profile_image, my_team_code,
+            (SELECT name_kr FROM teams WHERE team_code = members.my_team_code) AS myTeamName
+        FROM members
+        WHERE nickname LIKE CONCAT('%', #{keyword}, '%')
+          AND member_id != #{myMemberId}
+        ORDER BY nickname ASC
+    </select>
+
+    <select id="countTodayMembers" resultType="int">
+        SELECT COUNT(*) FROM members WHERE DATE(created_at) = CURDATE()
+    </select>
+
+    <select id="selectBySocialId" resultType="com.mtf.artixel.vo.MemberVO">
+        SELECT * FROM members
+        WHERE social_provider = #{socialProvider}
+          AND social_uid = #{socialUid}
+    </select>
+
+    <insert id="insertSocialMember" parameterType="com.mtf.artixel.vo.MemberVO"
+            useGeneratedKeys="true" keyProperty="memberId">
+        INSERT INTO members (
+            email, nickname, password, phone_number,
+            my_team_code, social_provider, social_uid,
+            role, status, profile_image, marketing_agree, created_at, updated_at
+        ) VALUES (
+                     #{email}, #{nickname}, NULL, NULL,
+                     'NONE', #{socialProvider}, #{socialUid},
+                     'USER', 'ACTIVE', #{profileImage}, 'N', NOW(), NOW()
+                 )
+    </insert>
+
+    <update id="updateSocialInfo">
+        UPDATE members
+        SET social_provider = #{socialProvider},
+            social_uid = #{socialUid},
+            profile_image = CASE WHEN profile_image IS NULL THEN #{profileImage} ELSE profile_image END,
+            updated_at = NOW()
+        WHERE email = #{email}
+    </update>
+
+</mapper>

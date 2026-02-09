@@ -1,0 +1,145 @@
+package com.mtf.artixel.service;
+
+import com.mtf.artixel.mapper.DiaryMapper;
+import com.mtf.artixel.vo.DiaryVO;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class DiaryService {
+
+    private final DiaryMapper diaryMapper;
+    // GameMapper는 필요하다면 사용 (예: 경기 존재 여부 확인)
+
+    /**
+     * 일기 작성
+     */
+    @Transactional
+    public Long writeDiary(DiaryVO diary) throws Exception {
+        // 1. 필수값 체크
+        if (diary.getGameId() == null) throw new Exception("경기를 선택해주세요.");
+        if (diary.getOneLineComment() == null || diary.getOneLineComment().isEmpty()) {
+            throw new Exception("한줄평을 입력해주세요.");
+        }
+
+        // 2. 작성 당시 응원팀 스냅샷 저장
+        // (Controller에서 세션의 팀코드를 넣어주겠지만, 한번 더 체크)
+        if (diary.getSnapshotTeamCode() == null) {
+            throw new Exception("응원팀 정보가 없습니다.");
+        }
+
+        // 3. 저장
+        diaryMapper.insertDiary(diary);
+
+        return diary.getDiaryId();
+    }
+
+    /**
+     * 일기 수정
+     */
+    @Transactional
+    public void modifyDiary(DiaryVO diary) throws Exception {
+        int result = diaryMapper.updateDiary(diary);
+        if (result == 0) {
+            throw new Exception("일기 수정에 실패했습니다. (본인 일기가 아니거나 존재하지 않음)");
+        }
+    }
+
+    /**
+     * 일기 상세 조회
+     */
+    public DiaryVO getDiary(Long diaryId) {
+        return diaryMapper.selectDiaryById(diaryId);
+    }
+
+    public List<DiaryVO> getRecentDiaries(Long memberId) {
+        return diaryMapper.selectRecentDiaries(memberId);
+    }
+
+    public List<DiaryVO> getMyDiaryList(Long memberId) {
+        return diaryMapper.selectDiaryList(memberId);
+    }
+
+    // 친구 일기 조회
+    public List<DiaryVO> getFriendDiaryList(Long memberId) {
+        return diaryMapper.selectFriendDiaryList(memberId);
+    }
+
+    // 방문 구장 현황 (총 9개 구장 기준 방문 여부 boolean 리스트 반환)
+    public List<Boolean> getStadiumVisitStatus(Long memberId) {
+        List<Long> visitedIds = diaryMapper.selectVisitedStadiumIds(memberId);
+
+        // KBO 구장 ID 순서대로 체크 (1~9번 구장이라 가정)
+        // 실제 운영 시에는 Stadium 테이블을 조회해서 매핑해야 함.
+        // 여기서는 편의상 1~9번 인덱스에 매핑하여 True/False 반환
+        List<Boolean> statusList = new ArrayList<>();
+        for (long i = 1; i <= 9; i++) {
+            statusList.add(visitedIds.contains(i));
+        }
+        return statusList;
+    }
+
+    // 방문한 구장 개수
+    public int getVisitedStadiumCount(Long memberId) {
+        return diaryMapper.selectVisitedStadiumIds(memberId).size();
+    }
+
+    /**
+     * 일기 삭제 (Soft Delete)
+     */
+    @Transactional
+    public void deleteDiary(Long diaryId, Long memberId) throws Exception {
+        // 상태를 'DELETED'로 변경
+        int result = diaryMapper.updateDiaryStatus(diaryId, memberId, "DELETED");
+
+        if (result == 0) {
+            throw new Exception("삭제 권한이 없거나 이미 삭제된 일기입니다.");
+        }
+
+        log.info("일기 삭제 완료: diaryId={}, memberId={}", diaryId, memberId);
+    }
+
+    // 친구 일기 전체 조회
+    public List<DiaryVO> getAllFriendDiaries(Long memberId) {
+        return diaryMapper.selectAllFriendDiaries(memberId);
+    }
+
+    // 공유 링크 생성 (UUID 발급)
+    @Transactional
+    public String generateShareLink(Long diaryId) {
+        DiaryVO diary = diaryMapper.selectDiaryById(diaryId);
+        if (diary == null) throw new IllegalArgumentException("일기가 존재하지 않습니다.");
+
+        // 이미 UUID가 있다면 기존 값 반환
+        if (diary.getShareUuid() != null && !diary.getShareUuid().isEmpty()) {
+            return diary.getShareUuid();
+        }
+
+        // 없으면 새로 생성 후 저장
+        String uuid = UUID.randomUUID().toString().replace("-", ""); // 깔끔하게 하이픈 제거
+        diaryMapper.updateShareUuid(diaryId, uuid);
+        return uuid;
+    }
+
+    // 공유 일기 조회 (UUID 기반)
+    public DiaryVO getSharedDiary(String uuid) {
+        return diaryMapper.selectDiaryByUuid(uuid);
+    }
+
+    public int countTotalDiaries() {
+        return diaryMapper.countTotalDiaries();
+    }
+
+    public int countTodayDiaries() {
+        return diaryMapper.countTodayDiaries();
+    }
+
+}

@@ -12,6 +12,13 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    // [추가] 생성자: 서버 시작 시 이 로그가 찍혀야 정상입니다.
+    public SecurityConfig() {
+        System.out.println("=======================================");
+        System.out.println(">>>> SecurityConfig가 로딩되었습니다! <<<<");
+        System.out.println("=======================================");
+    }
+
     // Spring Security의 기본 로그인 화면 및 차단 기능을 해제합니다.
     // 기존 인터셉터(AdminInterceptor 등)가 로그인 체크를 수행하므로 여기서는 문을 열어둡니다.
     @Bean

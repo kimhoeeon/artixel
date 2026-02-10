@@ -4,11 +4,20 @@ import com.mtf.artixel.filter.SecurityHeaderFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new HttpsRedirectInterceptor())
+                .addPathPatterns("/**")
+                .excludePathPatterns("/css/**", "/js/**", "/img/**", "/assets/**", "/error/**");
+    }
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         // [중요] 아래 경로의 'your_id' 부분은 실제 Cafe24 아이디로 바꿔야 합니다.

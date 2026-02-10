@@ -13,20 +13,23 @@ public class HttpsRedirectInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        // 1. 로컬 개발 환경(localhost)에서는 리다이렉트 하지 않음
+        // 1. 로컬 개발 환경(localhost)에서는 통과
         String host = request.getServerName();
         if ("localhost".equalsIgnoreCase(host) || "127.0.0.1".equals(host)) {
             return true;
         }
 
-        // 2. 현재 프로토콜 확인 (카페24 프록시 헤더 체크)
-        // X-Forwarded-Proto 헤더는 로드밸런서/프록시가 원본 프로토콜을 알려주는 표준 헤더입니다.
-        String proto = request.getHeader("X-Forwarded-Proto");
+        // 2. Cafe24 호스팅 전용 헤더 확인 (로그 기반 수정)
+        String hostingSsl = request.getHeader("hosting_ssl");   // "on" 이면 HTTPS
+        String serverPort = request.getHeader("x-server_port"); // "443" 이면 HTTPS
 
-        // 헤더가 없으면 기본 secure 상태 확인
-        boolean isSecure = request.isSecure() || "https".equalsIgnoreCase(proto);
+        // 3. HTTPS 여부 판별
+        // 표준 방식(isSecure) OR Cafe24 방식(hosting_ssl, x-server_port) 중 하나라도 만족하면 통과
+        boolean isSecure = request.isSecure()
+                || "on".equalsIgnoreCase(hostingSsl)
+                || "443".equals(serverPort);
 
-        // 3. HTTP라면 HTTPS로 리다이렉트
+        // 4. HTTP라면 HTTPS로 강제 리디렉션
         if (!isSecure) {
             String newUrl = "https://" + host + request.getRequestURI();
             if (request.getQueryString() != null) {
@@ -36,6 +39,6 @@ public class HttpsRedirectInterceptor implements HandlerInterceptor {
             return false; // 요청 중단 및 리다이렉트
         }
 
-        return true; // 통과
+        return true; // HTTPS이므로 통과
     }
 }

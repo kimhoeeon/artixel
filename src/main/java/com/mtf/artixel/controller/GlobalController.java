@@ -1,17 +1,13 @@
 package com.mtf.artixel.controller;
 
 import com.mtf.artixel.dto.MenuItem;
-import com.mtf.artixel.service.AlarmService;
 import com.mtf.artixel.service.MenuService;
-import com.mtf.artixel.vo.MemberVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ui.Model;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Slf4j
@@ -20,7 +16,6 @@ import java.util.List;
 public class GlobalController {
 
     private final MenuService menuService;
-    private final AlarmService alarmService;
 
     /**
      * 모든 요청 시 모델에 'menuItems'를 자동으로 담아줌
@@ -84,20 +79,6 @@ public class GlobalController {
         }
 
         return isGroupActive;
-    }
-
-    // 모든 요청에 대해 실행되어 jsp에서 ${hasUnreadAlarm} 사용 가능하게 함
-    @ModelAttribute
-    public void addGlobalAttributes(HttpServletRequest request, Model model) {
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            MemberVO loginMember = (MemberVO) session.getAttribute("loginMember");
-            if (loginMember != null) {
-                // 읽지 않은 알림 체크
-                int unreadCount = alarmService.getUnreadCount(loginMember.getMemberId());
-                model.addAttribute("hasUnreadAlarm", unreadCount > 0);
-            }
-        }
     }
 
     /**

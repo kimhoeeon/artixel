@@ -2,10 +2,6 @@ package com.mtf.artixel.controller;
 
 import com.mtf.artixel.mapper.AdminMngMapper;
 import com.mtf.artixel.service.AdminService;
-import com.mtf.artixel.service.DiaryService;
-import com.mtf.artixel.service.GameService;
-import com.mtf.artixel.service.MemberService;
-import com.viotory.diary.service.*;
 import com.mtf.artixel.vo.AdminVO;
 import com.mtf.artixel.vo.GameVO;
 import lombok.RequiredArgsConstructor;
@@ -27,9 +23,6 @@ import java.util.List;
 public class AdminController {
 
     private final AdminService adminService;     // DB 로그인용
-    private final GameService gameService;
-    private final MemberService memberService;
-    private final DiaryService diaryService;
 
     private final AdminMngMapper adminMngMapper;
 
@@ -97,7 +90,7 @@ public class AdminController {
         // [대시보드 통계 데이터 조회]
 
         // 1. 회원 현황
-        int totalMembers = memberService.countMembers("", "");
+        /*int totalMembers = memberService.countMembers("", "");
         int todayMembers = memberService.countTodayMembers();
 
         // 2. 일기 현황
@@ -113,7 +106,7 @@ public class AdminController {
         model.addAttribute("totalDiaries", totalDiaries);
         model.addAttribute("todayDiaries", todayDiaries);
         //model.addAttribute("todayGames", todayGames);
-        model.addAttribute("todayGameList", todayGameList);
+        model.addAttribute("todayGameList", todayGameList);*/
 
         // 시스템 상태 정보 수집
         addSystemStatus(model);

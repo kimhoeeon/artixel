@@ -1,439 +1,290 @@
-/**
- * [공통] 브라우저 기본 Alert 오버라이딩
- * 기본 alert() 호출 시 커스텀 팝업(showPopup)이 뜨도록 변경
- * 사용법: alert('메시지', function() { 페이지이동 등 후속작업 });
- */
-const nativeAlert = window.alert; // 기본 alert 백업
+$(document).ready(function () {
 
-window.alert = function(message, callback) {
-    // showPopup 함수가 정의되어 있으면(popup.jsp가 include된 페이지면) 커스텀 팝업 사용
-    if (typeof showPopup === 'function') {
-        showPopup('alert', message, callback);
-    } else {
-        // popup.jsp가 없는 페이지라면 기본 alert 사용
-        nativeAlert(message);
-        if (callback) callback();
-    }
-};
-
-// [옵션] Confirm도 커스텀으로 쓰고 싶다면 아래 함수 사용 (기존 confirm은 동기식이라 오버라이딩 불가)
-window.customConfirm = function(message, callback, cancelCallback) {
-    if (typeof showPopup === 'function') {
-        // showPopup이 취소 콜백을 4번째 인자로 지원한다고 가정 (또는 수정 필요)
-        showPopup('confirm', message, callback, cancelCallback);
-    } else {
-        if(confirm(message)) {
-            if(callback) callback();
+    // header 고정
+    $(window).on('scroll', function () {
+        if ($(window).scrollTop()) {
+            $('#header').addClass('active');
         } else {
-            // 기본 confirm에서 취소 시 실행
-            if(cancelCallback) cancelCallback();
-        }
-    }
-};
-
-// ios 높이 대응
-function setVH() {
-  document.documentElement.style.setProperty('--vh', (window.innerHeight * 0.01) + 'px');
-}
-setVH();
-window.addEventListener('resize', setVH);
-
-// 로그인
-const form = document.getElementById('loginForm');
-const btn = document.getElementById('loginBtn');
-
-const idInput = document.getElementById('loginId');
-const pwInput = document.getElementById('loginPw');
-const pwConfirmInput = document.getElementById('loginPwConfirm');
-
-const idField = idInput ? idInput.closest('.login-field') : null;
-const pwField = pwInput ? pwInput.closest('.login-field') : null;
-
-const pwConfirmField = pwConfirmInput ? pwConfirmInput.closest('.login-field') : null;
-
-const togglePw = document.getElementById('togglePw');
-const togglePwCheck = document.getElementById('togglePwCheck');
-
-const joinBtn = document.getElementById('joinBtn');
-const loginMessage = document.getElementById('loginMessage');
-
-function clearFormErrorUI(config) {
-    const { fields, messageEl } = config || {};
-
-    if (fields) {
-        Object.values(fields).forEach(el => {
-            if (el) el.classList.remove('is-error');
-        });
-    }
-
-    if (messageEl) {
-        messageEl.textContent = '';
-        messageEl.className = 'login-message';
-        messageEl.classList.remove('is-show', 'is-error');
-    }
-}
-
-function showFormErrorUI(config, { message = '', errorFields = [] } = {}) {
-    const { fields, messageEl } = config || {};
-
-    if (fields) {
-        Object.entries(fields).forEach(([name, el]) => {
-        if (!el) return;
-            el.classList.toggle('is-error', errorFields.includes(name));
-        });
-    }
-
-    if (messageEl && message) {
-        messageEl.textContent = message;
-            messageEl.classList.add('is-show', 'is-error');
-    }
-}
-
-const LOGIN_UI = {
-    fields: {
-        loginId: idField,
-        loginPw: pwField,
-        loginPwConfirm: pwConfirmField
-    },
-    messageEl: loginMessage
-};
-
-function clearLoginErrorUI() {
-    clearFormErrorUI(LOGIN_UI);
-}
-
-function showLoginErrorUI({ message = '', errorFields = [] }) {
-    showFormErrorUI(LOGIN_UI, { message, errorFields });
-}
-
-
-function setupPasswordToggle(inputEl, btnEl) {
-    if (!inputEl || !btnEl) return;
-        const img = btnEl.querySelector('img');
-    if (!img) return;
-
-    btnEl.addEventListener('click', () => {
-        const isHidden = inputEl.type === 'password';
-
-        inputEl.type = isHidden ? 'text' : 'password';
-
-        img.src = isHidden ? '/img/pass_on.svg' : '/img/pass_off.svg';
-
-        img.alt = isHidden ? '비밀번호 숨김' : '비밀번호 보기';
-        btnEl.setAttribute('aria-label', isHidden ? '비밀번호 숨김' : '비밀번호 표시');
-    });
-}
-
-setupPasswordToggle(pwInput, togglePw);
-setupPasswordToggle(pwConfirmInput, togglePwCheck);
-
-// 로그인폼
-/*if (form && btn) {
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        clearLoginErrorUI();
-
-        btn.classList.add('is-loading');
-        btn.disabled = true;
-
-        await new Promise(r => setTimeout(r, 700));
-
-        const serverResponse = {
-            success: false,
-            message: '입력하신 정보를 다시 확인해 주세요.',
-            error_fields: ['loginId', 'loginPw']
-        };
-
-        btn.classList.remove('is-loading');
-        btn.disabled = false;
-
-        if (serverResponse.success) return;
-
-        showLoginErrorUI({
-        message: serverResponse.message,
-        errorFields: serverResponse.error_fields || []
-        });
-
-        const first = (serverResponse.error_fields || [])[0];
-        if (first === 'loginId' && idInput) idInput.focus();
-        if (first === 'loginPw' && pwInput) pwInput.focus();
-    });
-}*/
-
-// 인증번호 입력 6자리
-const numberCert = document.getElementById('number_cert');
-const certCheckIcon = document.getElementById('certCheckIcon');
-
-if (numberCert && certCheckIcon) {
-    numberCert.addEventListener('input', () => {
-        const v = numberCert.value.trim();
-
-        if (v.length === 6) {
-        certCheckIcon.classList.add('is-show');
-        } else {
-        certCheckIcon.classList.remove('is-show');
+            $('#header').removeClass('active');
         }
     });
-}
 
-const keyRadios = document.querySelectorAll('.car-info_box .btn_wrap input');
-
-if (keyRadios.length && typeof enableNext === 'function') {
-    keyRadios.forEach(radio => {
-        radio.addEventListener('change', () => {
-            enableNext();
-        });
-    });
-}
-
-document.body.classList.add('is-loading');
-
-// API 완료 후
-document.body.classList.remove('is-loading');
-
-
-// 회원가입 동의하기
-document.addEventListener('DOMContentLoaded', () => {
-    const agreeAll = document.getElementById('agreeAll');
-    const items = document.querySelectorAll('.agree-item');
-    const nextBtn = document.getElementById('termsNext');
-
-    if (!agreeAll || !items.length || !nextBtn) return;
-
-    function updateStateFromItems() {
-        // 모든 항목이 체크됐는지
-        const allChecked = Array.from(items).every(i => i.checked);
-        agreeAll.checked = allChecked;
-
-        // 필수 항목이 모두 체크됐는지
-        const requiredOk = Array.from(items)
-        .filter(i => i.dataset.required === 'true')
-        .every(i => i.checked);
-
-        nextBtn.disabled = !requiredOk;
-    }
-
-    // 모두 동의 클릭 시 → 전체 동기화
-    agreeAll.addEventListener('change', () => {
-        const checked = agreeAll.checked;
-        items.forEach(i => {
-        i.checked = checked;
-        });
-        updateStateFromItems();
+    // 햄버거 메뉴
+    $('#header .hamberg').click(function () {
+        $(this).children('span').toggleClass('on');
+        $('#header .nav_wrap').toggleClass('on');
     });
 
-    // 각 항목 변화 시 → 전체/다음버튼 상태 갱신
-    items.forEach(i => {
-        i.addEventListener('change', updateStateFromItems);
-    });
+    // header 이벤트
+    function setMenuEvents() {
+        $('#header .menu > li').off('mouseover mouseleave click');
+        $('#header .lang').off('mouseover mouseout');
 
-    // 초기 상태 한 번 맞춰주기
-    updateStateFromItems();
-
-    // (옵션) 다음 버튼 클릭 시 값 확인
-    nextBtn.addEventListener('click', () => {
-        const result = {
-            all: agreeAll.checked,
-            service: document.getElementById('agreeService')?.checked || false,
-            privacy: document.getElementById('agreePrivacy')?.checked || false,
-            marketing: document.getElementById('agreeMarketing')?.checked || false
-        };
-        //console.log('약관 동의 상태:', result);
-        // TODO: 서버 전송 or 다음 페이지 이동
-    });
-});
-
-// 모달
-document.addEventListener('DOMContentLoaded', () => {
-    const sheetBackdrop = document.getElementById('selectSheet');
-    const sheetTitleEl  = document.getElementById('selectSheetTitle');
-    const sheetListEl   = document.getElementById('selectSheetList');
-    const sheetApplyBtn = document.getElementById('selectSheetApply');
-    const sheetCloseBtn = document.getElementById('selectSheetClose');
-    const sheetCancelBtn = document.getElementById('selectSheetCancel');
-
-    if (!sheetBackdrop || !sheetListEl || !sheetApplyBtn) return;
-
-    let currentTrigger = null;
-    let currentName    = '';
-    let currentValue   = '';
-    let tempValue      = '';
-
-    function openSelectSheet() {
-        sheetBackdrop.classList.add('is-open');
-    }
-
-    function closeSelectSheet() {
-        sheetBackdrop.classList.remove('is-open');
-        currentTrigger = null;
-        currentName = '';
-        currentValue = '';
-        tempValue = '';
-        sheetApplyBtn.disabled = true;
-    }
-
-    function renderOptions(options = []) {
-        sheetListEl.innerHTML = '';
-
-        const extraClass = currentTrigger?.dataset.selectClass || '';
-
-        options.forEach(label => {
-            const btn = document.createElement('button');
-                btn.type = 'button';
-                btn.className = `select-sheet_option ${extraClass}`;
-                btn.dataset.value = label;
-                btn.innerHTML = `<span>${label}</span>`;
-
-                if (label === currentValue) {
-                btn.classList.add('is-selected');
-                tempValue = currentValue;
-                sheetApplyBtn.disabled = false;
-            }
-
-            btn.addEventListener('click', () => {
-                sheetListEl
-                    .querySelectorAll('.select-sheet_option.is-selected')
-                    .forEach(el => el.classList.remove('is-selected'));
-
-                btn.classList.add('is-selected');
-                tempValue = btn.dataset.value;
-                sheetApplyBtn.disabled = false;
+        const slideMenu = (selector, child) => {
+            $(selector).on('mouseover', function () {
+                $(this).children(child).stop().slideDown();
+            }).on('mouseleave', function () {
+                $(this).children(child).stop().slideUp();
             });
-
-            sheetListEl.appendChild(btn);
-        });
-    }
-
-    document.querySelectorAll('.select-field').forEach(field => {
-        field.addEventListener('click', () => {
-        currentTrigger = field;
-
-        currentName = field.dataset.selectName || '';
-        if (!currentName) return;
-
-        const optionList = SELECT_DATA[currentName] || [];
-        const hiddenInput = document.querySelector(`input[name="${currentName}"]`);
-        currentValue = hiddenInput?.value || '';
-
-        if (sheetTitleEl) {
-            sheetTitleEl.textContent = field.dataset.selectTitle || '항목 선택';
-        }
-
-        renderOptions(optionList);
-        openSelectSheet();
-        });
-    });
-    
-    const SELECT_DATA = {
-            game: [
-                "[잠실 야구장] LG vs 두산 12. 08 18:30",
-                "[잠실 야구장] LG vs 두산 12. 09 18:30",
-                "[잠실 야구장] LG vs 두산 12. 10 18:30",
-                "[잠실 야구장] LG vs 두산 12. 11 18:30",
-                "[잠실 야구장] LG vs 두산 12. 12 18:30"
-            ],
-
-            ace: [
-                "[LG트윈스] 김엘지1",
-                "[LG트윈스] 김엘지2",
-                "[LG트윈스] 김엘지3",
-                "[LG트윈스] 김엘지4",
-                "[LG트윈스] 김엘지5",
-                "[LG트윈스] 김엘지6",
-                "[LG트윈스] 김엘지7",
-                "[LG트윈스] 김엘지8",
-                "[LG트윈스] 김엘지9"
-            ]
         };
 
-    sheetApplyBtn.addEventListener('click', () => {
-        if (!currentTrigger || !currentName || !tempValue) {
-            closeSelectSheet();
-            return;
+        if (window.innerWidth >= 899) {
+            slideMenu('#header .menu > li:has(.submenu)', '.submenu');
+            slideMenu('#header .lang', '.langmenu');
+        } else {
+            $('#header .menu > li').on('click', function () {
+                const $submenu = $(this).children('.submenu');
+                $('.submenu').not($submenu).slideUp();
+                $submenu.slideToggle();
+            }).each(function () {
+                if ($(this).children('.submenu').length > 0) {
+                    $(this).children('a').attr('href', 'javascript:void(0);');
+                }
+            });
         }
+    }
 
-        const hiddenInput = document.querySelector(`input[name="${currentName}"]`);
-        if (hiddenInput) hiddenInput.value = tempValue;
+    $(window).on('resize', setMenuEvents); // 화면 크기 변경 시 재설정
+    $(document).ready(setMenuEvents); // 초기 로드 시 설정
 
-        const valueSpan = currentTrigger.querySelector('.select-field_value');
-        if (valueSpan) {
-        valueSpan.textContent = tempValue;
-        valueSpan.classList.remove('is-placeholder');
-        }
 
-        closeSelectSheet();
+    $('.parallax_sec').each(function () {
+        const img = $(this).find('.parallax_img');
+        const url = img.attr('src');
+        $(this).css({
+            'background-image': `url(${url})`,
+        });
+        img.hide(); // 원래 이미지 숨김
     });
 
-    sheetCloseBtn?.addEventListener('click', closeSelectSheet);
-
-    sheetBackdrop.addEventListener('click', e => {
-        if (e.target === sheetBackdrop) closeSelectSheet();
-    });
-    sheetCancelBtn?.addEventListener('click', () => {
-    // 그냥 닫기만
-    closeSelectSheet();
-    });
 });
 
-// 팀선택
+$(document).ready(function () {
+    AOS.init(
+        {once: true}
+    ); // aos fade 이벤트
+});  
+
+// 개인정보처리방침 팝업
 document.addEventListener('DOMContentLoaded', () => {
-    const teamBtns = document.querySelectorAll('.team_info-btn');
 
-    if (!teamBtns.length) return;
+    const TERMSHEET_LIBRARY = {
+        service:{
+            title: '샘플',
+            text: 'sample'
 
-    teamBtns.forEach(btn => {
+            .trim()
+        },
+        privacy: {
+            title: '개인정보처리방침',
+            text: `
+                <div class="stack mt-24 terms_wrap">
+
+                    <div class="sec">
+                        <div class="text">
+                            본 개인정보처리방침은 제이슨 버먼트(이하 “회사”)가 제공하는 <span>사내 세차 예약 서비스 ‘버먼트의 모든 것’</span> (이하 “서비스”) 이용과 관련하여, 이용자의 개인정보를 보호하고 관련 법령을 준수하기 위하여 마련되었습니다. 본 방침에서 ‘이용자’란 본 서비스에 회원으로 등록하여 세차 예약을 이용하는 회사 임직원을 의미합니다.<br class="terms_br">
+                            회사는 「개인정보 보호법」 등 관계 법령을 준수하며, 이용자의 개인정보를 최소한으로 수집·이용하고 안전하게 관리합니다.
+                        </div>
+                    </div>
+                    <div class="sec">
+                        <div class="tit">
+                            1. 개인정보의 수집 항목 및 수집 방법
+                        </div>
+                        <div class="text">
+                            ① 수집 항목<br class="terms_br">
+                            회사는 서비스 제공을 위해 아래와 같은 개인정보를 수집합니다.<br class="terms_br"><br class="terms_br">
+
+                            <span>[필수 항목]</span><br class="terms_br">
+                            - 이름<br class="terms_br">
+                            - 휴대전화번호<br class="terms_br">
+                            - 차량 정보(차종, 차량번호, 차량색상)<br class="terms_br">
+                            - 예약 정보(예약 일시, 세차 종류,  주차 위치 정보)<br class="terms_br"><br class="terms_br">
+
+                            <span>[선택 항목]</span><br class="terms_br">
+                            - 요청사항(메모)<br class="terms_br">
+                            ※ 본 서비스는 결제 기능을 제공하지 않으며, 결제 관련 정보는 일절 수집하지 않습니다. <br class="terms_br">
+                            ※ 차량 정보(차량번호 등)는 특정 개인을 식별할 수 있는 정보로 간주되어 개인정보로 보호됩니다.<br class="terms_br"><br class="terms_br">
+
+                            ② 수집 방법<br class="terms_br">
+                            모바일 애플리케이션을 통한 이용자의 직접 입력
+                        </div>
+                    </div>
+                    <div class="sec">
+                        <div class="tit">
+                            2. 개인정보의 이용 목적
+                        </div>
+                        <div class="text">
+                            회사는 수집한 개인정보를 다음의 목적에 한하여 이용합니다.<br class="terms_br">
+                            - 세차 예약 접수 및 예약 내역 관리<br class="terms_br">
+                            - 예약 일정 확인 및 변경, 안내 연락<br class="terms_br">
+                            - 서비스 운영 및 내부 관리 목적<br class="terms_br">
+                            ※ 수집된 개인정보는 위 목적 외의 용도로 이용되지 않으며, 이용 목적이 변경될 경우 사전에 이용자의 동의를 받습니다.
+                        </div>
+                    </div>
+                    <div class="sec">
+                        <div class="tit">
+                            3. 개인정보의 열람 및 접근 권한
+                        </div>
+                        <div class="text">
+                            이용자의 개인정보는 다음의 경우에 한하여 열람할 수 있습니다.<br class="terms_br">
+                            - 서비스 관리자<br class="terms_br">
+                            - 해당 예약을 수행하는 세차업체 관리자<br class="terms_br">
+                            - 그 외 제3자 및 일반 직원은 개인정보에 접근할 수 없습니다.
+                        </div>
+                    </div>
+                    <div class="sec">
+                        <div class="tit">
+                            4. 개인정보의 보유 및 이용 기간
+                        </div>
+                        <div class="text">
+                            회사는 개인정보 수집 및 이용 목적이 달성된 후 지체 없이 해당 정보를 파기합니다.<br class="terms_br">
+                            - 예약 정보: 예약 완료 후 24개월 보관 후 파기<br class="terms_br">
+                            - 예약 정보: 예약 완료일 기준 24개월 보관 후 파기<br class="terms_br">
+                            - 이용자가 퇴사를 하는 경우: 즉시 파기<br class="terms_br">
+                            - 알림 발송 이력: 서비스 운영 확인을 위해 최대 7일간 보관 후 파기<br class="terms_br">
+                            단, 내부 감사 또는 관계 법령에 따라 보관이 필요한 경우에는 해당 목적 달성 시까지 보관할 수 있습니다.<br class="terms_br">
+                        </div>
+                    </div>
+                    <div class="sec">
+                        <div class="tit">
+                            5. 개인정보의 제3자 제공
+                        </div>
+                        <div class="text">
+                            회사는 이용자의 개인정보를 외부 제3자에게 제공하지 않습니다.<br class="terms_br">
+                            다만, 법령에 따라 제공이 요구되는 경우에는 관련 법령을 따릅니다.<br class="terms_br">
+                            ※ 세차업체는 서비스 제공을 위한 내부 협력 주체로서, 개인정보 처리 목적 범위 내에서만 접근 권한이 부여됩니다.
+                        </div>
+                    </div>
+                    <div class="sec">
+                        <div class="tit">
+                            6. 개인정보의 처리 위탁
+                        </div>
+                        <div class="text">
+                            회사는 원칙적으로 개인정보 처리 업무를 외부에 위탁하지 않습니다.향후 위탁이 발생할 경우, 관련 법령에 따라 사전에 안내하고 필요한 조치를 취하겠습니다.
+                        </div>
+                    </div>
+                    <div class="sec">
+                        <div class="tit">
+                            7. 개인정보의 파기 절차 및 방법
+                        </div>
+                        <div class="text">
+                            회사는 개인정보 보유 기간이 경과하거나 처리 목적이 달성된 경우, 해당 정보를 지체 없이 파기합니다.<br class="terms_br">
+                            - 전자적 파일 형태: 복구 불가능한 방법으로 삭제<br class="terms_br">
+                            - 종이 문서 형태: 분쇄 또는 소각
+                        </div>
+                    </div>
+                    <div class="sec">
+                        <div class="tit">
+                            8. 이용자의 권리 및 행사 방법
+                        </div>
+                        <div class="text">
+                            이용자는 언제든지 다음과 같은 권리를 행사할 수 있습니다.<br class="terms_br">
+                            - 개인정보 열람 요청<br class="terms_br">
+                            - 개인정보 정정 또는 삭제 요청<br class="terms_br">
+                            - 개인정보 처리 정지 요청<br class="terms_br">
+                            위 권리는 서비스 관리자에게 요청하실 수 있으며, 회사는 지체 없이 조치합니다.
+                        </div>
+                    </div>
+                    <div class="sec">
+                        <div class="tit">
+                            9. 개인정보 보호를 위한 안전성 확보 조치
+                        </div>
+                        <div class="text">
+                            회사는 개인정보 보호를 위하여 다음과 같은 조치를 취하고 있습니다.<br class="terms_br">
+                            - 개인정보 접근 권한 최소화<br class="terms_br">
+                            - 관리자 계정 관리 및 접근 통제<br class="terms_br">
+                            - 개인정보 취급자에 대한 정기적인 관리 및 교육
+                        </div>
+                    </div>
+                    <div class="sec">
+                        <div class="tit">
+                            10. 개인정보 보호 책임자
+                        </div>
+                        <div class="text">
+                            회사는 개인정보 처리에 관한 업무를 총괄하여 책임지는 개인정보 보호 책임자를 지정하고 있습니다.<br class="terms_br">
+                            - 개인정보 보호 책임자: 남점범<br class="terms_br">
+                            - 담당 부서: CEO<br class="terms_br">
+                            - 연락처: 010-32740-1207<br class="terms_br">
+                            - 이메일: benefits@jasonbourmount.com<br class="terms_br">
+                            ※ 개인정보 보호 책임자 정보는 내부 지정 후 서비스 내 별도 공지를 통해 안내됩니다.
+                        </div>
+                    </div>
+                    <div class="sec">
+                        <div class="tit">
+                            11. 고지의 의무
+                        </div>
+                        <div class="text">
+                            본 개인정보처리방침의 내용이 변경되는 경우, 시행일 최소 7일 전에 서비스 내 공지사항을 통해 안내드립니다.
+                        </div>
+                    </div>
+                </div>
+            `.trim()
+        }
+    };
+
+    const TERMSHEET_BACKDROP = document.getElementById('centerPopup');
+    const TERMSHEET_TITLE = document.getElementById('centerPopupTitle');
+    const TERMSHEET_TEXT = document.getElementById('centerPopupTxt');
+    const TERMSHEET_OPEN_BTNS = document.querySelectorAll('.btn-open-terms');
+    const TERMSHEET_CONFIRM_BTN = TERMSHEET_BACKDROP?.querySelector('[data-popup="center-confirm"]');
+
+    if (!TERMSHEET_BACKDROP || !TERMSHEET_TITLE || !TERMSHEET_OPEN_BTNS.length) return;
+
+    const TERMSHEET_TEXT_EL = TERMSHEET_TEXT || (() => {
+        const el = document.createElement('div');
+        el.className = 'center-popup_txt';
+        el.id = 'centerPopupTxt';
+        TERMSHEET_TITLE.insertAdjacentElement('afterend', el);
+        return el;
+    })();
+
+
+    function TERMSHEET_nl2br(str = '') {
+        return String(str).replace(/\n/g, '<br>');
+    }
+
+    function TERMSHEET_open(key) {
+        const doc = TERMSHEET_LIBRARY[key];
+        if (!doc) return;
+
+        TERMSHEET_TITLE.textContent = doc.title || '';
+        TERMSHEET_TEXT_EL.innerHTML = TERMSHEET_nl2br(doc.text || '');
+
+        TERMSHEET_BACKDROP.style.display = 'block';
+        TERMSHEET_BACKDROP.classList.add('is-open');
+
+        document.body.classList.add('is-scroll-locked');
+    }
+
+    function TERMSHEET_close() {
+        TERMSHEET_BACKDROP.classList.remove('is-open');
+        TERMSHEET_BACKDROP.style.display = 'none';
+
+        TERMSHEET_TITLE.textContent = '';
+        TERMSHEET_TEXT_EL.innerHTML = '';
+
+        document.body.classList.remove('is-scroll-locked');
+    }
+
+    TERMSHEET_OPEN_BTNS.forEach(btn => {
         btn.addEventListener('click', () => {
 
-            teamBtns.forEach(b => b.classList.remove('is-select'));
-                btn.classList.add('is-select');
+        const key = btn.dataset.terms;
+        TERMSHEET_open(key);
         });
     });
-});
 
-// 친구 탭
-document.addEventListener('DOMContentLoaded', () => {
-    const tabs = document.querySelectorAll('.tab-pill_btn');
-    const panels = document.querySelectorAll('.tab-panel');
+    if (TERMSHEET_CONFIRM_BTN) {
+        TERMSHEET_CONFIRM_BTN.addEventListener('click', TERMSHEET_close);
+    }
 
-    if (!tabs.length) return;
+    TERMSHEET_BACKDROP.addEventListener('click', (e) => {
+        if (e.target === TERMSHEET_BACKDROP) TERMSHEET_close();
+    });
 
-    tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-        const key = tab.dataset.tab;
-
-        tabs.forEach(t => {
-            t.classList.remove('on');
-            t.setAttribute('aria-selected', 'false');
-        });
-
-        tab.classList.add('on');
-        tab.setAttribute('aria-selected', 'true');
-
-        // (선택) 패널 전환
-        if (panels.length) {
-            panels.forEach(p => p.classList.toggle('on', p.dataset.panel === key));
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && TERMSHEET_BACKDROP.style.display === 'block') {
+        TERMSHEET_close();
         }
-        });
     });
 });
-
-
-document.addEventListener('DOMContentLoaded', () => {
-    const tabs = document.querySelectorAll('.tab_menu li');
-    const conts = document.querySelectorAll('.tab_cont');
-
-    if (!tabs.length || !conts.length) return;
-
-    tabs.forEach((tab, idx) => {
-        tab.addEventListener('click', () => {
-
-            tabs.forEach(t => t.classList.remove('on'));
-            conts.forEach(c => c.classList.remove('on'));
-
-            tab.classList.add('on');
-            if (conts[idx]) conts[idx].classList.add('on');
-        });
-    });
-});
-

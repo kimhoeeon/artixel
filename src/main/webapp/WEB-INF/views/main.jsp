@@ -119,11 +119,13 @@
                             몇 번의 클릭으로 간편하게<br />미술품 감정을 의뢰해보세요.
                         </div>
                         <div class="small">
-                            01. 홈페이지에 작품 사진을 업로드하세요.<br />
-                            02. Artixel의 AI 시스템이 작품을 분석합니다.<br />
-                            03. 5일 이내에 AI 평가 보고서 및 인증서를 받아보실 수 있습니다.
+                            <ul>
+                                <li><span>1</span> 홈페이지에 작품 사진을 업로드하세요.</li>
+                                <li><span>2</span> Artixel의 AI 시스템이 작품을 분석합니다.</li>
+                                <li><span>3</span> 5일 이내에 AI 평가 보고서 및 인증서를 받아보실 수 있습니다.</li>
+                            </ul>
                         </div>
-                        <span>
+                        <span class="gray_txt">
                             * 제출하시는 파일은 안전하게 업로드되며 분석 서비스 목적 달성 후 파기됩니다.<br />
                             * 학습이 완료되지 않은 작가에 대해서는 서비스를 제공하지 않을 수 있습니다.
                         </span>
@@ -143,52 +145,70 @@
                     <div class="big">
                         Artixel의 핵심 원칙
                     </div>
+                </div>
+                <div class="trust_wrap">
                     <ul class="truth_txt">
                         <li>
-                            <div class="num">01</div>
                             <div class="tit">인간의 도구</div>
-                            <div class="txt">AI의 감정 결과는 객관적이고 수학적인 ‘통찰’을 제공합니다. 그러나 AI는 전문가를 대체하지 않습니다. 전문가의 감정(Connoisseurship), 출처에 대한 조사, 화학적·물리적 분석 결과 등을 보완하는 도구로서 AI 결과를 활용해야 합니다.</div>
+                            <div class="txt">
+                                <p>
+                                    AI의 감정 결과는 객관적이고 수학적인 ‘통찰’을 제공합니다. 그러나 AI는 전문가를 대체하지 않습니다. 전문가의 감정(Connoisseurship), 출처에 대한 조사, 화학적·물리적 분석 결과 등을 보완하는 도구로서 AI 결과를 활용해야 합니다.
+                                </p>
+                            </div>
+                            <div class="m-img">
+                                <img src="/img/truth_img01.png" alt="이미지 소개">
+                            </div>
                         </li>
                         <li>
-                            <div class="num">02</div>
                             <div class="tit">기술적 투명성</div>
-                            <div class="txt">AI의 판단 근거를 인간이 이해할 수 있어야 합니다. Artixel의 AI는 그림의 어느 부분을 보고 판단했는지 “히트맵(Heatmaps)”을 통해 시각적으로 보여줍니다. 또한 AI가 학습한 데이터 소스와 알고리즘, 그리고 한계점을 명확하게 문서화합니다.</div>
+                            <div class="txt">
+                                <p>
+                                    AI의 판단 근거를 인간이 이해할 수 있어야 합니다. Artixel의 AI는 그림의 어느 부분을 보고 판단했는지 “히트맵(Heatmaps)”을 통해 시각적으로 보여줍니다. 또한 AI가 학습한 데이터 소스와 알고리즘, 그리고 한계점을 명확하게 문서화합니다.
+                                </p>
+                            </div>
+                            <div class="m-img">
+                                <img src="/img/truth_img03.png" alt="이미지 소개">
+                            </div>
                         </li>
                         <li>
-                            <div class="num">03</div>
                             <div class="tit">고품질 데이터</div>
-                            <div class="txt">학습에 사용되는 데이터는 엄격하게 선별됩니다. ‘도록’에 활용된 데이터와 작가가 직접 제공하는 데이터를 학습 데이터의 핵심 소스로 사용합니다. 또한 전문가의 교차 검증을 거쳐 위작이나 모작으로 판별된 부정적 사례도 함께 학습하여 AI모델을 설계합니다.</div>
+                            <div class="txt">
+                                <p>
+                                    학습에 사용되는 데이터는 엄격하게 선별됩니다. ‘도록’에 활용된 데이터와 작가가 직접 제공하는 데이터를 학습 데이터의 핵심 소스로 사용합니다. 또한 전문가의 교차 검증을 거쳐 위작이나 모작으로 판별된 부정적 사례도 함께 학습하여 AI모델을 설계합니다.
+                                </p>
+                            </div>
+                            <div class="m-img">
+                                <img src="/img/truth_img04.jpg" alt="이미지 소개">
+                            </div>
                         </li>
                         <li>
-                            <div class="num">04</div>
                             <div class="tit">윤리적 절차</div>
-                            <div class="txt">학습에 사용되는 데이터의 저작권을 준수합니다. 필요한 경우 라이선스를 확보합니다. 또한 우리의 AI 분석 결과는 법적인 효력을 갖을 수 없으며 법적 분쟁에서 단독 증거가 될 수 없습니다.</div>
+                            <div class="txt">
+                                <p>
+                                    학습에 사용되는 데이터의 저작권을 준수합니다. 필요한 경우 라이선스를 확보합니다.<br />또한 우리의 AI 분석 결과는 법적인 효력을 갖을 수 없으며 법적 분쟁에서 단독 증거가 될 수 없습니다.
+                                </p>
+                            </div>
+                            <div class="m-img">
+                                <img src="/img/truth_img05.jpg" alt="이미지 소개">
+                            </div>
                         </li>
                     </ul>
-                </div>
-                <div class="truth_cont">
-                    <ul data-aos="fade-up" data-aos-duration="1500" data-aos-delay="100">
-                        <li>
-                            <img src="/img/truth_img01.png" alt="이미지 소개">
-                        </li>
-                        <li>
-                            <img src="/img/truth_img03.png" alt="이미지 소개">
-                        </li>
-                        <li>
-                            <img src="/img/truth_img04.jpg" alt="이미지 소개">
-                        </li>
-                        <li>
-                            <img src="/img/truth_img05.jpg" alt="이미지 소개">
-                        </li>
-                    </ul>
-                    <!-- <ul class="truth_cont_item">
-                        <li data-aos="fade-up" data-aos-duration="1500" data-aos-delay="400">
-                            <img src="/img/truth_img05.png" alt="이미지 소개">
-                        </li>
-                        <li data-aos="fade-up" data-aos-duration="1500" data-aos-delay="700">
-                            <img src="/img/truth_img06.png" alt="이미지 소개">
-                        </li>
-                    </ul> -->
+                    <div class="truth_img">
+                        <ul>
+                            <li class="active">
+                                <img src="/img/truth_img01.png" alt="이미지 소개">
+                            </li>
+                            <li>
+                                <img src="/img/truth_img03.png" alt="이미지 소개">
+                            </li>
+                            <li>
+                                <img src="/img/truth_img04.jpg" alt="이미지 소개">
+                            </li>
+                            <li>
+                                <img src="/img/truth_img05.jpg" alt="이미지 소개">
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>

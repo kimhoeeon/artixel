@@ -72,14 +72,9 @@
             <div class="inner">
                 <div class="sec_box">
                     <div class="title">
-                        <div class="big num">
-                            01
-                        </div>
-                        <div class="small">
+                        <div class="big">
                             붓 터치의 미세한 결까지 파악하는<br />‘시각적 통찰력’
                         </div>
-                    </div>
-                    <div class="about_txt">
                         <div class="small">
                             딥러닝 분야에서 가장 신뢰받는 ResNet(Residual Network) 아키텍처를 도입하여 인간의 눈이 놓치기 쉬운 붓 터치의 압력, 질감, 선의 굴곡을 수치화합니다.
                         </div>
@@ -87,14 +82,9 @@
                 </div>
                 <div class="sec_box">
                     <div class="title">
-                        <div class="big num">
-                            02
-                        </div>
-                        <div class="small">
+                        <div class="big">
                             작품 전체의 구도와 맥락을 꿰뚫는<br />‘통합적 구조화’
                         </div>
-                    </div>
-                    <div class="about_txt">
                         <div class="small">
                             최신 자연어 처리 기술에서 영감을 얻은 Swin Transformer 모델은 작품을 작은 조각 단위로 나누어 분석하면서도, 조각들 간의 유기적인 관계를 파악합니다. 개별 붓 터치를 넘어 작품 전체의 굳, 색채 배치, 공간감을 하나의 맥락으로 이해합니다.
                         </div>
@@ -102,14 +92,9 @@
                 </div>
                 <div class="sec_box">
                     <div class="title">
-                        <div class="big num">
-                            03
-                        </div>
-                        <div class="small">
+                        <div class="big">
                             지속적인 진화와 끊임없는 연구
                         </div>
-                    </div>
-                    <div class="about_txt">
                         <div class="small">
                             최근 발표된 MaxViT(Multi-Axis Vision Transformer)모델을 도입하여 감정의 정확도를 끌어올렸습니다. 고해상도 초정밀 데이터를 처리하는 최신 모델을 끊임없이 연구하고 적용하여, AI 감정 기술의 한계를 매일 경신하고 있습니다.
                         </div>
@@ -117,14 +102,9 @@
                 </div>
                 <div class="sec_box">
                     <div class="title">
-                        <div class="big num">
-                            04
-                        </div>
-                        <div class="small">
+                        <div class="big">
                             전문가와 AI의 협력 ‘앙상블’시스템
                         </div>
-                    </div>
-                    <div class="about_txt">
                         <div class="small">
                             여러 가지 최첨단 AI 모델이 각자의 강점으로 작품을 다각도에서 분석하는 과정에 교수, 작가, 감정사, 미술품 보존과학자가 참여하여 Artixel만의 시스템을 완성하였습니다. 우리는 이 시스템 위에 안전하고 검증된 고품질 데이터를 쌓아 기술의 한계를 경신하고 있습니다.
                         </div>
@@ -132,14 +112,9 @@
                 </div>
                 <div class="sec_box">
                     <div class="title">
-                        <div class="big num">
-                            05
-                        </div>
-                        <div class="small">
+                        <div class="big">
                             해석가능성(Interpretability)과 설명가능성(Explainablity)
                         </div>
-                    </div>
-                    <div class="about_txt">
                         <div class="small">
                             AI가 이미지의 어느 부분을 근거로 판단했는지 히트맵(Heatmap) 보고서를 제공하여 감정 과정의 투명성을 보장합니다.
                         </div>

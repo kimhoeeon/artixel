@@ -35,6 +35,9 @@ $(document).ready(function () {
         startSegmentBar(this);
       },
 
+      resize: function () {
+        swiperMainTop.changeDirection(getDirection());
+      },
     },
   });
 

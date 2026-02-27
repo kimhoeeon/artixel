@@ -63,6 +63,16 @@
     .form_box tbody tr td.naeyong{gap: 5px;}
     .sub_wrap .sec_box .title{width: 100%;}
     .contact_form{width: 100%;}
+    .sub_wrap.product_wrap .sec_box .title{width: 100%;}
+    .sub_wrap.product_wrap .sec_box .product_img{width: 100%;}
+
+    .sub_wrap.about_wrap .sec_box{align-items: start;}
+    .sub_wrap.think_wrap .inner{ grid-template-columns: repeat(2, 1fr);}
+    .sub_wrap.think_wrap .sec_box .title{display: flex;flex-direction: column; height: 100%;padding: 30px;}
+    .sub_wrap.think_wrap .sec_box:nth-child(3) .title{border-right: 1px solid #ddd;}
+    .sub_wrap.think_wrap .sec_box:nth-child(4) .title{border-bottom: 1px solid #ddd;}
+
+    .contact_wrap .btn{font-size: 1.125rem;max-width: 200px; padding: 13px 20px;}
 }
 
 @media screen and (max-width:899px) {
@@ -130,6 +140,18 @@
     .contact_wrap {padding: 200px 0 80px;}
     .contact_wrap .small{font-size: 1.125rem;}
     .btn_wrap div a{width: 180px; height: 60px; line-height: 60px;}
+
+    .truth_img{display: none;}
+    .truth_txt{width: 100%;}
+    .truth_txt li.active .m-img{opacity: 1;overflow: hidden;max-height: 500px; margin-bottom: 30px;transition: transform 0.25s ease;}
+    .truth_txt li.active .m-img img{width: 100%;  object-fit: cover;}
+
+    .guide-top .tit{font-size: 28px;}
+    .guide-top .guide-txt ul{font-size: 16px;padding: 20px;}
+    .guide-top .guide-txt ul li{text-indent: -13px; margin-left: 13px;}
+    .guide-content ul li.bold{flex-direction: column; justify-content: center;}
+    .guide-content ul li{font-size: 18px;}
+    .guide-content ul li span{margin: 0 auto;}
 }
 
 @media screen and (max-width:599px) {
@@ -221,5 +243,14 @@
     .sub_wrap .sec_box .title .big.num{font-size: 1.5rem;margin-bottom: 10px;}
     .sub_wrap .sec_box .title .small{font-size: 1.5rem; line-height: 28px;}
     .sub_wrap .sec_box{gap: 20px;}
-    .sub_wrap.think_wrap .inner{gap: 60px;}
+
+    .form_box .file_info .file_box{flex-wrap: wrap;}
+
+    .sub_wrap.think_wrap .inner{grid-template-columns: repeat(1, 1fr);}
+    .sub_wrap.think_wrap .sec_box .title{padding: 20px;}
+    .sub_wrap.think_wrap .sec_box .title .big{font-size: 20px;margin-bottom: 0;}
+    .sub_wrap.think_wrap .sec_box .title .small{font-size: 16px;}
+
+    .guide-content ul li.bold{margin-bottom: 5px;}
+    
 }

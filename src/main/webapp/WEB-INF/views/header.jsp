@@ -15,6 +15,13 @@
                     <a href="/contact/contact">Contact</a>
                 </li>
             </ul>
+            <div class="lang">
+                <a>KOR</a>
+                <div class="langmenu">
+                    <a href="/" class="active">KOR</a>
+                    <a href="" onclick="alert('준비중입니다')">ENG</a>
+                </div>
+            </div>
         </div>
         <div class="hamberg">
             <span>메뉴</span>

@@ -53,12 +53,12 @@
                 <div class="sec_box">
                     <div class="title">
                         <div class="big">
-                            Our Technology<br /><span>“보는 것”이 아니라 “읽는 것”</span>
+                            “보는 것”이 아니라 “읽는 것”
                         </div>
                         <div class="small">
                             아티셀은 이미지 유사도를 단순히 비교하지 않습니다.<br />
                             대신 작가가 반복적으로 남기는 <span>스타일 시그니처를 데이터로 읽어내,</span><br />
-                            일관된 판단 근거로 정리합니다.<br />
+                            일관된 판단 근거로 정리합니다.<br /><br />
                             이를 위해 CNN으로 미세 질감·경계를 SWIN으로<br />
                             전체 구조·구도 맥락을 포착하고, 두 모델을 결합해<br />
                             디테일과 구성을 동시에 분석,<br />
@@ -134,7 +134,7 @@
                 <div class="sec_box">
                     <div class="title">
                         <div class="big">
-                            판단을 돕는 건<br />‘결론’이 아니라 ‘근거’
+                            판단을 돕는 건<br />결론이 아니라 <span>근거</span>
                         </div>
                         <a href="/contact/contact">Get Started <img src="/img/arrow-right_w.png" alt="화살표"></a>
                     </div>

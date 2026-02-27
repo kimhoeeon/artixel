@@ -36,7 +36,10 @@ $(document).ready(function () {
       },
 
       resize: function () {
-        swiperMainTop.changeDirection(getDirection());
+        if (typeof getDirection !== 'function') return;
+        if (typeof this.changeDirection !== 'function') return;
+
+        this.changeDirection(getDirection());
       },
     },
   });

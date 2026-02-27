@@ -111,14 +111,16 @@ $(document).ready(function () {
     });
 
     function openAccordion($li) {
-        const $txt = $li.find('.txt');
+    const $txt = $li.find('.txt');
+        if (!$txt.length) return;
 
         $li.addClass('active');
 
         $txt.css('max-height', '0px');
+
         requestAnimationFrame(() => {
-        const realHeight = $txt[0].scrollHeight;
-        $txt.css('max-height', realHeight + 'px');
+            const realHeight = $txt[0].scrollHeight;
+            $txt.css('max-height', realHeight + 'px');
         });
     }
 

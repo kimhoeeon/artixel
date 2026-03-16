@@ -2,6 +2,7 @@ package com.mtf.artixel.controller;
 
 import com.mtf.artixel.mapper.AdminMngMapper;
 import com.mtf.artixel.service.AdminService;
+import com.mtf.artixel.service.InquiryService;
 import com.mtf.artixel.vo.AdminVO;
 import com.mtf.artixel.vo.GameVO;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,7 @@ import java.util.List;
 public class AdminController {
 
     private final AdminService adminService;     // DB 로그인용
-
+    private final InquiryService inquiryService;
     private final AdminMngMapper adminMngMapper;
 
     // --- 1. 로그인 및 메인 ---
@@ -85,28 +86,20 @@ public class AdminController {
      * 관리자 메인 대시보드
      */
     @GetMapping("/main.do")
-    public String mainPage(Model model) {
+    public String mainPage(Model model) throws Exception {
 
         // [대시보드 통계 데이터 조회]
+        // 1. 누적 문의 건수
+        model.addAttribute("totalInquiryCount", inquiryService.getTotalInquiryCount());
 
-        // 1. 회원 현황
-        /*int totalMembers = memberService.countMembers("", "");
-        int todayMembers = memberService.countTodayMembers();
+        // 2. 금일 문의 건수
+        model.addAttribute("todayInquiryCount", inquiryService.getTodayInquiryCount());
 
-        // 2. 일기 현황
-        int totalDiaries = diaryService.countTotalDiaries();
-        int todayDiaries = diaryService.countTodayDiaries();
+        // 3. 구분별 통계 (기업/개인/기관 등)
+        model.addAttribute("categoryStats", inquiryService.getInquiryCountByCategory());
 
-        // 3. 오늘 경기 수
-        //int todayGames = gameService.countTodayGames();
-        List<GameVO> todayGameList = gameService.getAllGamesToday();
-
-        model.addAttribute("totalMembers", totalMembers);
-        model.addAttribute("todayMembers", todayMembers);
-        model.addAttribute("totalDiaries", totalDiaries);
-        model.addAttribute("todayDiaries", todayDiaries);
-        //model.addAttribute("todayGames", todayGames);
-        model.addAttribute("todayGameList", todayGameList);*/
+        // 4. 국가별 통계 (원형 그래프용)
+        model.addAttribute("countryStats", inquiryService.getInquiryCountByCountry());
 
         // 시스템 상태 정보 수집
         addSystemStatus(model);

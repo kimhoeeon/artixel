@@ -1,15 +1,22 @@
 package com.mtf.artixel.service;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.mtf.artixel.mapper.InquiryMapper;
 import com.mtf.artixel.vo.InquiryVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Slf4j
@@ -18,9 +25,10 @@ import java.util.UUID;
 public class InquiryService {
 
     private final InquiryMapper inquiryMapper;
+    private final AmazonS3 amazonS3;
 
-    // WebConfig.java에 설정하셨던 실제 Cafe24 서버의 물리적 업로드 경로입니다.
-    private final String UPLOAD_DIR = "/artixel/tomcat/webapps/uploads/";
+    @Value("${naver.cloud.bucket}")
+    private String bucketName;
 
     // 1. 사용자: 문의 및 의뢰 접수 (파일 업로드 및 스팸 방지 IP 체크 포함)
     @Transactional(rollbackFor = Exception.class)
@@ -33,14 +41,8 @@ public class InquiryService {
             return "SPAM_BLOCKED";
         }
 
-        // 첨부 파일이 존재할 경우 파일 업로드 처리
+        // 첨부 파일이 존재할 경우 네이버 클라우드 Object Storage에 업로드 처리
         if (file != null && !file.isEmpty()) {
-            // 저장할 디렉토리가 없으면 자동 생성
-            File dir = new File(UPLOAD_DIR);
-            if (!dir.exists()) {
-                dir.mkdirs();
-            }
-
             String originalFileName = file.getOriginalFilename();
             String extension = "";
             if (originalFileName != null && originalFileName.lastIndexOf(".") > -1) {
@@ -49,14 +51,33 @@ public class InquiryService {
 
             // 중복 방지를 위해 고유한 UUID로 새 파일명 생성
             String savedFileName = UUID.randomUUID().toString() + extension;
-            File targetFile = new File(UPLOAD_DIR + savedFileName);
 
-            // 서버의 지정된 경로로 물리적 파일 전송 및 저장
-            file.transferTo(targetFile);
+            // 파일 메타데이터 설정 (사이즈와 확장자 정보)
+            ObjectMetadata metadata = new ObjectMetadata();
+            metadata.setContentType(file.getContentType());
+            metadata.setContentLength(file.getSize());
 
-            // DB에 저장할 원본 파일명과 저장된 파일명 세팅
+            // InputStream을 통해 서버 메모리를 최소화하며 클라우드로 직접 전송
+            try (InputStream inputStream = file.getInputStream()) {
+                PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, savedFileName, inputStream, metadata);
+
+                // 관리자가 웹에서 이미지를 바로 볼 수 있도록 읽기 권한 부여
+                putObjectRequest.withCannedAcl(CannedAccessControlList.PublicRead);
+                amazonS3.putObject(putObjectRequest);
+            }
+
+            // 네이버 클라우드에 업로드된 실제 이미지 접근 URL 가져오기
+            String fileUrl = amazonS3.getUrl(bucketName, savedFileName).toString();
+
+            // DB에 저장할 원본 파일명, 저장된 파일명, 클라우드 URL 세팅
             inquiryVO.setFileOriginName(originalFileName);
             inquiryVO.setFilePath(savedFileName);
+            inquiryVO.setFileUrl(fileUrl);
+
+        } else if (inquiryVO.getFileUrl() != null && !inquiryVO.getFileUrl().isEmpty()) {
+            // 사용자가 이미지가 아닌 타 드라이브 URL 링크만 남긴 경우
+            inquiryVO.setFileOriginName("URL_LINK");
+            inquiryVO.setFilePath("URL_LINK");
         }
 
         // 작성자 디바이스 IP 세팅
@@ -64,11 +85,7 @@ public class InquiryService {
 
         // DB에 문의 내역 INSERT
         int result = inquiryMapper.insertInquiry(inquiryVO);
-
-        if (result > 0) {
-            // 차후 이곳에 자동 이메일 발송 로직(business@meetingfan.com 등)을 추가할 예정입니다.
-            return "SUCCESS";
-        }
+        if (result > 0) return "SUCCESS";
 
         return "FAIL";
     }
@@ -99,4 +116,22 @@ public class InquiryService {
     public boolean updateInquiryStatus(InquiryVO inquiryVO) throws Exception {
         return inquiryMapper.updateInquiryStatus(inquiryVO) > 0;
     }
+
+    // --- 대시보드 통계 조회용 메서드 ---
+    public int getTotalInquiryCount() throws Exception {
+        return inquiryMapper.selectTotalInquiryCount();
+    }
+
+    public int getTodayInquiryCount() throws Exception {
+        return inquiryMapper.selectTodayInquiryCount();
+    }
+
+    public List<Map<String, Object>> getInquiryCountByCategory() throws Exception {
+        return inquiryMapper.selectInquiryCountByCategory();
+    }
+
+    public List<Map<String, Object>> getInquiryCountByCountry() throws Exception {
+        return inquiryMapper.selectInquiryCountByCountry();
+    }
+
 }

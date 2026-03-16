@@ -3,14 +3,17 @@
 <mapper namespace="com.mtf.artixel.mapper.InquiryMapper">
 
     <insert id="insertInquiry" parameterType="com.mtf.artixel.vo.InquiryVO" useGeneratedKeys="true" keyProperty="inquiryId">
-        INSERT INTO inquiry (category, client_name, country_code, contact, email, country,
-                             artwork_title, artwork_size, artist_name, content,
-                             file_url, file_path, file_origin_name, agree_privacy,
-                             status, client_ip, created_at, updated_at)
-        VALUES (#{category}, #{clientName}, #{countryCode}, #{contact}, #{email}, #{country},
-                #{artworkTitle}, #{artworkSize}, #{artistName}, #{content},
-                #{fileUrl}, #{filePath}, #{fileOriginName}, #{agreePrivacy},
-                'PENDING', #{clientIp}, NOW(), NOW())
+        INSERT INTO inquiry (
+            category, client_name, country_code, contact, email, country,
+            artwork_title, artwork_size, artist_name, content,
+            file_url, file_path, file_origin_name, agree_privacy,
+            status, client_ip, created_at, updated_at
+        ) VALUES (
+                     #{category}, #{clientName}, #{countryCode}, #{contact}, #{email}, #{country},
+                     #{artworkTitle}, #{artworkSize}, #{artistName}, #{content},
+                     #{fileUrl}, #{filePath}, #{fileOriginName}, #{agreePrivacy},
+                     'PENDING', #{clientIp}, NOW(), NOW()
+                 )
     </insert>
 
     <select id="selectRecentInquiryCountByIp" parameterType="String" resultType="int">
@@ -127,5 +130,27 @@
             updated_at = NOW()
         WHERE inquiry_id = #{inquiryId}
     </update>
+
+    <select id="selectTotalInquiryCount" resultType="int">
+        SELECT COUNT(*) FROM inquiry
+    </select>
+
+    <select id="selectTodayInquiryCount" resultType="int">
+        SELECT COUNT(*) FROM inquiry WHERE DATE(created_at) = CURDATE()
+    </select>
+
+    <select id="selectInquiryCountByCategory" resultType="java.util.Map">
+        SELECT category, COUNT(*) as count
+        FROM inquiry
+        GROUP BY category
+        ORDER BY count DESC
+    </select>
+
+    <select id="selectInquiryCountByCountry" resultType="java.util.Map">
+        SELECT country, COUNT(*) as count
+        FROM inquiry
+        GROUP BY country
+        ORDER BY count DESC
+    </select>
 
 </mapper>

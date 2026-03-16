@@ -22,7 +22,6 @@ public class ContactController {
     // 1. Contact 폼 화면 띄우기 (퍼블리싱된 jsp 연결)
     @GetMapping("/contact/contact")
     public String contactForm() {
-        // 실제 JSP 파일 위치인 WEB-INF/views/contact/contact.jsp 를 호출합니다.
         return "contact/contact";
     }
 

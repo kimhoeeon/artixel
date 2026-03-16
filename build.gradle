@@ -52,6 +52,9 @@ dependencies {
 	implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '4.1.2'
 	implementation 'com.google.firebase:firebase-admin:9.2.0'
 
+	// 네이버 클라우드 Object Storage (S3 호환 API)
+	implementation 'com.amazonaws:aws-java-sdk-s3:1.12.700'
+
 	// 로컬 라이브러리
 	implementation fileTree(dir : 'src/main/webapp/WEB-INF/lib', include : [ '*.jar'])
 

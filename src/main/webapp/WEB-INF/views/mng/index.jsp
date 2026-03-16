@@ -18,7 +18,7 @@
     <link rel="shortcut icon" href="/favicon.ico" />
     <link rel="manifest" href="/site.webmanifest" />
 
-    <title>관리자 로그인 | 승요일기</title>
+    <title>관리자 로그인 | Artixel</title>
 
     <link href="/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css"/>
     <link href="/assets/css/style.bundle.css" rel="stylesheet" type="text/css"/>
@@ -86,7 +86,7 @@
                                 Admin System
                             </h1>
                             <div class="text-gray-500 fw-semibold fs-4">
-                                승요일기 관리자 시스템
+                                Artixel 관리자 시스템
                             </div>
                         </div>
 
@@ -133,7 +133,7 @@
 
             <div class="d-flex flex-center flex-column-auto p-10">
                 <div class="d-flex align-items-center fw-semibold fs-6">
-                    <span class="text-gray-600 px-2">Copyright &copy; 승요일기. All rights reserved.</span>
+                    <span class="text-gray-600 px-2">Copyright &copy; Artixel. All rights reserved.</span>
                 </div>
             </div>
 

@@ -118,8 +118,15 @@
                                 <td class="naeyong">
                                     <select id="countryCode" name="countryCode">
                                         <option value="+82">대한민국 (+82)</option>
-                                        <option value="+1">미국(+1)</option>
-                                        <option value="+81">일본(+81)</option>
+                                        <option value="+1">미국/캐나다 (+1)</option>
+                                        <option value="+81">일본 (+81)</option>
+                                        <option value="+86">중국 (+86)</option>
+                                        <option value="+49">독일 (+49)</option>
+                                        <option value="+33">프랑스 (+33)</option>
+                                        <option value="+44">영국 (+44)</option>
+                                        <option value="+61">호주 (+61)</option>
+                                        <option value="+84">베트남 (+84)</option>
+                                        <option value="+66">태국 (+66)</option>
                                     </select>
                                     <span>-</span>
                                     <input type="text" id="contact" name="contact" placeholder="010-1234-5678">
@@ -175,11 +182,13 @@
                                 </td>
                                 <td class="naeyong">
                                     <p class="file_box">
+                                        <input type="file" id="uploadFile" name="uploadFile" style="display:none;">
+
                                         <input type="text" class="upload_name" value="파일선택" disabled="disabled">
-                                        <button type="button" class="btn_file" id="">
+                                        <button type="button" class="btn_file" onclick="$('#uploadFile').click();">
                                             파일 선택
                                         </button>
-                                        <input type="text" placeholder="URL 입력">
+                                        <input type="text" id="fileUrl" name="fileUrl" placeholder="URL 입력 (https://)">
                                     </p>
                                 </td>
                                 <td>
@@ -305,7 +314,7 @@
 
     <script>
         $(document).ready(function() {
-            // 1. 서버 측 전송 결과 메시지 처리 (ContactController에서 보낸 메시지)
+            // 1. 서버 측 전송 결과 메시지 처리
             var serverMsg = '${msg}';
             if (serverMsg) {
                 alert(serverMsg);
@@ -326,7 +335,7 @@
                 }
             });
 
-            // 3. 이메일 도메인 선택 처리 (직접입력 포함)
+            // 3. 이메일 도메인 선택 처리
             $('#emailDomainSelect').on('change', function() {
                 var domain = $(this).val();
                 if(domain === 'direct') {
@@ -336,7 +345,7 @@
                 }
             });
 
-            // 4. 첨부파일 용량 제한 (100MB)
+            // 4. 첨부파일 용량 제한 및 파일명 표시 (UI 연동)
             $('#uploadFile').on('change', function() {
                 var file = this.files[0];
                 if (file) {
@@ -344,7 +353,14 @@
                     if (file.size > maxSize) {
                         alert('첨부파일은 최대 100MB까지 업로드 가능합니다.');
                         $(this).val('');
+                        $('.upload_name').val('파일선택');
+                        return;
                     }
+                    // 정상 파일 첨부 시 화면에 파일명 표시
+                    var fileName = $(this).val().split('\\').pop();
+                    $('.upload_name').val(fileName);
+                } else {
+                    $('.upload_name').val('파일선택');
                 }
             });
 
@@ -352,10 +368,22 @@
             $('#btnSubmit').on('click', function(e) {
                 e.preventDefault();
 
-                // [검증] 구분 (라디오 버튼)
-                if (!$('input[name="category"]:checked').val()) {
+                // [검증] 구분 (라디오 버튼) 및 기타 직접입력 처리
+                var categoryVal = $('input[name="category"]:checked').val();
+                if (!categoryVal) {
                     alert('구분을 선택해주세요.');
                     return;
+                }
+
+                if (categoryVal === '기타') {
+                    var etcVal = $('.etc_input').val().trim();
+                    if (!etcVal) {
+                        alert('기타 세부항목을 직접 입력해주세요.');
+                        $('.etc_input').focus();
+                        return;
+                    }
+                    // 전송 직전에 라디오 버튼의 값을 "기타 - 입력내용" 으로 변경하여 서버로 전송
+                    $('#cat_etc').val('기타 - ' + etcVal);
                 }
 
                 // [검증] 성함
@@ -365,7 +393,7 @@
                     return;
                 }
 
-                // [검증] 이메일 조합 및 세팅
+                // [검증] 이메일 조합
                 var email1 = $('#email1').val().trim();
                 var emailDomain = $('#emailDomain').val().trim();
                 if (!email1 || !emailDomain) {
@@ -375,7 +403,7 @@
                 }
                 $('#fullEmail').val(email1 + '@' + emailDomain);
 
-                // [검증] 국가번호 및 연락처
+                // [검증] 연락처
                 if (!$('#contact').val().trim()) {
                     alert('연락처를 입력해주세요.');
                     $('#contact').focus();
@@ -396,7 +424,7 @@
                     return;
                 }
 
-                // [검증] 첨부파일 & URL 확인 (둘 중 하나 필수)
+                // [검증] 첨부파일 & URL 확인
                 var uploadFile = $('#uploadFile').val();
                 var fileUrl = $('#fileUrl').val().trim();
 
@@ -405,7 +433,6 @@
                     return;
                 }
 
-                // URL 입력 시 https:// 검증
                 if (fileUrl && !fileUrl.startsWith('https://')) {
                     alert('URL은 반드시 https:// 로 시작해야 합니다.');
                     $('#fileUrl').focus();
@@ -419,16 +446,16 @@
                     return;
                 }
 
-                // [검증] 개인정보 동의 여부
+                // [검증] 개인정보 동의
                 if (!$('#agreePrivacy').is(':checked')) {
                     alert('개인정보 수집 및 이용에 동의해주세요.');
                     return;
                 }
 
-                // 중복 전송 방지를 위해 버튼 비활성화 및 텍스트 변경
+                // 중복 전송 방지
                 $(this).prop('disabled', true).text('접수 중...');
 
-                // 모든 검사 통과 시 실제 폼 전송
+                // 폼 전송
                 $('#inquiryForm').submit();
             });
         });

@@ -208,7 +208,11 @@ public class AdminController {
             labels.add((String)row.get("country"));
             series.add(((Number)row.get("cnt")).intValue());
         }
-        if(labels.isEmpty()) { labels.add("데이터 없음"); series.add(1); }
+
+        if(labels.isEmpty()) {
+            labels.add("데이터 없음");
+            series.add(0);
+        }
 
         Map<String, Object> res = new HashMap<>();
         res.put("labels", labels);

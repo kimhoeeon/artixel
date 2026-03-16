@@ -13,7 +13,6 @@
     <meta name="mobile-web-app-capable" content="yes" />
 
     <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon.png">
-    <link rel="manifest" href="/site.webmanifest" />
 
     <title>문의 목록 | Artixel 관리자</title>
     <link href="/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css"/>

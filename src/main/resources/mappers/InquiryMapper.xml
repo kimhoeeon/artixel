@@ -129,4 +129,17 @@
         GROUP BY country ORDER BY cnt DESC
     </select>
 
+    <select id="selectTopPageViews" resultType="java.util.Map">
+        SELECT page_name as pageName, page_url as pageUrl, view_count as viewCount
+        FROM page_views
+        ORDER BY view_count DESC
+        LIMIT 5
+    </select>
+
+    <insert id="upsertPageView">
+        INSERT INTO page_views (page_url, page_name, view_count)
+        VALUES (#{pageUrl}, #{pageName}, 1)
+        ON DUPLICATE KEY UPDATE view_count = view_count + 1
+    </insert>
+
 </mapper>

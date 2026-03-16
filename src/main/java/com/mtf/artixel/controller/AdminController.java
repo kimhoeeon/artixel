@@ -100,6 +100,9 @@ public class AdminController {
         model.addAttribute("totalUniqueVisitors", inquiryService.getTotalUniqueVisitors());
         model.addAttribute("totalVisitors", inquiryService.getTotalVisitors());
 
+        // [신규 추가] 실시간 상위 조회 페이지 TOP 5
+        model.addAttribute("topPages", inquiryService.getTopPageViews());
+
         Gson gson = new Gson();
 
         // 2. 방문 현황 및 문의 현황 (Day/Week/Month 동적 생성)

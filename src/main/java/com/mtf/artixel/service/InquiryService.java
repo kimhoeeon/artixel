@@ -119,4 +119,20 @@ public class InquiryService {
     public List<Map<String, Object>> getCountryStat(String period) throws Exception {
         return inquiryMapper.selectCountryStat(period);
     }
+
+    // [신규] 상위 페이지 조회수
+    public List<Map<String, Object>> getTopPageViews() throws Exception {
+        return inquiryMapper.selectTopPageViews();
+    }
+
+    // [신규] 페이지 조회수 증가
+    @Transactional(rollbackFor = Exception.class)
+    public void increasePageView(String pageUrl, String pageName) {
+        try {
+            inquiryMapper.upsertPageView(pageUrl, pageName);
+        } catch (Exception e) {
+            log.error("조회수 증가 실패: {}", pageUrl, e);
+        }
+    }
+
 }

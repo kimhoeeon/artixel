@@ -46,4 +46,6 @@ public interface InquiryMapper {
     List<Map<String, Object>> selectInquiryTrendByCategory(@Param("period") String period);
     List<Map<String, Object>> selectCountryStat(@Param("period") String period);
 
+    List<Map<String, Object>> selectTopPageViews();
+    void upsertPageView(@Param("pageUrl") String pageUrl, @Param("pageName") String pageName);
 }

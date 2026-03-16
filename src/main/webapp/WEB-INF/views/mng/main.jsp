@@ -12,8 +12,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="mobile-web-app-capable" content="yes" />
 
-    <link rel="icon" href="/favicon.ico" />
-    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon.png">
     <link rel="manifest" href="/site.webmanifest" />
 
     <title>관리자 메인 | Artixel 관리자</title>
@@ -137,11 +136,33 @@
                                                 </tr>
                                                 </thead>
                                                 <tbody class="fw-bold text-gray-700">
-                                                <tr><td class="text-center"><span class="badge badge-square badge-danger fw-bolder px-3 py-2">1</span></td><td><a href="/" target="_blank" class="text-dark text-hover-primary fs-6 fw-bolder">메인 (Home)</a></td><td class="text-end text-primary fs-5">12,450</td></tr>
-                                                <tr><td class="text-center"><span class="badge badge-square badge-warning fw-bolder px-3 py-2 text-white">2</span></td><td><a href="/contact" target="_blank" class="text-dark text-hover-primary fs-6 fw-bolder">Contact (문의하기)</a></td><td class="text-end text-primary fs-5">8,230</td></tr>
-                                                <tr><td class="text-center"><span class="badge badge-square badge-success fw-bolder px-3 py-2">3</span></td><td><a href="/our-technology" target="_blank" class="text-dark text-hover-primary fs-6 fw-bolder">Our Technology</a></td><td class="text-end text-primary fs-5">6,120</td></tr>
-                                                <tr><td class="text-center"><span class="badge badge-square badge-info fw-bolder px-3 py-2">4</span></td><td><a href="/about" target="_blank" class="text-dark text-hover-primary fs-6 fw-bolder">About Us</a></td><td class="text-end text-primary fs-5">4,500</td></tr>
-                                                <tr><td class="text-center"><span class="badge badge-square badge-light fw-bolder px-3 py-2 text-dark">5</span></td><td><a href="/policy/privacy" target="_blank" class="text-dark text-hover-primary fs-6 fw-bolder">개인정보처리방침</a></td><td class="text-end text-primary fs-5">1,200</td></tr>
+                                                <c:choose>
+                                                    <c:when test="${empty topPages}">
+                                                        <tr><td colspan="3" class="text-center text-muted">수집된 페이지 조회 데이터가 없습니다.</td></tr>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <c:forEach var="item" items="${topPages}" varStatus="status">
+                                                            <c:set var="badgeClass" value="badge-light" />
+                                                            <c:set var="textClass" value="text-dark" />
+                                                            <c:if test="${status.index == 0}"> <c:set var="badgeClass" value="badge-danger" /> <c:set var="textClass" value="text-white" /> </c:if>
+                                                            <c:if test="${status.index == 1}"> <c:set var="badgeClass" value="badge-warning" /> <c:set var="textClass" value="text-white" /> </c:if>
+                                                            <c:if test="${status.index == 2}"> <c:set var="badgeClass" value="badge-success" /> <c:set var="textClass" value="text-white" /> </c:if>
+                                                            <c:if test="${status.index == 3}"> <c:set var="badgeClass" value="badge-info" /> <c:set var="textClass" value="text-white" /> </c:if>
+
+                                                            <tr>
+                                                                <td class="text-center">
+                                                                    <span class="badge badge-square ${badgeClass} fw-bolder px-3 py-2 ${textClass}">${status.index + 1}</span>
+                                                                </td>
+                                                                <td>
+                                                                    <a href="${item.pageUrl}" target="_blank" class="text-dark text-hover-primary fs-6 fw-bolder">${item.pageName}</a>
+                                                                </td>
+                                                                <td class="text-end text-primary fs-5">
+                                                                    <fmt:formatNumber value="${item.viewCount}" pattern="#,###"/>
+                                                                </td>
+                                                            </tr>
+                                                        </c:forEach>
+                                                    </c:otherwise>
+                                                </c:choose>
                                                 </tbody>
                                             </table>
                                         </div>
@@ -357,9 +378,9 @@
             };
 
             // 초기 화면 세팅 (DAY 렌더링)
-            updateVisitChart('DAY');
-            updateInquiryChart('DAY');
-            updateCountryChart('DAY');
+            updateVisitChart('WEEK');
+            updateInquiryChart('WEEK');
+            updateCountryChart('WEEK');
         });
     </script>
 

@@ -12,8 +12,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="mobile-web-app-capable" content="yes" />
 
-    <link rel="icon" href="/favicon.ico" />
-    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon.png">
     <link rel="manifest" href="/site.webmanifest" />
 
     <title>문의 목록 | Artixel 관리자</title>

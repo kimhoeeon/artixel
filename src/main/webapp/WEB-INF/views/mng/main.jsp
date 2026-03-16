@@ -178,8 +178,8 @@
                                                 </h3>
                                                 <div class="card-toolbar">
                                                     <ul class="nav nav-pills nav-pills-custom mb-0">
-                                                        <li class="nav-item mb-3 me-3"><a class="nav-link btn btn-sm btn-color-muted btn-active btn-active-primary fw-bolder px-4 active" data-bs-toggle="tab" onclick="updateVisitChart('DAY')">Day</a></li>
-                                                        <li class="nav-item mb-3 me-3"><a class="nav-link btn btn-sm btn-color-muted btn-active btn-active-primary fw-bolder px-4" data-bs-toggle="tab" onclick="updateVisitChart('WEEK')">Week</a></li>
+                                                        <li class="nav-item mb-3 me-3"><a class="nav-link btn btn-sm btn-color-muted btn-active btn-active-primary fw-bolder px-4" data-bs-toggle="tab" onclick="updateVisitChart('DAY')">Day</a></li>
+                                                        <li class="nav-item mb-3 me-3"><a class="nav-link btn btn-sm btn-color-muted btn-active btn-active-primary fw-bolder px-4 active" data-bs-toggle="tab" onclick="updateVisitChart('WEEK')">Week</a></li>
                                                         <li class="nav-item mb-3"><a class="nav-link btn btn-sm btn-color-muted btn-active btn-active-primary fw-bolder px-4" data-bs-toggle="tab" onclick="updateVisitChart('MONTH')">Month</a></li>
                                                     </ul>
                                                 </div>
@@ -198,8 +198,8 @@
                                                 </h3>
                                                 <div class="card-toolbar">
                                                     <ul class="nav nav-pills nav-pills-custom mb-0">
-                                                        <li class="nav-item mb-3 me-3"><a class="nav-link btn btn-sm btn-color-muted btn-active btn-active-primary fw-bolder px-4 active" data-bs-toggle="tab" onclick="updateInquiryChart('DAY')">Day</a></li>
-                                                        <li class="nav-item mb-3 me-3"><a class="nav-link btn btn-sm btn-color-muted btn-active btn-active-primary fw-bolder px-4" data-bs-toggle="tab" onclick="updateInquiryChart('WEEK')">Week</a></li>
+                                                        <li class="nav-item mb-3 me-3"><a class="nav-link btn btn-sm btn-color-muted btn-active btn-active-primary fw-bolder px-4" data-bs-toggle="tab" onclick="updateInquiryChart('DAY')">Day</a></li>
+                                                        <li class="nav-item mb-3 me-3"><a class="nav-link btn btn-sm btn-color-muted btn-active btn-active-primary fw-bolder px-4 active" data-bs-toggle="tab" onclick="updateInquiryChart('WEEK')">Week</a></li>
                                                         <li class="nav-item mb-3"><a class="nav-link btn btn-sm btn-color-muted btn-active btn-active-primary fw-bolder px-4" data-bs-toggle="tab" onclick="updateInquiryChart('MONTH')">Month</a></li>
                                                     </ul>
                                                 </div>
@@ -220,8 +220,8 @@
                                                 </h3>
                                                 <div class="card-toolbar">
                                                     <ul class="nav nav-pills nav-pills-custom mb-0">
-                                                        <li class="nav-item mb-3 me-3"><a class="nav-link btn btn-sm btn-color-muted btn-active btn-active-primary fw-bolder px-4 active" data-bs-toggle="tab" onclick="updateCountryChart('DAY')">Day</a></li>
-                                                        <li class="nav-item mb-3 me-3"><a class="nav-link btn btn-sm btn-color-muted btn-active btn-active-primary fw-bolder px-4" data-bs-toggle="tab" onclick="updateCountryChart('WEEK')">Week</a></li>
+                                                        <li class="nav-item mb-3 me-3"><a class="nav-link btn btn-sm btn-color-muted btn-active btn-active-primary fw-bolder px-4" data-bs-toggle="tab" onclick="updateCountryChart('DAY')">Day</a></li>
+                                                        <li class="nav-item mb-3 me-3"><a class="nav-link btn btn-sm btn-color-muted btn-active btn-active-primary fw-bolder px-4 active" data-bs-toggle="tab" onclick="updateCountryChart('WEEK')">Week</a></li>
                                                         <li class="nav-item mb-3"><a class="nav-link btn btn-sm btn-color-muted btn-active btn-active-primary fw-bolder px-4" data-bs-toggle="tab" onclick="updateCountryChart('MONTH')">Month</a></li>
                                                     </ul>
                                                 </div>

@@ -155,6 +155,14 @@
                             </tr>
                             <tr class="w100">
                                 <td class="gubun">
+                                    작가명
+                                </td>
+                                <td class="naeyong">
+                                    <input type="text" id="artistName" name="artistName" placeholder="작가명을 입력해주세요">
+                                </td>
+                            </tr>
+                            <tr class="w100">
+                                <td class="gubun">
                                     작품 제목
                                 </td>
                                 <td class="naeyong">

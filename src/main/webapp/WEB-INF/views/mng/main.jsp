@@ -290,14 +290,13 @@
 
     <script>
         $(document).ready(function() {
-            // 백엔드에서 생성된 JSON 데이터
             var visitData = ${visitChartsJson};
             var inquiryData = ${inquiryChartsJson};
             var countryData = ${countryChartsJson};
 
             var visitChart, inquiryChart, countryPieChart;
 
-            // [1] 방문 현황 (보라색 Area)
+            // [1] 방문 현황
             var visitOptions = {
                 series: [{ name: '방문자 수', data: [] }],
                 chart: { type: 'area', height: 350, toolbar: { show: false }, fontFamily: 'Pretendard' },
@@ -313,11 +312,11 @@
             visitChart = new ApexCharts(document.querySelector("#kt_visit_chart"), visitOptions);
             visitChart.render();
 
-            // [2] 문의 현황 (누적 스택 바 차트 - 기업/개인/기관/기타 색상구분)
+            // [2] 문의 현황
             var inquiryOptions = {
                 series: [],
                 chart: { type: 'bar', height: 350, stacked: true, toolbar: { show: false }, fontFamily: 'Pretendard' },
-                colors: ['#009ef7', '#50cd89', '#f1416c', '#ffc700'], // 기업(Primary), 개인(Success), 기관(Danger), 기타(Warning)
+                colors: ['#009ef7', '#50cd89', '#f1416c', '#ffc700'],
                 plotOptions: { bar: { horizontal: false, borderRadius: 3, columnWidth: '40%' } },
                 dataLabels: { enabled: false },
                 xaxis: { categories: [], axisBorder: { show: false }, axisTicks: { show: false }, labels: { style: { colors: '#a1a5b7' } } },
@@ -329,7 +328,7 @@
             inquiryChart = new ApexCharts(document.querySelector("#kt_inquiry_chart"), inquiryOptions);
             inquiryChart.render();
 
-            // [3] 국가별 통계 (도넛 차트)
+            // [3] 국가별 통계 (데이터 0일 경우 자연스럽게 표기되도록 수정)
             var pieOptions = {
                 series: [],
                 labels: [],
@@ -343,23 +342,20 @@
             countryPieChart = new ApexCharts(document.querySelector("#kt_country_pie_chart"), pieOptions);
             countryPieChart.render();
 
-            // --- 탭 클릭 시 차트 업데이트 함수 ---
             window.updateVisitChart = function(period) {
                 visitChart.updateSeries([{ data: visitData[period].data }]);
                 visitChart.updateOptions({ xaxis: { categories: visitData[period].categories } });
             };
-
             window.updateInquiryChart = function(period) {
                 inquiryChart.updateSeries(inquiryData[period].series);
                 inquiryChart.updateOptions({ xaxis: { categories: inquiryData[period].categories } });
             };
-
             window.updateCountryChart = function(period) {
                 countryPieChart.updateSeries(countryData[period].series);
                 countryPieChart.updateOptions({ labels: countryData[period].labels });
             };
 
-            // 초기 화면 세팅 (DAY 렌더링)
+            // 초기 세팅 (WEEK)
             updateVisitChart('WEEK');
             updateInquiryChart('WEEK');
             updateCountryChart('WEEK');

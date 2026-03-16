@@ -9,7 +9,7 @@
                 <img alt="Logo" src="/img/logo.svg" class="h-30px" />
             </a>
             <div class="d-none d-md-flex align-items-center ms-2">
-                <span class="fs-4 fw-bold text-gray-800">승요일기</span>
+                <span class="fs-4 fw-bold text-gray-800">Artixel</span>
                 <span class="badge badge-light-primary fw-bold fs-7 ms-2 px-2 py-1">Manager</span>
             </div>
         </div>

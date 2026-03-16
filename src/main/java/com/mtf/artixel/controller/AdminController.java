@@ -15,7 +15,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
+import java.lang.management.ManagementFactory;
+import java.lang.management.OperatingSystemMXBean;
+import java.net.InetAddress;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Controller
@@ -85,7 +90,7 @@ public class AdminController {
      * 관리자 메인 대시보드
      */
     @GetMapping("/main.do")
-    public String mainPage(Model model) throws Exception {
+    public String mainPage(Model model, HttpServletRequest request) throws Exception {
 
         // [대시보드 통계 데이터 조회]
         // 1. 누적 문의 건수
@@ -101,65 +106,50 @@ public class AdminController {
         model.addAttribute("countryStats", inquiryService.getInquiryCountByCountry());
 
         // 시스템 상태 정보 수집
-        addSystemStatus(model);
+        // [B] 관리자 시스템 정보 수집 대시보드 영역 (viotorydiary 방식 적용)
+        OperatingSystemMXBean osBean = ManagementFactory.getOperatingSystemMXBean();
+        Runtime runtime = Runtime.getRuntime();
+
+        Map<String, Object> sysInfo = new HashMap<>();
+        sysInfo.put("osName", System.getProperty("os.name"));
+        sysInfo.put("osArch", System.getProperty("os.arch"));
+        sysInfo.put("javaVersion", System.getProperty("java.version"));
+
+        // 메모리 정보 계산 (MB 단위)
+        long totalMem = runtime.totalMemory() / (1024 * 1024);
+        long freeMem = runtime.freeMemory() / (1024 * 1024);
+        long usedMem = totalMem - freeMem;
+        long maxMem = runtime.maxMemory() / (1024 * 1024);
+
+        sysInfo.put("totalMemory", totalMem);
+        sysInfo.put("freeMemory", freeMem);
+        sysInfo.put("usedMemory", usedMem);
+        sysInfo.put("maxMemory", maxMem);
+
+        // 디스크 정보 계산 (GB 단위)
+        File root = new File("/");
+        long totalSpace = root.getTotalSpace() / (1024 * 1024 * 1024);
+        long usableSpace = root.getUsableSpace() / (1024 * 1024 * 1024);
+        long usedSpace = totalSpace - usableSpace;
+
+        sysInfo.put("totalSpace", totalSpace);
+        sysInfo.put("usableSpace", usableSpace);
+        sysInfo.put("usedSpace", usedSpace);
+
+        // 접속 IP 정보 수집
+        try {
+            sysInfo.put("serverIp", InetAddress.getLocalHost().getHostAddress());
+        } catch (Exception e) {
+            sysInfo.put("serverIp", "Unknown");
+        }
+        sysInfo.put("clientIp", getClientIp(request));
+
+        // 뷰로 데이터 전송
+        model.addAttribute("sysInfo", sysInfo);
 
         return "mng/main";
     }
 
-    // --- 시스템 상태 정보 수집 메소드 ---
-    private void addSystemStatus(Model model) {
-        // 1. DB 연결 상태 체크
-        boolean dbStatus = false;
-        try {
-            // 간단한 쿼리로 DB 연결 확인 (예: 회원 수 조회 재활용)
-            adminMngMapper.checkLoginId("admin");
-            dbStatus = true;
-        } catch (Exception e) {
-            log.error("DB Connection Check Failed", e);
-            dbStatus = false;
-        }
-        model.addAttribute("sysDbStatus", dbStatus);
-
-        // 2. JVM 메모리 상태 (MB)
-        Runtime runtime = Runtime.getRuntime();
-        long totalMemory = runtime.totalMemory() / (1024 * 1024);
-        long freeMemory = runtime.freeMemory() / (1024 * 1024);
-        long usedMemory = totalMemory - freeMemory;
-
-        // 0으로 나누기 방지
-        int memoryUsage = 0;
-        if (totalMemory > 0) {
-            memoryUsage = (int) ((double) usedMemory / totalMemory * 100);
-        }
-
-        model.addAttribute("sysMemoryUsed", usedMemory);
-        model.addAttribute("sysMemoryTotal", totalMemory);
-        model.addAttribute("sysMemoryUsage", memoryUsage);
-
-        // 3. 디스크 공간 (GB)
-        File root = new File("/");
-        long totalSpace = root.getTotalSpace() / (1024 * 1024 * 1024);
-        long freeSpace = root.getUsableSpace() / (1024 * 1024 * 1024);
-        long usedSpace = totalSpace - freeSpace;
-
-        int diskUsage = 0;
-        if (totalSpace > 0) {
-            diskUsage = (int) ((double) usedSpace / totalSpace * 100);
-        }
-
-        model.addAttribute("sysDiskUsed", usedSpace);
-        model.addAttribute("sysDiskTotal", totalSpace);
-        model.addAttribute("sysDiskUsage", diskUsage);
-
-        // (4) 스레드 및 코어 정보
-        model.addAttribute("sysActiveThreads", Thread.activeCount());
-        model.addAttribute("sysCpuCores", runtime.availableProcessors());
-
-        // (5) OS 정보
-        model.addAttribute("sysOsName", System.getProperty("os.name"));
-        model.addAttribute("sysJavaVer", System.getProperty("java.version"));
-    }
-    
     /**
      * 로그아웃
      */

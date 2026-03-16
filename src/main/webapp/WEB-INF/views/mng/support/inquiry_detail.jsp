@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -45,7 +46,7 @@
                             <div id="kt_app_toolbar_container" class="app-container container-xxl d-flex flex-stack">
                                 <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
                                     <h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">
-                                        1:1 문의 관리
+                                        문의 상세보기
                                     </h1>
 
                                     <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
@@ -55,100 +56,98 @@
                                         <li class="breadcrumb-item">
                                             <span class="bullet bg-gray-400 w-5px h-2px"></span>
                                         </li>
-                                        <li class="breadcrumb-item text-muted">고객센터</li>
+                                        <li class="breadcrumb-item text-muted">문의 관리</li>
                                         <li class="breadcrumb-item">
                                             <span class="bullet bg-gray-400 w-5px h-2px"></span>
                                         </li>
-                                        <li class="breadcrumb-item text-dark">1:1 문의 관리</li>
+                                        <li class="breadcrumb-item text-dark">문의 목록</li>
                                     </ul>
                                 </div>
                             </div>
                         </div>
 
                         <div id="kt_app_content" class="app-content flex-column-fluid">
-                            <div id="kt_app_content_container" class="app-container container-xxl pt-10">
+                            <div id="kt_app_content_container" class="app-container container-xxl">
 
-                                <div class="card mb-5 mb-xl-10">
-                                    <div class="card-header border-0">
-                                        <div class="card-title m-0">
-                                            <h3 class="fw-bold m-0 me-2">문의 상세</h3>
-                                            <c:if test="${inquiry.status eq 'WAITING'}"><span
-                                                    class="badge badge-light-warning">답변대기</span></c:if>
-                                            <c:if test="${inquiry.status eq 'COMPLETED'}"><span
-                                                    class="badge badge-light-success">답변완료</span></c:if>
-                                        </div>
-                                    </div>
-                                    <div class="card-body p-9">
-                                        <div class="row mb-7">
-                                            <label class="col-lg-2 fw-semibold text-muted">작성자</label>
-                                            <div class="col-lg-4"><span
-                                                    class="fw-bold fs-6 text-gray-800">${inquiry.memberName} (${inquiry.memberEmail})</span>
-                                            </div>
-                                            <label class="col-lg-2 fw-semibold text-muted">작성일</label>
-                                            <div class="col-lg-4">
-                                                <span class="fw-bold fs-6 text-gray-800">
-                                                    <fmt:parseDate value="${inquiry.createdAt}"
-                                                                   pattern="yyyy-MM-dd'T'HH:mm:ss" var="regDate"
-                                                                   type="both"/>
-                                                    <fmt:formatDate value="${regDate}" pattern="yyyy-MM-dd HH:mm"/>
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-7">
-                                            <label class="col-lg-2 fw-semibold text-muted">유형</label>
-                                            <div class="col-lg-4"><span
-                                                    class="badge badge-light-primary fw-bold">${inquiry.typeName}</span>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-7">
-                                            <label class="col-lg-2 fw-semibold text-muted">제목</label>
-                                            <div class="col-lg-10"><span
-                                                    class="fw-bold fs-6 text-gray-800">${inquiry.title}</span></div>
-                                        </div>
-                                        <div class="row mb-7">
-                                            <label class="col-lg-2 fw-semibold text-muted">내용</label>
-                                            <div class="col-lg-10">
-                                                <div class="p-5 border rounded bg-light text-gray-800 fs-6"
-                                                     style="white-space: pre-wrap; min-height: 150px;">${inquiry.content}</div>
-                                            </div>
-                                        </div>
+                                <div class="d-flex justify-content-between align-items-center mb-5">
+                                    <h1>의뢰 문의 상세 내역</h1>
+                                    <div>
+                                        <a href="/mng/inquiry/list" class="btn btn-secondary me-2">목록으로</a>
+                                        <form action="/mng/inquiry/delete" method="post" style="display:inline;" onsubmit="return confirm('삭제 시 복구가 불가능합니다. 정말 삭제하시겠습니까?');">
+                                            <input type="hidden" name="inquiryId" value="${inquiry.inquiryId}">
+                                            <button type="submit" class="btn btn-danger">삭제하기</button>
+                                        </form>
                                     </div>
                                 </div>
 
-                                <div class="card mb-5 mb-xl-10">
-                                    <div class="card-header border-0">
-                                        <div class="card-title m-0"><h3 class="fw-bold m-0">관리자 답변</h3></div>
-                                        <c:if test="${not empty inquiry.answeredAt}">
-                                            <div class="card-toolbar">
-                                                <span class="text-gray-400 fs-7">답변일:
-                                                    <fmt:parseDate value="${inquiry.answeredAt}"
-                                                                   pattern="yyyy-MM-dd'T'HH:mm:ss" var="ansDate"
-                                                                   type="both"/>
-                                                    <fmt:formatDate value="${ansDate}" pattern="yyyy-MM-dd HH:mm"/>
-                                                </span>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <table class="table table-bordered align-middle table-row-dashed fs-6">
+                                            <colgroup>
+                                                <col style="width: 15%; background: #f8f9fa;">
+                                                <col style="width: 35%;">
+                                                <col style="width: 15%; background: #f8f9fa;">
+                                                <col style="width: 35%;">
+                                            </colgroup>
+                                            <tbody>
+                                            <tr>
+                                                <th class="text-center">접수 일시</th>
+                                                <td>${inquiry.createdAt}</td>
+                                                <th class="text-center">구분</th>
+                                                <td>${inquiry.category}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="text-center">성함</th>
+                                                <td>${inquiry.clientName}</td>
+                                                <th class="text-center">연락처</th>
+                                                <td>${inquiry.countryCode} ${inquiry.contact}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="text-center">이메일</th>
+                                                <td>${inquiry.email}</td>
+                                                <th class="text-center">국가</th>
+                                                <td>${inquiry.country}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="text-center">작품 제목</th>
+                                                <td>${inquiry.artworkTitle}</td>
+                                                <th class="text-center">작가명</th>
+                                                <td>${inquiry.artistName}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="text-center">작품 크기</th>
+                                                <td colspan="3">${inquiry.artworkSize}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="text-center">첨부 파일/URL</th>
+                                                <td colspan="3">
+                                                    <c:choose>
+                                                        <c:when test="${not empty inquiry.fileUrl}">
+                                                            <a href="${inquiry.fileUrl}" target="_blank" class="text-primary fw-bolder text-hover-primary">
+                                                                <i class="bi bi-link-45deg"></i> 원본 확인 및 다운로드 (${inquiry.fileOriginName})
+                                                            </a>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <span class="text-muted">첨부된 파일이 없습니다.</span>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th class="text-center">문의 내용</th>
+                                                <td colspan="3" style="white-space: pre-wrap; padding: 20px;">${inquiry.content}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+
+                                        <c:if test="${not empty inquiry.fileUrl and (fn:endsWith(fn:toLowerCase(inquiry.fileUrl), '.jpg') or fn:endsWith(fn:toLowerCase(inquiry.fileUrl), '.jpeg') or fn:endsWith(fn:toLowerCase(inquiry.fileUrl), '.png') or fn:endsWith(fn:toLowerCase(inquiry.fileUrl), '.gif'))}">
+                                            <div class="mt-10 text-center">
+                                                <h3 class="mb-5">첨부 이미지 미리보기</h3>
+                                                <img src="${inquiry.fileUrl}" alt="첨부된 작품 이미지" class="img-fluid border" style="max-height: 800px; object-fit: contain;">
                                             </div>
                                         </c:if>
+
                                     </div>
-                                    <form action="/mng/support/inquiry/answer" method="post">
-                                        <input type="hidden" name="inquiryId" value="${inquiry.inquiryId}">
-
-                                        <input type="hidden" name="pageNum" value="${cri.pageNum}">
-                                        <input type="hidden" name="amount" value="${cri.amount}">
-                                        <input type="hidden" name="keyword" value="${cri.keyword}">
-                                        <input type="hidden" name="status" value="${cri.status}">
-
-                                        <div class="card-body p-9 pt-0">
-                                            <textarea class="form-control form-control-solid" name="answer" rows="10"
-                                                      placeholder="답변 내용을 입력하세요." required>${inquiry.answer}</textarea>
-                                        </div>
-                                        <div class="card-footer d-flex justify-content-end py-6 px-9">
-                                            <a href="/mng/support/inquiry/list?pageNum=${cri.pageNum}&amount=${cri.amount}&keyword=${cri.keyword}&status=${cri.status}"
-                                               class="btn btn-light btn-active-light-primary me-2">목록으로</a>
-                                            <button type="submit" class="btn btn-primary">
-                                                ${empty inquiry.answer ? '답변 등록' : '답변 수정'}
-                                            </button>
-                                        </div>
-                                    </form>
                                 </div>
 
                             </div>

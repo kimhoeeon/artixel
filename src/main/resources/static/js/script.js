@@ -81,7 +81,7 @@ $(document).ready(function () {
     ); // aos fade 이벤트
 });  
 
-$('input[name="cmp_type"]').on('change', function () {
+$('input[name="category"]').on('change', function () {
 
     if ($(this).val() === '기타') {
         $('.etc_input').stop().fadeIn(0).focus();

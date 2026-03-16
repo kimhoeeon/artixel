@@ -22,9 +22,6 @@
     <meta property="og:description" content="Artixel">
     <meta property="og:image" content="/img/og_img.jpg">
 
-    <!-- swiper 외부 라이브러리 -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
-
     <!-- aos 외부 라이브러리 -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
@@ -61,7 +58,9 @@
                         </div>
                         <div class="btn guide">작품 촬영 가이드<img src="/img/arrow-right_w.png" alt="화살표"></div>
                     </div>
-                    <form class="contact_form">
+                    <form id="inquiryForm" class="contact_form" action="/contact/submit" method="post" enctype="multipart/form-data">
+                        <input type="hidden" id="fullEmail" name="email">
+
                         <table class="form_box">
                             <tbody>
                             <tr class="radio">
@@ -70,16 +69,16 @@
                                 </td>
                                 <td class="naeyong">
                                     <label>
-                                        <input type="radio" name="cmp_type" checked>기업
+                                        <input type="radio" id="cat_corp" name="category" value="기업" checked><label for="cat_corp">기업</label>
                                     </label>
                                     <label>
-                                        <input type="radio" name="cmp_type">개인
+                                        <input type="radio" id="cat_person" name="category" value="개인"><label for="cat_person">개인</label>
                                     </label>
                                     <label>
-                                        <input type="radio" name="cmp_type">기관
+                                        <input type="radio" id="cat_org" name="category" value="기관"><label for="cat_org">기관</label>
                                     </label>
                                     <label class="etc_wrap">
-                                        <input type="radio" name="cmp_type" value="기타" class="etc_radio">기타
+                                        <input type="radio" id="cat_etc" name="category" value="기타"><label for="cat_etc">기타</label>
                                     </label>
                                     <input type="text" class="etc_input" placeholder="직접입력">
                                 </td>
@@ -89,7 +88,7 @@
                                     성함
                                 </td>
                                 <td class="naeyong">
-                                    <input type="text" placeholder="담당자명을 입력해주세요">
+                                    <input type="text" id="clientName" name="clientName" placeholder="담당자명을 입력해주세요">
                                 </td>
                             </tr>
                             <tr class="email_info">
@@ -97,24 +96,18 @@
                                     이메일
                                 </td>
                                 <td class="naeyong">
-                                    <input type="text" name="tax_email_id" id="tax_email_id" maxlength="40" value="" placeholder="이메일" autocomplete="off">
+                                    <input type="text" id="email1" maxlength="40" value="" placeholder="이메일" autocomplete="off">
                                     <span>@</span>
-                                    <select name="email_host" id="email_host">
-                                        <option value="">직접입력</option>
-                                        <option value="daum.net">daum.net</option>
-                                        <option value="nate.com">nate.com</option>
-                                        <option value="hanmail.net">hanmail.net</option>
+                                    <input type="text" id="emailDomain" placeholder="직접입력">
+                                    <select id="emailDomainSelect">
+                                        <option value="direct">직접입력</option>
                                         <option value="naver.com">naver.com</option>
-                                        <option value="hotmail.com">hotmail.com</option>
-                                        <option value="yahoo.co.kr">yahoo.co.kr</option>
-                                        <option value="empal.com">empal.com</option>
-                                        <option value="korea.com">korea.com</option>
-                                        <option value="hanmir.com">hanmir.com</option>
-                                        <option value="dreamwiz.com">dreamwiz.com</option>
-                                        <option value="orgio.net">orgio.net</option>
-                                        <option value="choi.com">choi.com</option>
-                                        <option value="hitel.net">hitel.net</option>
+                                        <option value="daum.net">daum.net</option>
+                                        <option value="kakao.com">kakao.com</option>
+                                        <option value="hanmail.net">hanmail.net</option>
                                         <option value="gmail.com">gmail.com</option>
+                                        <option value="outlook.com">outlook.com</option>
+                                        <option value="icloud.com">icloud.com</option>
                                     </select>
                                 </td>
                             </tr>
@@ -123,13 +116,13 @@
                                     연락처
                                 </td>
                                 <td class="naeyong">
-                                    <select name="phone" id="phone">
-                                        <option value="">대한민국 (+82)</option>
-                                        <option value="">미국(+1)</option>
-                                        <option value="">일본(+81)</option>
+                                    <select id="countryCode" name="countryCode">
+                                        <option value="+82">대한민국 (+82)</option>
+                                        <option value="+1">미국(+1)</option>
+                                        <option value="+81">일본(+81)</option>
                                     </select>
                                     <span>-</span>
-                                    <input type="text" value="" placeholder="010-1234-5678">
+                                    <input type="text" id="contact" name="contact" placeholder="010-1234-5678">
                                 </td>
                             </tr>
                             <tr class="country_info">
@@ -137,18 +130,18 @@
                                     국가 선택
                                 </td>
                                 <td class="naeyong">
-                                    <select name="email_host" id="email_host">
-                                        <option value="" selected>대한민국 (South Korea)</option>
-                                        <option value="">일본 (Japan)</option>
-                                        <option value="">중국 (China)</option>
-                                        <option value="">미국 (United States)</option>
-                                        <option value="">캐나다 (Canada)</option>
-                                        <option value="">독일 (Germany)</option>
-                                        <option value="">프랑스 (France)</option>
-                                        <option value="">영국 (United Kingdom)</option>
-                                        <option value="">호주 (Australia)</option>
-                                        <option value="">베트남 (Vietnam)</option>
-                                        <option value="">태국 (Thailand)</option>
+                                    <select id="country" name="country">
+                                        <option value="대한민국" selected>대한민국 (South Korea)</option>
+                                        <option value="일본">일본 (Japan)</option>
+                                        <option value="중국">중국 (China)</option>
+                                        <option value="미국">미국 (United States)</option>
+                                        <option value="캐나다">캐나다 (Canada)</option>
+                                        <option value="독일">독일 (Germany)</option>
+                                        <option value="프랑스">프랑스 (France)</option>
+                                        <option value="영국">영국 (United Kingdom)</option>
+                                        <option value="호주">호주 (Australia)</option>
+                                        <option value="베트남">베트남 (Vietnam)</option>
+                                        <option value="태국">태국 (Thailand)</option>
                                     </select>
                                 </td>
                             </tr>
@@ -157,7 +150,7 @@
                                     작품 크기
                                 </td>
                                 <td class="naeyong">
-                                    <input type="text" placeholder="그림의 실제 사이즈를 작성해주세요">
+                                    <input type="text" id="artworkSize" name="artworkSize" placeholder="그림의 실제 사이즈를 작성해주세요">
                                 </td>
                             </tr>
                             <tr class="w100">
@@ -165,7 +158,7 @@
                                     작품 제목
                                 </td>
                                 <td class="naeyong">
-                                    <input type="text" placeholder="작품 제목을 입력해주세요">
+                                    <input type="text" id="artworkTitle" name="artworkTitle" placeholder="작품 제목을 입력해주세요">
                                 </td>
                             </tr>
                             <tr class="file_info">
@@ -194,13 +187,13 @@
                                     문의 내용
                                 </td>
                                 <td class="naeyong">
-                                    <textarea name="" id="" placeholder="목적 : (매입/전시/보험/거래)&#13;&#10;작가 :&#13;&#10;연도 : "></textarea>
+                                    <textarea id="content" name="content" placeholder="목적 : (매입/전시/보험/거래)&#13;&#10;작가 :&#13;&#10;연도 :"></textarea>
                                 </td>
                             </tr>
                             <tr class="agree_info">
                                 <td>
                                     <label class="agree_chk">
-                                        <input type="checkbox" id="agreePrivacy" required>
+                                        <input type="checkbox" id="agreePrivacy" name="agreePrivacy" value="Y" required>
                                         <span class="chk_box"></span>
                                         <span class="txt">
                                             <span href="" class="btn_terms btn-open-terms" data-terms="service">개인정보 수집 이용</span> 동의
@@ -213,7 +206,7 @@
                         </table>
                         <div class="btn_wrap">
                             <div class="send">
-                                <a href="#">문의하기</a>
+                                <a href="#" id="btnSubmit">문의하기</a>
                             </div>
                         </div>
                     </form>
@@ -299,11 +292,139 @@
     </div>
     <!-- 팝업 -->
 
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="/js/jquery-3.6.0.min.js"></script>
     <script src="/js/script.js"></script>
-    <script src="/js/swiper.js"></script>
 
+    <script>
+        $(document).ready(function() {
+            // 1. 서버 측 전송 결과 메시지 처리 (ContactController에서 보낸 메시지)
+            var serverMsg = '${msg}';
+            if (serverMsg) {
+                alert(serverMsg);
+            }
+
+            // 2. 연락처(전화번호) 하이픈 자동 생성 및 숫자만 입력 처리
+            $('#contact').on('input', function() {
+                var val = $(this).val().replace(/[^0-9]/g, '');
+                var len = val.length;
+                if(len < 4) {
+                    $(this).val(val);
+                } else if(len < 8) {
+                    $(this).val(val.substring(0, 3) + '-' + val.substring(3));
+                } else if(len < 11) {
+                    $(this).val(val.substring(0, 3) + '-' + val.substring(3, 3) + '-' + val.substring(6));
+                } else {
+                    $(this).val(val.substring(0, 3) + '-' + val.substring(3, 4) + '-' + val.substring(7));
+                }
+            });
+
+            // 3. 이메일 도메인 선택 처리 (직접입력 포함)
+            $('#emailDomainSelect').on('change', function() {
+                var domain = $(this).val();
+                if(domain === 'direct') {
+                    $('#emailDomain').val('').prop('readonly', false).focus();
+                } else {
+                    $('#emailDomain').val(domain).prop('readonly', true);
+                }
+            });
+
+            // 4. 첨부파일 용량 제한 (100MB)
+            $('#uploadFile').on('change', function() {
+                var file = this.files[0];
+                if (file) {
+                    var maxSize = 100 * 1024 * 1024; // 100MB
+                    if (file.size > maxSize) {
+                        alert('첨부파일은 최대 100MB까지 업로드 가능합니다.');
+                        $(this).val('');
+                    }
+                }
+            });
+
+            // 5. 폼 전송(Submit) 버튼 클릭 시 전체 유효성 검사
+            $('#btnSubmit').on('click', function(e) {
+                e.preventDefault();
+
+                // [검증] 구분 (라디오 버튼)
+                if (!$('input[name="category"]:checked').val()) {
+                    alert('구분을 선택해주세요.');
+                    return;
+                }
+
+                // [검증] 성함
+                if (!$('#clientName').val().trim()) {
+                    alert('성함을 입력해주세요.');
+                    $('#clientName').focus();
+                    return;
+                }
+
+                // [검증] 이메일 조합 및 세팅
+                var email1 = $('#email1').val().trim();
+                var emailDomain = $('#emailDomain').val().trim();
+                if (!email1 || !emailDomain) {
+                    alert('이메일을 정확히 입력해주세요.');
+                    $('#email1').focus();
+                    return;
+                }
+                $('#fullEmail').val(email1 + '@' + emailDomain);
+
+                // [검증] 국가번호 및 연락처
+                if (!$('#contact').val().trim()) {
+                    alert('연락처를 입력해주세요.');
+                    $('#contact').focus();
+                    return;
+                }
+
+                // [검증] 국가 선택
+                if (!$('#country').val().trim()) {
+                    alert('국가를 선택해주세요.');
+                    $('#country').focus();
+                    return;
+                }
+
+                // [검증] 작품 크기
+                if (!$('#artworkSize').val().trim()) {
+                    alert('작품 크기를 입력해주세요.');
+                    $('#artworkSize').focus();
+                    return;
+                }
+
+                // [검증] 첨부파일 & URL 확인 (둘 중 하나 필수)
+                var uploadFile = $('#uploadFile').val();
+                var fileUrl = $('#fileUrl').val().trim();
+
+                if (!uploadFile && !fileUrl) {
+                    alert('작품 이미지 파일이나 URL을 첨부해주세요.');
+                    return;
+                }
+
+                // URL 입력 시 https:// 검증
+                if (fileUrl && !fileUrl.startsWith('https://')) {
+                    alert('URL은 반드시 https:// 로 시작해야 합니다.');
+                    $('#fileUrl').focus();
+                    return;
+                }
+
+                // [검증] 문의 내용
+                if (!$('#content').val().trim()) {
+                    alert('문의 내용을 입력해주세요.');
+                    $('#content').focus();
+                    return;
+                }
+
+                // [검증] 개인정보 동의 여부
+                if (!$('#agreePrivacy').is(':checked')) {
+                    alert('개인정보 수집 및 이용에 동의해주세요.');
+                    return;
+                }
+
+                // 중복 전송 방지를 위해 버튼 비활성화 및 텍스트 변경
+                $(this).prop('disabled', true).text('접수 중...');
+
+                // 모든 검사 통과 시 실제 폼 전송
+                $('#inquiryForm').submit();
+            });
+        });
+    </script>
 </body>
 </html>

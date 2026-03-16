@@ -25,9 +25,4 @@ public class MainController {
         return "product/product";
     }
 
-    @GetMapping("/contact/contact")
-    public String contact_contact() {
-        return "contact/contact";
-    }
-
 }

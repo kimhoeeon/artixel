@@ -48,70 +48,53 @@
                 <div class="app-main flex-column flex-row-fluid" id="kt_app_main">
                     <div class="d-flex flex-column flex-column-fluid">
                         <div id="kt_app_content" class="app-content flex-column-fluid">
-                            <div id="kt_app_content_container" class="app-container container-xxl">
-
-                                <c:if test="${sessionScope.admin.role eq 'SUPER'}">
-                                    <div class="card mb-8 bg-light-warning border-warning border-dashed">
-                                        <div class="card-body py-5 d-flex align-items-center justify-content-between">
-                                            <div class="d-flex align-items-center">
-                                                <i class="ki-duotone ki-security-user fs-1 text-warning me-4">
-                                                    <span class="path1"></span>
-                                                    <span class="path2"></span>
-                                                </i>
-                                                <div class="d-flex flex-column">
-                                                    <h3 class="fs-4 fw-bold mb-1 text-gray-900">관리자 계정 관리 (Super Admin)</h3>
-                                                    <span class="fs-7 fw-semibold text-gray-600">운영자 및 발주사 계정 생성, IP 및 권한을 설정할 수 있습니다.</span>
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <a href="/mng/system/admin/list" class="btn btn-sm btn-warning fw-bold">
-                                                    <i class="ki-duotone ki-setting-2 fs-2 me-1">
-                                                        <span class="path1"></span>
-                                                        <span class="path2"></span>
-                                                    </i> 계정 관리
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </c:if>
+                            <div id="kt_content_container" class="container-xxl">
 
                                 <div class="d-flex justify-content-between align-items-center mb-8 mt-5">
                                     <h1 class="d-flex align-items-center text-dark fw-bolder fs-1 my-1">대시보드</h1>
                                 </div>
 
-                                <div class="row g-5 g-xl-8 mb-8">
+                                <div class="row g-5 mb-8 align-items-stretch">
                                     <div class="col-xl-3 col-md-6">
-                                        <div class="card premium-card bg-primary card-xl-stretch shadow-sm">
-                                            <div class="card-body px-7 py-8">
-                                                <i class="ki-outline ki-message-text-2 text-white fs-3x mb-5 d-block"></i>
-                                                <div class="text-white fw-bolder fs-3 mb-2 opacity-75">누적 문의 건수</div>
+                                        <div class="card premium-card bg-primary h-100 shadow-sm">
+                                            <div class="card-body px-7 py-6 d-flex flex-column justify-content-between">
+                                                <div>
+                                                    <i class="ki-outline ki-message-text-2 text-white fs-2x mb-4 d-block"></i>
+                                                    <div class="text-white fw-bolder fs-4 mb-2 opacity-75 text-nowrap">누적 문의 건수</div>
+                                                </div>
                                                 <div class="fw-bolder text-white fs-1"><fmt:formatNumber value="${totalInquiryCount}" pattern="#,###"/> 건</div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-xl-3 col-md-6">
-                                        <div class="card premium-card bg-success card-xl-stretch shadow-sm">
-                                            <div class="card-body px-7 py-8">
-                                                <i class="ki-outline ki-user text-white fs-3x mb-5 d-block"></i>
-                                                <div class="text-white fw-bolder fs-3 mb-2 opacity-75">누적 순 방문자</div>
+                                        <div class="card premium-card bg-success h-100 shadow-sm">
+                                            <div class="card-body px-7 py-6 d-flex flex-column justify-content-between">
+                                                <div>
+                                                    <i class="ki-outline ki-user text-white fs-2x mb-4 d-block"></i>
+                                                    <div class="text-white fw-bolder fs-4 mb-2 opacity-75 text-nowrap">누적 순 방문자</div>
+                                                </div>
                                                 <div class="fw-bolder text-white fs-1"><fmt:formatNumber value="${totalUniqueVisitors}" pattern="#,###"/> 명</div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-xl-3 col-md-6">
-                                        <div class="card premium-card bg-info card-xl-stretch shadow-sm">
-                                            <div class="card-body px-7 py-8">
-                                                <i class="ki-outline ki-profile-user text-white fs-3x mb-5 d-block"></i>
-                                                <div class="text-white fw-bolder fs-3 mb-2 opacity-75">누적 전체 방문자</div>
+                                        <div class="card premium-card bg-info h-100 shadow-sm">
+                                            <div class="card-body px-7 py-6 d-flex flex-column justify-content-between">
+                                                <div>
+                                                    <i class="ki-outline ki-profile-user text-white fs-2x mb-4 d-block"></i>
+                                                    <div class="text-white fw-bolder fs-4 mb-2 opacity-75 text-nowrap">누적 전체 방문자</div>
+                                                </div>
                                                 <div class="fw-bolder text-white fs-1"><fmt:formatNumber value="${totalVisitors}" pattern="#,###"/> 명</div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-xl-3 col-md-6">
-                                        <div class="card premium-card bg-warning card-xl-stretch shadow-sm">
-                                            <div class="card-body px-7 py-8">
-                                                <i class="ki-outline ki-flash text-white fs-3x mb-5 d-block"></i>
-                                                <div class="text-white fw-bolder fs-3 mb-2 opacity-75">오늘 신규 의뢰</div>
+                                        <div class="card premium-card bg-warning h-100 shadow-sm">
+                                            <div class="card-body px-7 py-6 d-flex flex-column justify-content-between">
+                                                <div>
+                                                    <i class="ki-outline ki-bulb text-white fs-2x mb-4 d-block"></i>
+                                                    <div class="text-white fw-bolder fs-4 mb-2 opacity-75 text-nowrap">오늘 신규 의뢰</div>
+                                                </div>
                                                 <div class="fw-bolder text-white fs-1"><fmt:formatNumber value="${todayInquiryCount}" pattern="#,###"/> 건</div>
                                             </div>
                                         </div>
@@ -168,7 +151,7 @@
                                     </div>
                                 </div>
 
-                                <div class="row g-5 g-xl-8 mb-8">
+                                <div class="row g-5 mb-8">
                                     <div class="col-xl-6">
                                         <div class="card shadow-sm h-100 premium-card">
                                             <div class="card-header pt-7 border-0 align-items-center">
@@ -210,9 +193,9 @@
                                     </div>
                                 </div>
 
-                                <div class="row g-5 g-xl-8 mb-8">
+                                <div class="row g-5 mb-8">
                                     <div class="col-xl-6">
-                                        <div class="card shadow-sm h-md-100 premium-card">
+                                        <div class="card shadow-sm h-100 premium-card">
                                             <div class="card-header pt-7 border-0 align-items-center">
                                                 <h3 class="card-title align-items-start flex-column">
                                                     <span class="card-label fw-bolder text-dark fs-3">국가별 문의 현황</span>
@@ -232,18 +215,18 @@
                                     </div>
 
                                     <div class="col-xl-6">
-                                        <div class="card shadow-sm h-md-100 premium-card">
+                                        <div class="card shadow-sm h-100 premium-card">
                                             <div class="card-header pt-7 border-0 mb-3">
                                                 <h3 class="card-title align-items-start flex-column">
                                                     <span class="card-label fw-bolder text-dark fs-3">서버 시스템 리소스 현황</span>
                                                 </h3>
                                             </div>
-                                            <div class="card-body pt-0 pb-8">
+                                            <div class="card-body pt-0 pb-8 d-flex flex-column justify-content-between">
                                                 <div class="d-flex flex-column gap-6">
 
                                                     <div class="d-flex align-items-center p-5 rounded border border-dashed border-gray-300">
                                                         <div class="symbol symbol-50px me-5">
-                                                            <span class="symbol-label bg-light-primary"><i class="ki-outline ki-cpu fs-2x text-primary"></i></span>
+                                                            <span class="symbol-label bg-light-primary"><i class="ki-outline ki-setting-2 fs-2x text-primary"></i></span>
                                                         </div>
                                                         <div class="d-flex flex-column flex-grow-1">
                                                             <span class="text-dark fw-bolder fs-5 mb-1">${sysInfo.osName} (${sysInfo.osArch})</span>
@@ -253,7 +236,7 @@
 
                                                     <div class="d-flex align-items-center p-5 rounded border border-dashed border-gray-300">
                                                         <div class="symbol symbol-50px me-5">
-                                                            <span class="symbol-label bg-light-success"><i class="ki-outline ki-save-2 fs-2x text-success"></i></span>
+                                                            <span class="symbol-label bg-light-success"><i class="ki-outline ki-chart-pie-4 fs-2x text-success"></i></span>
                                                         </div>
                                                         <div class="d-flex flex-column flex-grow-1">
                                                             <div class="d-flex justify-content-between mb-2">
@@ -266,7 +249,7 @@
 
                                                     <div class="d-flex align-items-center p-5 rounded border border-dashed border-gray-300">
                                                         <div class="symbol symbol-50px me-5">
-                                                            <span class="symbol-label bg-light-danger"><i class="ki-outline ki-hard-drive fs-2x text-danger"></i></span>
+                                                            <span class="symbol-label bg-light-danger"><i class="ki-outline ki-archive fs-2x text-danger"></i></span>
                                                         </div>
                                                         <div class="d-flex flex-column flex-grow-1">
                                                             <div class="d-flex justify-content-between mb-2">
@@ -277,13 +260,13 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="d-flex justify-content-between">
-                                                        <div class="d-flex align-items-center p-4 rounded border border-dashed border-gray-300 w-100 me-3">
-                                                            <i class="ki-outline ki-server fs-2 text-info me-3"></i>
+                                                    <div class="d-flex justify-content-between gap-3">
+                                                        <div class="d-flex align-items-center p-4 rounded border border-dashed border-gray-300 w-100">
+                                                            <i class="ki-outline ki-route fs-2 text-info me-3"></i>
                                                             <div class="d-flex flex-column"><span class="text-muted fs-7">Server IP</span><span class="fw-bolder fs-6">${sysInfo.serverIp}</span></div>
                                                         </div>
                                                         <div class="d-flex align-items-center p-4 rounded border border-dashed border-gray-300 w-100">
-                                                            <i class="ki-outline ki-screen fs-2 text-warning me-3"></i>
+                                                            <i class="ki-outline ki-user fs-2 text-warning me-3"></i>
                                                             <div class="d-flex flex-column"><span class="text-muted fs-7">Client IP</span><span class="fw-bolder fs-6">${sysInfo.clientIp}</span></div>
                                                         </div>
                                                     </div>

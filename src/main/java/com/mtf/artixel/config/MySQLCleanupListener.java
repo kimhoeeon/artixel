@@ -24,7 +24,15 @@ public class MySQLCleanupListener implements ServletContextListener {
     public void contextDestroyed(ServletContextEvent sce) {
         log.info(">>> 웹 애플리케이션 종료: MySQL 리소스 정리 시작");
 
-        // 1. 등록된 JDBC 드라이버 강제 해제
+        // 1. MySQL Cleanup 쓰레드 강제 종료 (로그의 주범 해결)
+        try {
+            AbandonedConnectionCleanupThread.checkedShutdown();
+            log.info(">>> MySQL AbandonedConnectionCleanupThread 종료 완료");
+        } catch (Exception e) {
+            log.error(">>> MySQL 쓰레드 종료 실패", e);
+        }
+
+        // 2. 등록된 JDBC 드라이버 강제 해제
         Enumeration<Driver> drivers = DriverManager.getDrivers();
         while (drivers.hasMoreElements()) {
             Driver driver = drivers.nextElement();
@@ -36,12 +44,5 @@ public class MySQLCleanupListener implements ServletContextListener {
             }
         }
 
-        // 2. MySQL Cleanup 쓰레드 강제 종료 (로그의 주범 해결)
-        try {
-            AbandonedConnectionCleanupThread.checkedShutdown();
-            log.info(">>> MySQL AbandonedConnectionCleanupThread 종료 완료");
-        } catch (Exception e) {
-            log.error(">>> MySQL 쓰레드 종료 실패", e);
-        }
     }
 }

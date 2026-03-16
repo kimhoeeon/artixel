@@ -81,7 +81,7 @@
                     <form class="form w-100" novalidate="novalidate" id="login_form" action="/mng/login" method="post">
 
                         <div class="text-center mb-10">
-                            <img alt="Logo" src="/img/logo.svg" class="h-60px mb-3"/>
+                            <img alt="Logo" src="/img/logo.png" class="h-60px mb-3"/>
                             <h1 class="logo-text mb-3">
                                 Admin System
                             </h1>

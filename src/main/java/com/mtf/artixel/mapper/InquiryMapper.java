@@ -2,6 +2,8 @@ package com.mtf.artixel.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import com.mtf.artixel.vo.InquiryVO;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 import java.util.Map;
 
@@ -35,9 +37,13 @@ public interface InquiryMapper {
     // [신규] 9. 대시보드: 금일 신규 문의 건수
     int selectTodayInquiryCount();
 
-    // [신규] 10. 대시보드: 구분별 통계 (기업/개인/기관 등)
-    List<Map<String, Object>> selectInquiryCountByCategory();
+    // [신규] 대시보드: 누적 전체 방문자 및 순 방문자 (access_logs 테이블 연동)
+    int selectTotalVisitors();
+    int selectTotalUniqueVisitors();
 
-    // [신규] 11. 대시보드: 국가별 통계
-    List<Map<String, Object>> selectInquiryCountByCountry();
+    // [대시보드 차트] 동적 기간(DAY, WEEK, MONTH) 적용
+    List<Map<String, Object>> selectVisitorTrend(@Param("period") String period);
+    List<Map<String, Object>> selectInquiryTrendByCategory(@Param("period") String period);
+    List<Map<String, Object>> selectCountryStat(@Param("period") String period);
+
 }

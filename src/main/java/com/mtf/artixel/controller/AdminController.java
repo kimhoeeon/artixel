@@ -1,5 +1,6 @@
 package com.mtf.artixel.controller;
 
+import com.google.gson.Gson;
 import com.mtf.artixel.mapper.AdminMngMapper;
 import com.mtf.artixel.service.AdminService;
 import com.mtf.artixel.service.InquiryService;
@@ -18,9 +19,10 @@ import java.io.File;
 import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;
 import java.net.InetAddress;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 @Slf4j
 @Controller
@@ -92,62 +94,137 @@ public class AdminController {
     @GetMapping("/main.do")
     public String mainPage(Model model, HttpServletRequest request) throws Exception {
 
-        // [대시보드 통계 데이터 조회]
-        // 1. 누적 문의 건수
+        // 1. 상단 요약 데이터
         model.addAttribute("totalInquiryCount", inquiryService.getTotalInquiryCount());
-
-        // 2. 금일 문의 건수
         model.addAttribute("todayInquiryCount", inquiryService.getTodayInquiryCount());
+        model.addAttribute("totalUniqueVisitors", inquiryService.getTotalUniqueVisitors());
+        model.addAttribute("totalVisitors", inquiryService.getTotalVisitors());
 
-        // 3. 구분별 통계 (기업/개인/기관 등)
-        model.addAttribute("categoryStats", inquiryService.getInquiryCountByCategory());
+        Gson gson = new Gson();
 
-        // 4. 국가별 통계 (원형 그래프용)
-        model.addAttribute("countryStats", inquiryService.getInquiryCountByCountry());
+        // 2. 방문 현황 및 문의 현황 (Day/Week/Month 동적 생성)
+        Map<String, Object> visitCharts = new HashMap<>();
+        Map<String, Object> inquiryCharts = new HashMap<>();
+        Map<String, Object> countryCharts = new HashMap<>();
 
-        // 시스템 상태 정보 수집
-        // [B] 관리자 시스템 정보 수집 대시보드 영역 (viotorydiary 방식 적용)
-        OperatingSystemMXBean osBean = ManagementFactory.getOperatingSystemMXBean();
+        String[] periods = {"DAY", "WEEK", "MONTH"};
+        for (String period : periods) {
+            visitCharts.put(period, buildVisitorData(period));
+            inquiryCharts.put(period, buildInquiryStackedData(period));
+            countryCharts.put(period, buildCountryPieData(period));
+        }
+
+        model.addAttribute("visitChartsJson", gson.toJson(visitCharts));
+        model.addAttribute("inquiryChartsJson", gson.toJson(inquiryCharts));
+        model.addAttribute("countryChartsJson", gson.toJson(countryCharts));
+
+        // 3. 서버 시스템 리소스 현황
         Runtime runtime = Runtime.getRuntime();
-
         Map<String, Object> sysInfo = new HashMap<>();
         sysInfo.put("osName", System.getProperty("os.name"));
         sysInfo.put("osArch", System.getProperty("os.arch"));
         sysInfo.put("javaVersion", System.getProperty("java.version"));
 
-        // 메모리 정보 계산 (MB 단위)
         long totalMem = runtime.totalMemory() / (1024 * 1024);
         long freeMem = runtime.freeMemory() / (1024 * 1024);
-        long usedMem = totalMem - freeMem;
-        long maxMem = runtime.maxMemory() / (1024 * 1024);
-
         sysInfo.put("totalMemory", totalMem);
-        sysInfo.put("freeMemory", freeMem);
-        sysInfo.put("usedMemory", usedMem);
-        sysInfo.put("maxMemory", maxMem);
+        sysInfo.put("usedMemory", totalMem - freeMem);
 
-        // 디스크 정보 계산 (GB 단위)
         File root = new File("/");
         long totalSpace = root.getTotalSpace() / (1024 * 1024 * 1024);
         long usableSpace = root.getUsableSpace() / (1024 * 1024 * 1024);
-        long usedSpace = totalSpace - usableSpace;
-
         sysInfo.put("totalSpace", totalSpace);
-        sysInfo.put("usableSpace", usableSpace);
-        sysInfo.put("usedSpace", usedSpace);
+        sysInfo.put("usedSpace", totalSpace - usableSpace);
 
-        // 접속 IP 정보 수집
-        try {
-            sysInfo.put("serverIp", InetAddress.getLocalHost().getHostAddress());
-        } catch (Exception e) {
-            sysInfo.put("serverIp", "Unknown");
-        }
+        try { sysInfo.put("serverIp", InetAddress.getLocalHost().getHostAddress()); }
+        catch (Exception e) { sysInfo.put("serverIp", "Unknown"); }
         sysInfo.put("clientIp", getClientIp(request));
 
-        // 뷰로 데이터 전송
         model.addAttribute("sysInfo", sysInfo);
 
         return "mng/main";
+    }
+
+    // --- 차트용 JSON 데이터 빌더 도우미 ---
+    private Map<String, Object> buildVisitorData(String period) throws Exception {
+        List<String> labels = generateDateLabels(period);
+        List<Map<String, Object>> dbList = inquiryService.getVisitorTrend(period);
+        Map<String, Integer> dbMap = new HashMap<>();
+        for(Map<String, Object> row : dbList) dbMap.put((String)row.get("dateStr"), ((Number)row.get("cnt")).intValue());
+
+        List<Integer> data = new ArrayList<>();
+        for(String label : labels) data.add(dbMap.getOrDefault(label, 0));
+
+        Map<String, Object> res = new HashMap<>();
+        res.put("categories", labels);
+        res.put("data", data);
+        return res;
+    }
+
+    private Map<String, Object> buildInquiryStackedData(String period) throws Exception {
+        List<String> labels = generateDateLabels(period);
+        List<Map<String, Object>> dbList = inquiryService.getInquiryTrendByCategory(period);
+
+        String[] categories = {"기업", "개인", "기관", "기타"};
+        Map<String, List<Integer>> seriesMap = new HashMap<>();
+        for(String cat : categories) seriesMap.put(cat, new ArrayList<>(Collections.nCopies(labels.size(), 0)));
+
+        for(Map<String, Object> row : dbList) {
+            String dateStr = (String)row.get("dateStr");
+            String cat = (String)row.get("category");
+            int cnt = ((Number)row.get("cnt")).intValue();
+
+            int idx = labels.indexOf(dateStr);
+            if(idx >= 0) {
+                if(seriesMap.containsKey(cat)) seriesMap.get(cat).set(idx, cnt);
+                else if (cat != null && cat.startsWith("기타")) {
+                    seriesMap.get("기타").set(idx, seriesMap.get("기타").get(idx) + cnt);
+                }
+            }
+        }
+
+        List<Map<String, Object>> series = new ArrayList<>();
+        for(String cat : categories) {
+            Map<String, Object> s = new HashMap<>();
+            s.put("name", cat);
+            s.put("data", seriesMap.get(cat));
+            series.add(s);
+        }
+
+        Map<String, Object> res = new HashMap<>();
+        res.put("categories", labels);
+        res.put("series", series);
+        return res;
+    }
+
+    private Map<String, Object> buildCountryPieData(String period) throws Exception {
+        List<Map<String, Object>> dbList = inquiryService.getCountryStat(period);
+        List<String> labels = new ArrayList<>();
+        List<Integer> series = new ArrayList<>();
+        for(Map<String, Object> row : dbList) {
+            labels.add((String)row.get("country"));
+            series.add(((Number)row.get("cnt")).intValue());
+        }
+        if(labels.isEmpty()) { labels.add("데이터 없음"); series.add(1); }
+
+        Map<String, Object> res = new HashMap<>();
+        res.put("labels", labels);
+        res.put("series", series);
+        return res;
+    }
+
+    // 빈 날짜 생성을 위한 헬퍼
+    private List<String> generateDateLabels(String period) {
+        List<String> labels = new ArrayList<>();
+        LocalDate now = LocalDate.now();
+        if ("MONTH".equals(period)) {
+            for(int i=11; i>=0; i--) labels.add(now.minusMonths(i).format(DateTimeFormatter.ofPattern("yyyy-MM")));
+        } else if ("WEEK".equals(period)) {
+            for(int i=11; i>=0; i--) labels.add(now.minusWeeks(i).with(DayOfWeek.MONDAY).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        } else {
+            for(int i=14; i>=0; i--) labels.add(now.minusDays(i).format(DateTimeFormatter.ofPattern("MM.dd")));
+        }
+        return labels;
     }
 
     /**

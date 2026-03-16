@@ -27,8 +27,7 @@ public class AdminController {
     private final InquiryService inquiryService;
     private final AdminMngMapper adminMngMapper;
 
-    // --- 1. 로그인 및 메인 ---
-
+    // 1. 관리자 로그인 화면 (유지)
     @GetMapping("/index.do")
     public String loginPage(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
@@ -201,27 +200,15 @@ public class AdminController {
             ip = request.getHeader("WL-Proxy-Client-IP");
         }
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("HTTP_CLIENT_IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("HTTP_X_FORWARDED_FOR");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getRemoteAddr();
         }
         return ip;
     }
-
-    /************************************************************
-     * **********************************************************
-     * KBO 데이터 수집 관련
-     * **********************************************************
-     * **********************************************************/
-
-    // 수동 업데이트 API
-    // 사용법: /admin/game/update-rapid?date=2025-05-05
-    /*@GetMapping("/update-rapid")
-    public String updateFromRapid(@RequestParam(required = false) String date) {
-        LocalDate targetDate = (date != null)
-                ? LocalDate.parse(date, DateTimeFormatter.ISO_DATE)
-                : LocalDate.now();
-
-        gameDataService.fetchFromRapid(targetDate);
-        return targetDate + " 경기 데이터 업데이트 요청 완료!";
-    }*/
 
 }

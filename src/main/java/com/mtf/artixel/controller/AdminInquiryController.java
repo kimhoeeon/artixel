@@ -27,7 +27,7 @@ public class AdminInquiryController {
     private final InquiryService inquiryService;
 
     // 1. 문의 목록 조회 (검색/페이징 포함)
-    @GetMapping("/list.do")
+    @GetMapping("/list")
     public String list(@ModelAttribute InquiryVO inquiryVO, HttpServletRequest request, Model model) throws Exception {
 
         // 페이징 처리 로직
@@ -45,19 +45,18 @@ public class AdminInquiryController {
         model.addAttribute("searchVO", inquiryVO);
         model.addAttribute("currentPage", page);
 
-        // viotorydiary의 기존 JSP 경로 구조 유지
         return "mng/support/inquiry_list";
     }
 
     // 2. 문의 상세 보기
-    @GetMapping("/detail.do")
+    @GetMapping("/detail")
     public String detail(@RequestParam Long inquiryId, Model model) throws Exception {
         model.addAttribute("inquiry", inquiryService.getInquiryDetail(inquiryId));
         return "mng/support/inquiry_detail";
     }
 
     // 3. 문의 삭제 (AJAX 또는 단순 POST 용)
-    @PostMapping("/delete.do")
+    @PostMapping("/delete")
     public String delete(@RequestParam Long inquiryId, RedirectAttributes rttr) throws Exception {
         boolean result = inquiryService.deleteInquiry(inquiryId);
         if (result) {
@@ -65,11 +64,11 @@ public class AdminInquiryController {
         } else {
             rttr.addFlashAttribute("msg", "삭제에 실패했습니다.");
         }
-        return "redirect:/mng/inquiry/list.do";
+        return "redirect:/mng/inquiry/list";
     }
 
     // 4. 전체 엑셀(Excel) 다운로드 로직
-    @GetMapping("/excel.do")
+    @GetMapping("/excel")
     public void excelDownload(@ModelAttribute InquiryVO inquiryVO, HttpServletResponse response) throws Exception {
         // 엑셀은 전체 데이터를 추출해야 하므로 LIMIT 제한 해제
         inquiryVO.setLimitStart(0);

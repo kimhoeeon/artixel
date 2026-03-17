@@ -37,7 +37,7 @@ public interface InquiryMapper {
     // 9. 대시보드: 금일 신규 문의 건수
     int selectTodayInquiryCount();
 
-    // 대시보드: 누적 전체 방문자 및 순 방문자 (access_logs 테이블 연동)
+    // 대시보드: 누적 전체 방문자 및 순 방문자
     int selectTotalVisitors();
     int selectTotalUniqueVisitors();
 
@@ -48,4 +48,7 @@ public interface InquiryMapper {
 
     List<Map<String, Object>> selectTopPageViews();
     void upsertPageView(@Param("pageUrl") String pageUrl, @Param("pageName") String pageName);
+
+    void insertVisitLog(@Param("clientIp") String clientIp);
+
 }

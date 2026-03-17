@@ -135,4 +135,14 @@ public class InquiryService {
         }
     }
 
+    // 방문자 로그 기록 (세션당 1회)
+    @Transactional(rollbackFor = Exception.class)
+    public void insertVisitLog(String clientIp) {
+        try {
+            inquiryMapper.insertVisitLog(clientIp);
+        } catch (Exception e) {
+            log.error("방문자 로그 기록 실패", e);
+        }
+    }
+
 }

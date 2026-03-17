@@ -2,18 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mtf.artixel.mapper.InquiryMapper">
 
-    <insert id="insertInquiry" parameterType="com.mtf.artixel.vo.InquiryVO" useGeneratedKeys="true" keyProperty="inquiryId">
-        INSERT INTO inquiry (
-            category, client_name, country_code, contact, email, country,
-            artwork_title, artwork_size, artist_name, content,
-            file_url, file_path, file_origin_name, agree_privacy,
-            status, client_ip, created_at, updated_at
-        ) VALUES (
-                     #{category}, #{clientName}, #{countryCode}, #{contact}, #{email}, #{country},
-                     #{artworkTitle}, #{artworkSize}, #{artistName}, #{content},
-                     #{fileUrl}, #{filePath}, #{fileOriginName}, #{agreePrivacy},
-                     'PENDING', #{clientIp}, NOW(), NOW()
-                 )
+    <insert id="insertInquiry" parameterType="com.mtf.artixel.vo.InquiryVO" useGeneratedKeys="true"
+            keyProperty="inquiryId">
+        INSERT INTO inquiry (category, client_name, country_code, contact, email, country,
+                             artwork_title, artwork_size, artist_name, content,
+                             file_url, file_path, file_origin_name, agree_privacy,
+                             status, client_ip, created_at, updated_at)
+        VALUES (#{category}, #{clientName}, #{countryCode}, #{contact}, #{email}, #{country},
+                #{artworkTitle}, #{artworkSize}, #{artistName}, #{content},
+                #{fileUrl}, #{filePath}, #{fileOriginName}, #{agreePrivacy},
+                'PENDING', #{clientIp}, NOW(), NOW())
     </insert>
 
     <select id="selectRecentInquiryCountByIp" parameterType="String" resultType="int">
@@ -23,7 +21,8 @@
           AND created_at >= DATE_SUB(NOW(), INTERVAL 1 MINUTE)
     </select>
 
-    <select id="selectInquiryList" parameterType="com.mtf.artixel.vo.InquiryVO" resultType="com.mtf.artixel.vo.InquiryVO">
+    <select id="selectInquiryList" parameterType="com.mtf.artixel.vo.InquiryVO"
+            resultType="com.mtf.artixel.vo.InquiryVO">
         SELECT
         inquiry_id AS inquiryId, category, client_name AS clientName,
         country_code AS countryCode, contact, email, country,
@@ -35,14 +34,15 @@
         WHERE 1=1
         <if test="searchType != null and searchType != '' and keyword != null and keyword != ''">
             <choose>
-                <when test="searchType == 'name'"> AND client_name LIKE CONCAT('%', #{keyword}, '%') </when>
-                <when test="searchType == 'contact'"> AND contact LIKE CONCAT('%', #{keyword}, '%') </when>
+                <when test="searchType == 'name'">AND client_name LIKE CONCAT('%', #{keyword}, '%')</when>
+                <when test="searchType == 'contact'">AND contact LIKE CONCAT('%', #{keyword}, '%')</when>
             </choose>
         </if>
-        <if test="startDate != null and startDate != ''"> AND DATE(created_at) >= #{startDate} </if>
-        <if test="endDate != null and endDate != ''"> <![CDATA[ AND DATE(created_at) <= CONCAT(#{endDate}, ' 23:59:59') ]]> </if>
+        <if test="startDate != null and startDate != ''">AND DATE(created_at) >= #{startDate}</if>
+        <if test="endDate != null and endDate != ''">
+            <![CDATA[ AND DATE(created_at) <= CONCAT(#{endDate}, ' 23:59:59') ]]> </if>
         ORDER BY inquiry_id DESC
-        <if test="recordSize > 0"> LIMIT #{limitStart}, #{recordSize} </if>
+        <if test="recordSize > 0">LIMIT #{limitStart}, #{recordSize}</if>
     </select>
 
     <select id="selectInquiryListCount" parameterType="com.mtf.artixel.vo.InquiryVO" resultType="int">
@@ -50,52 +50,84 @@
         WHERE 1=1
         <if test="searchType != null and searchType != '' and keyword != null and keyword != ''">
             <choose>
-                <when test="searchType == 'name'"> AND client_name LIKE CONCAT('%', #{keyword}, '%') </when>
-                <when test="searchType == 'contact'"> AND contact LIKE CONCAT('%', #{keyword}, '%') </when>
+                <when test="searchType == 'name'">AND client_name LIKE CONCAT('%', #{keyword}, '%')</when>
+                <when test="searchType == 'contact'">AND contact LIKE CONCAT('%', #{keyword}, '%')</when>
             </choose>
         </if>
-        <if test="startDate != null and startDate != ''"> AND DATE(created_at) >= #{startDate} </if>
-        <if test="endDate != null and endDate != ''"> <![CDATA[ AND DATE(created_at) <= CONCAT(#{endDate}, ' 23:59:59') ]]> </if>
+        <if test="startDate != null and startDate != ''">AND DATE(created_at) >= #{startDate}</if>
+        <if test="endDate != null and endDate != ''">
+            <![CDATA[ AND DATE(created_at) <= CONCAT(#{endDate}, ' 23:59:59') ]]> </if>
     </select>
 
     <select id="selectInquiryDetail" parameterType="Long" resultType="com.mtf.artixel.vo.InquiryVO">
-        SELECT
-            inquiry_id AS inquiryId, category, client_name AS clientName,
-            country_code AS countryCode, contact, email, country,
-            artwork_title AS artworkTitle, artwork_size AS artworkSize, artist_name AS artistName,
-            content, file_url AS fileUrl, file_path AS filePath, file_origin_name AS fileOriginName,
-            agree_privacy AS agreePrivacy, status, client_ip AS clientIp,
-            created_at AS createdAt, updated_at AS updatedAt
+        SELECT inquiry_id       AS inquiryId,
+               category,
+               client_name      AS clientName,
+               country_code     AS countryCode,
+               contact,
+               email,
+               country,
+               artwork_title    AS artworkTitle,
+               artwork_size     AS artworkSize,
+               artist_name      AS artistName,
+               content,
+               file_url         AS fileUrl,
+               file_path        AS filePath,
+               file_origin_name AS fileOriginName,
+               agree_privacy    AS agreePrivacy,
+               status,
+               client_ip        AS clientIp,
+               created_at       AS createdAt,
+               updated_at       AS updatedAt
         FROM inquiry
         WHERE inquiry_id = #{inquiryId}
     </select>
 
     <delete id="deleteInquiry" parameterType="Long">
-        DELETE FROM inquiry WHERE inquiry_id = #{inquiryId}
+        DELETE
+        FROM inquiry
+        WHERE inquiry_id = #{inquiryId}
     </delete>
 
     <update id="updateInquiryStatus" parameterType="com.mtf.artixel.vo.InquiryVO">
-        UPDATE inquiry SET status = #{status}, updated_at = NOW() WHERE inquiry_id = #{inquiryId}
+        UPDATE inquiry
+        SET status     = #{status},
+            updated_at = NOW()
+        WHERE inquiry_id = #{inquiryId}
     </update>
 
-    <select id="selectTotalInquiryCount" resultType="int"> SELECT COUNT(*) FROM inquiry </select>
-    <select id="selectTodayInquiryCount" resultType="int"> SELECT COUNT(*) FROM inquiry WHERE DATE(created_at) = CURDATE() </select>
-    <select id="selectTotalVisitors" resultType="int"> SELECT COUNT(*) FROM access_logs </select>
-    <select id="selectTotalUniqueVisitors" resultType="int"> SELECT COUNT(DISTINCT member_id) FROM access_logs </select>
+    <insert id="insertVisitLog">
+        INSERT INTO visit_logs (client_ip, visit_time)
+        VALUES (#{clientIp}, NOW())
+    </insert>
+
+    <select id="selectTotalInquiryCount" resultType="int"> SELECT COUNT(*)
+                                                           FROM inquiry </select>
+    <select id="selectTodayInquiryCount" resultType="int"> SELECT COUNT(*)
+                                                           FROM inquiry
+                                                           WHERE DATE(created_at) = CURDATE() </select>
+
+    <select id="selectTotalVisitors" resultType="int"> SELECT COUNT(*)
+                                                       FROM visit_logs </select>
+    <select id="selectTotalUniqueVisitors" resultType="int"> SELECT COUNT(DISTINCT client_ip)
+                                                             FROM visit_logs </select>
 
     <select id="selectVisitorTrend" resultType="java.util.Map">
         SELECT
         <choose>
-            <when test="period == 'MONTH'"> DATE_FORMAT(login_date, '%Y-%m') </when>
-            <when test="period == 'WEEK'"> DATE_FORMAT(DATE_SUB(login_date, INTERVAL WEEKDAY(login_date) DAY), '%Y-%m-%d') </when>
-            <otherwise> DATE_FORMAT(login_date, '%m.%d') </otherwise>
-        </choose> as dateStr,
+            <when test="period == 'MONTH'">DATE_FORMAT(visit_time, '%Y-%m')</when>
+            <when test="period == 'WEEK'">DATE_FORMAT(DATE_SUB(visit_time, INTERVAL WEEKDAY(visit_time) DAY),
+                '%Y-%m-%d')
+            </when>
+            <otherwise>DATE_FORMAT(visit_time, '%m.%d')</otherwise>
+        </choose>
+        as dateStr,
         COUNT(*) as cnt
-        FROM access_logs
+        FROM visit_logs
         <choose>
-            <when test="period == 'MONTH'"> WHERE login_date >= DATE_SUB(CURDATE(), INTERVAL 11 MONTH) </when>
-            <when test="period == 'WEEK'"> WHERE login_date >= DATE_SUB(CURDATE(), INTERVAL 11 WEEK) </when>
-            <otherwise> WHERE login_date >= DATE_SUB(CURDATE(), INTERVAL 14 DAY) </otherwise>
+            <when test="period == 'MONTH'">WHERE visit_time >= DATE_SUB(CURDATE(), INTERVAL 11 MONTH)</when>
+            <when test="period == 'WEEK'">WHERE visit_time >= DATE_SUB(CURDATE(), INTERVAL 11 WEEK)</when>
+            <otherwise>WHERE visit_time >= DATE_SUB(CURDATE(), INTERVAL 14 DAY)</otherwise>
         </choose>
         GROUP BY dateStr ORDER BY dateStr ASC
     </select>
@@ -103,17 +135,20 @@
     <select id="selectInquiryTrendByCategory" resultType="java.util.Map">
         SELECT
         <choose>
-            <when test="period == 'MONTH'"> DATE_FORMAT(created_at, '%Y-%m') </when>
-            <when test="period == 'WEEK'"> DATE_FORMAT(DATE_SUB(created_at, INTERVAL WEEKDAY(created_at) DAY), '%Y-%m-%d') </when>
-            <otherwise> DATE_FORMAT(created_at, '%m.%d') </otherwise>
-        </choose> as dateStr,
+            <when test="period == 'MONTH'">DATE_FORMAT(created_at, '%Y-%m')</when>
+            <when test="period == 'WEEK'">DATE_FORMAT(DATE_SUB(created_at, INTERVAL WEEKDAY(created_at) DAY),
+                '%Y-%m-%d')
+            </when>
+            <otherwise>DATE_FORMAT(created_at, '%m.%d')</otherwise>
+        </choose>
+        as dateStr,
         category,
         COUNT(*) as cnt
         FROM inquiry
         <choose>
-            <when test="period == 'MONTH'"> WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 11 MONTH) </when>
-            <when test="period == 'WEEK'"> WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 11 WEEK) </when>
-            <otherwise> WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 14 DAY) </otherwise>
+            <when test="period == 'MONTH'">WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 11 MONTH)</when>
+            <when test="period == 'WEEK'">WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 11 WEEK)</when>
+            <otherwise>WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 14 DAY)</otherwise>
         </choose>
         GROUP BY dateStr, category ORDER BY dateStr ASC
     </select>
@@ -122,9 +157,9 @@
         SELECT country, COUNT(*) as cnt
         FROM inquiry
         <choose>
-            <when test="period == 'MONTH'"> WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH) </when>
-            <when test="period == 'WEEK'"> WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 1 WEEK) </when>
-            <otherwise> WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 1 DAY) </otherwise>
+            <when test="period == 'MONTH'">WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH)</when>
+            <when test="period == 'WEEK'">WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 1 WEEK)</when>
+            <otherwise>WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 1 DAY)</otherwise>
         </choose>
         GROUP BY country ORDER BY cnt DESC
     </select>

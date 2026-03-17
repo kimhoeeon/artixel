@@ -7,6 +7,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @Component
 @RequiredArgsConstructor
@@ -30,11 +31,34 @@ public class PageViewInterceptor implements HandlerInterceptor {
             pageName = "Contact";
         }
 
-        // 해당 페이지 접근 시 비동기적으로 조회수 +1
         if (!pageName.isEmpty()) {
+            // 1. 해당 페이지의 단순 뷰(View) 카운트는 매번 증가
             inquiryService.increasePageView(uri, pageName);
+
+            // 2. 전체 방문자 집계용 로깅 (브라우저 세션당 1회만 기록하여 DB 과부하 방지 및 순수 방문자 측정)
+            HttpSession session = request.getSession();
+            if (session.getAttribute("site_visited") == null) {
+                String clientIp = getClientIp(request);
+                inquiryService.insertVisitLog(clientIp);
+                session.setAttribute("site_visited", true); // 플래그 꽂기
+            }
         }
 
         return true;
+    }
+
+    // 클라이언트 IP 추출 유틸
+    private String getClientIp(HttpServletRequest request) {
+        String ip = request.getHeader("X-Forwarded-For");
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
+        }
+        return ip;
     }
 }

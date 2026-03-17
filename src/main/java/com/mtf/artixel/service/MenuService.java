@@ -21,7 +21,7 @@ public class MenuService {
         // 2. 문의 관리 (그룹)
         List<MenuItem> subMem = new ArrayList<>();
         subMem.add(new MenuItem("문의 목록", "/mng/inquiry/list", "", 0));
-        menus.add(new MenuItem("문의 관리", "#", "ki-user", 2, subMem));
+        menus.add(new MenuItem("문의 관리", "#", "ki-message-text-2", 3, subMem));
 
         return menus;
     }

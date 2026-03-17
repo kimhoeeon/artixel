@@ -31,13 +31,13 @@ public interface InquiryMapper {
     // 7. 관리자: 진행 상태 변경
     int updateInquiryStatus(InquiryVO inquiryVO);
 
-    // [신규] 8. 대시보드: 누적 문의 건수
+    // 8. 대시보드: 누적 문의 건수
     int selectTotalInquiryCount();
 
-    // [신규] 9. 대시보드: 금일 신규 문의 건수
+    // 9. 대시보드: 금일 신규 문의 건수
     int selectTodayInquiryCount();
 
-    // [신규] 대시보드: 누적 전체 방문자 및 순 방문자 (access_logs 테이블 연동)
+    // 대시보드: 누적 전체 방문자 및 순 방문자 (access_logs 테이블 연동)
     int selectTotalVisitors();
     int selectTotalUniqueVisitors();
 

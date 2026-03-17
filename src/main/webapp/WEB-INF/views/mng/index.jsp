@@ -22,40 +22,29 @@
     <link href="/assets/css/style.bundle.css" rel="stylesheet" type="text/css"/>
 
     <style>
-        /* [수정 2] 배경 이미지 대신 CSS 그라데이션 적용 */
         body {
-            /* 기본 다크 배경 */
-            /* 중앙에서 퍼지는 은은한 조명 효과 (Dark Blue 톤) */
             background: #1e1e2d radial-gradient(circle at center, #2b3344 0%, #1e1e2d 70%);
             min-height: 100vh;
         }
-
-        /* 로그인 카드 스타일 */
         .card-login {
             background-color: #151521 !important;
             border: 1px solid #2b2b40;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4); /* 그림자 강화 */
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
         }
-
-        /* 입력창 커스텀 (다크 모드) */
         .form-control.bg-dark-input {
             background-color: #1e1e2d !important;
             border-color: #323248;
             color: #ffffff;
         }
         .form-control.bg-dark-input:focus {
-            border-color: #0055a2; /* 키 컬러 (Blue) */
+            border-color: #0055a2;
             box-shadow: 0 0 0 0.25rem rgba(0, 85, 162, 0.25);
         }
-
-        /* 로고 텍스트 */
         .logo-text {
             color: #ffffff;
             font-weight: 700;
             letter-spacing: -1px;
         }
-
-        /* 로그인 버튼 (키 컬러 그라데이션) */
         .btn-primary-custom {
             background: #0055a2 linear-gradient(135deg, #0055a2 0%, #003e7e 100%);
             border: none;
@@ -88,7 +77,7 @@
                             </div>
                         </div>
 
-                        <c:if test="${not empty msg}">
+                        <c:if test="${not empty msg and param.expired ne 'true'}">
                             <div class="alert alert-danger d-flex align-items-center p-5 mb-5">
                                 <i class="ki-duotone ki-shield-cross fs-2hx text-danger me-4">
                                     <span class="path1"></span><span class="path2"></span>
@@ -141,6 +130,14 @@
     <script src="/assets/plugins/global/plugins.bundle.js"></script>
     <script src="/assets/js/scripts.bundle.js"></script>
     <script>
+
+        // [핵심 로직] 세션 만료로 튕겨져 왔을 경우 브라우저 Alert을 띄웁니다.
+        <c:if test="${param.expired == 'true' or msg eq '로그인이 필요한 서비스입니다.'}">
+            alert('로그인이 필요한 서비스입니다.');
+            // Alert 창을 띄운 후 URL에서 ?expired=true 파라미터를 조용히 지워줍니다. (새로고침 시 Alert 재발생 방지)
+            history.replaceState({}, null, location.pathname);
+        </c:if>
+
         var form = document.querySelector('#login_form');
         var submitButton = document.querySelector('#kt_sign_in_submit');
 

@@ -36,11 +36,16 @@ public class AdminController {
 
     // 1. 관리자 로그인 화면 (유지)
     @GetMapping("/index.do")
-    public String loginPage(HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-        if (session != null && session.getAttribute("adminId") != null) {
-            return "redirect:/mng/main.do";
+    public String index(HttpSession session,
+                        @RequestParam(value = "expired", required = false) String expired,
+                        Model model) {
+        if (session.getAttribute("admin") != null) return "redirect:/mng/main.do";
+
+        // 인터셉터에서 세션 만료로 튕겨냈을 경우 메시지 모델에 추가 (index.jsp에서 자동 알럿)
+        if ("true".equals(expired)) {
+            model.addAttribute("msg", "로그인이 필요한 서비스입니다.");
         }
+
         return "mng/index";
     }
 
@@ -100,7 +105,7 @@ public class AdminController {
         model.addAttribute("totalUniqueVisitors", inquiryService.getTotalUniqueVisitors());
         model.addAttribute("totalVisitors", inquiryService.getTotalVisitors());
 
-        // [신규 추가] 실시간 상위 조회 페이지 TOP 5
+        // 실시간 상위 조회 페이지 TOP 5
         model.addAttribute("topPages", inquiryService.getTopPageViews());
 
         Gson gson = new Gson();

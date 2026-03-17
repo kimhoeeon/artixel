@@ -106,7 +106,7 @@
                                         <div class="card bg-dark h-100">
                                             <div class="card-body px-7 py-6 d-flex flex-column justify-content-between">
                                                 <div>
-                                                    <i class="ki-outline ki-bell fs-2x mb-4 d-block text-warning neon-warning"></i>
+                                                    <i class="ki-outline ki-sms fs-2x mb-4 d-block text-warning neon-warning"></i>
                                                     <div class="text-gray-400 fw-bolder fs-5 mb-2 text-nowrap">오늘 신규 의뢰</div>
                                                 </div>
                                                 <div class="fw-bolder text-white fs-1"><fmt:formatNumber value="${todayInquiryCount}" pattern="#,###"/> <span class="fs-5 text-gray-600">건</span></div>
@@ -139,16 +139,17 @@
                                                     </c:when>
                                                     <c:otherwise>
                                                         <c:forEach var="item" items="${topPages}" varStatus="status">
-                                                            <c:set var="badgeClass" value="badge-light-dark" />
-                                                            <c:set var="textClass" value="text-gray-500" />
-                                                            <c:if test="${status.index == 0}"> <c:set var="badgeClass" value="badge-light-danger" /> <c:set var="textClass" value="text-danger" /> </c:if>
-                                                            <c:if test="${status.index == 1}"> <c:set var="badgeClass" value="badge-light-warning" /> <c:set var="textClass" value="text-warning" /> </c:if>
-                                                            <c:if test="${status.index == 2}"> <c:set var="badgeClass" value="badge-light-success" /> <c:set var="textClass" value="text-success" /> </c:if>
-                                                            <c:if test="${status.index == 3}"> <c:set var="badgeClass" value="badge-light-info" /> <c:set var="textClass" value="text-info" /> </c:if>
+
+                                                            <c:set var="badgeClass" value="badge-dark" />
+                                                            <c:set var="textClass" value="text-gray-400" />
+                                                            <c:if test="${status.index == 0}"> <c:set var="badgeClass" value="badge-danger neon-danger" /> <c:set var="textClass" value="text-white" /> </c:if>
+                                                            <c:if test="${status.index == 1}"> <c:set var="badgeClass" value="badge-warning neon-warning" /> <c:set var="textClass" value="text-white" /> </c:if>
+                                                            <c:if test="${status.index == 2}"> <c:set var="badgeClass" value="badge-success neon-success" /> <c:set var="textClass" value="text-white" /> </c:if>
+                                                            <c:if test="${status.index == 3}"> <c:set var="badgeClass" value="badge-info neon-info" /> <c:set var="textClass" value="text-white" /> </c:if>
 
                                                             <tr class="hover-elevate-up">
                                                                 <td class="text-center">
-                                                                    <span class="badge badge-square ${badgeClass} fw-bolder px-3 py-2 ${textClass}">${status.index + 1}</span>
+                                                                    <span class="badge badge-square ${badgeClass} ${textClass} fw-bolder px-3 py-2 border-0">${status.index + 1}</span>
                                                                 </td>
                                                                 <td>
                                                                     <a href="${item.pageUrl}" target="_blank" class="text-white text-hover-primary fs-6 fw-bolder">${item.pageName}</a>

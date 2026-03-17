@@ -16,7 +16,7 @@
 
     <title>문의 상세 | Artixel 관리자</title>
     <link href="/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css"/>
-    <link href="/assets/css/style.bundle.css" rel="stylesheet" type="text/css"/>
+    <link href="/assets/css/style.bundle.css" rel="stylesheet" type="text/css"/>x
     <link href="/css/mngStyle.css" rel="stylesheet">
 </head>
 <body id="kt_app_body"

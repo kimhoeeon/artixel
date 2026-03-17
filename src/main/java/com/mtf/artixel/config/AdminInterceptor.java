@@ -18,43 +18,66 @@ public class AdminInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String requestURI = request.getRequestURI();
 
-        // 1. 로그인 페이지 및 리소스는 검사 제외 (WebMvcConfig에서도 제외하지만 이중 체크 - viotorydiary 원본 로직)
-        if (requestURI.equals("/mng/index.do") || requestURI.equals("/mng/index") || requestURI.equals("/mng/login.do") || requestURI.equals("/mng/login")) {
+        // 1. 로그인 및 정적 리소스는 인터셉터 패스 (WebConfig와 이중 체크)
+        if (requestURI.startsWith("/mng/index") || requestURI.startsWith("/mng/login") ||
+                requestURI.startsWith("/mng/assets") || requestURI.startsWith("/mng/css") ||
+                requestURI.startsWith("/mng/js") || requestURI.startsWith("/mng/img")) {
             return true;
         }
 
-        // 2. 세션 체크 (로그인 여부 확인)
+        // 2. 관리자 세션 검증
         HttpSession session = request.getSession(false);
 
-        // AdminController에서 session.setAttribute("admin", admin); 로 저장된 객체 확인
         if (session == null || session.getAttribute("admin") == null) {
 
-            // [버그 패치] 비동기 통신(AJAX)일 경우 스크립트 실행을 막고 401 에러 반환 (무한 알럿 완벽 방지)
-            String ajaxHeader = request.getHeader("X-Requested-With");
-            if ("XMLHttpRequest".equals(ajaxHeader)) {
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Ajax request requires login.");
+            String clientIp = getClientIp(request);
+            log.warn("관리자 비로그인/세션만료 접근 차단: IP={} / URI={}", clientIp, requestURI);
+
+            // 3. [1차 방어] 비동기 요청(AJAX, Fetch 등) 정밀 감지
+            boolean isAjax = false;
+            String requestedWith = request.getHeader("X-Requested-With");
+            String accept = request.getHeader("Accept");
+            String fetchMode = request.getHeader("Sec-Fetch-Mode");
+
+            if ("XMLHttpRequest".equalsIgnoreCase(requestedWith) ||
+                    (accept != null && accept.toLowerCase().contains("application/json")) ||
+                    "cors".equalsIgnoreCase(fetchMode)) {
+                isAjax = true;
+            }
+
+            if (isAjax) {
+                // 비동기 요청일 경우 스크립트를 내리지 않고 401 상태 코드만 조용히 반환
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentType("application/json; charset=UTF-8");
+                PrintWriter out = response.getWriter();
+                out.print("{\"error\": \"Session Expired\", \"redirect\": \"/mng/index.do\"}");
+                out.flush();
                 return false;
             }
 
-            String clientIp = getClientIp(request);
-            log.info("관리자 비로그인 접근 차단: IP={} / URI={}", clientIp, requestURI);
-
-            // 바로 리다이렉트 하지 않고, 알림창을 띄운 후 이동하도록 스크립트 전송 (viotorydiary 원본 로직)
+            // 4. [2차 방어] 일반 웹 요청일 경우 스크립트 실행 (무한 알럿 원천 차단 가드 적용)
             response.setContentType("text/html; charset=UTF-8");
             PrintWriter out = response.getWriter();
 
             out.println("<script>");
-            out.println("alert('로그인이 필요한 서비스입니다.');");
-            out.println("location.href='/mng/index.do';"); // 로그인 페이지로 이동
+            // window.top 객체에 플래그(isSessionAlertShown)를 저장하여 알럿이 중복으로 뜨는 것을 완벽히 차단합니다.
+            out.println("if (window.top && !window.top.isSessionAlertShown) {");
+            out.println("    window.top.isSessionAlertShown = true;");
+            out.println("    alert('로그인이 필요한 서비스입니다.');");
+            out.println("    window.top.location.href='/mng/index.do';");
+            out.println("} else if (!window.top) {");
+            out.println("    alert('로그인이 필요한 서비스입니다.');");
+            out.println("    location.href='/mng/index.do';");
+            out.println("}");
             out.println("</script>");
 
             out.flush();
-            out.close(); // 더 이상 컨트롤러로 진행하지 않음
+            out.close();
 
-            return false; // 컨트롤러 실행 차단
+            return false;
         }
 
-        return true; // 통과
+        return true; // 세션 유효 시 통과
     }
 
     // 클라이언트 IP 추출 유틸 (로그용으로만 남겨둠)

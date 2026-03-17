@@ -6,13 +6,13 @@
         <div class="nav_wrap">
             <ul class="menu">
                 <li>
-                    <a href="/about/about">Our Technology</a>
+                    <a href="/about">Our Technology</a>
                 </li>
                 <li>
-                    <a href="/product/product">Start Analysis</a>
+                    <a href="/product">Start Analysis</a>
                 </li>
                 <li>
-                    <a href="/contact/contact">Contact</a>
+                    <a href="/contact">Contact</a>
                 </li>
             </ul>
             <div class="lang">

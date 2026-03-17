@@ -15,12 +15,12 @@ public class MainController {
         return "main";
     }
 
-    @GetMapping("/about/about")
+    @GetMapping("/about")
     public String about_about() {
         return "about/about";
     }
 
-    @GetMapping("/product/product")
+    @GetMapping("/product")
     public String product_product() {
         return "product/product";
     }

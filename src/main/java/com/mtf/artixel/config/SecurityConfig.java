@@ -17,14 +17,12 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf().disable() // CSRF 보안 해제
-                .formLogin().disable() // 기본 로그인 페이지 사용 안 함
-                .headers().frameOptions().disable() // h2-console 등 iframe 허용
+                .csrf().disable()
+                .headers().frameOptions().disable()
                 .and()
                 .authorizeRequests()
-                // [핵심] 정적 리소스와 manifest 파일은 누구나 접근 가능하게 허용
-                .antMatchers("/**").permitAll() // [중요] 모든 경로에 대해 누구나 접근 허용
-                .anyRequest().permitAll(); // 나머지 요청도 일단 허용 (보안은 Interceptor에서 처리하므로)
+                .antMatchers("/**").permitAll()
+                .anyRequest().authenticated();
 
         return http.build();
     }

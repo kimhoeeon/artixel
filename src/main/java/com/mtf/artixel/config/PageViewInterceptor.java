@@ -22,14 +22,12 @@ public class PageViewInterceptor implements HandlerInterceptor {
         // URL 패턴에 맞춰서 자동으로 페이지 이름과 조회수 매핑
         if ("/".equals(uri)) {
             pageName = "메인 (Home)";
-        } else if ("/contact".equals(uri)) {
-            pageName = "Contact (문의하기)";
-        } else if ("/our-technology".equals(uri)) {
-            pageName = "Our Technology";
         } else if ("/about".equals(uri)) {
-            pageName = "About Us";
-        } else if ("/policy/privacy".equals(uri)) {
-            pageName = "개인정보처리방침";
+            pageName = "Our Technology";
+        } else if ("/product".equals(uri)) {
+            pageName = "Start Analysis";
+        } else if ("/contact".equals(uri)) {
+            pageName = "Contact";
         }
 
         // 해당 페이지 접근 시 비동기적으로 조회수 +1

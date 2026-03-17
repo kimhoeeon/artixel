@@ -20,7 +20,7 @@ public class ContactController {
     private final InquiryService inquiryService;
 
     // 1. Contact 폼 화면 띄우기 (퍼블리싱된 jsp 연결)
-    @GetMapping("/contact/contact")
+    @GetMapping("")
     public String contactForm() {
         return "contact/contact";
     }

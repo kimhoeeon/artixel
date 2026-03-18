@@ -51,14 +51,26 @@ public class GlobalController {
 
             boolean isSelfActive = false;
 
-            // 1. [본인 확인] 현재 URL과 메뉴 URL이 정확히 일치하는지 확인
-            if (menu.getUrl() != null && !menu.getUrl().isEmpty()) {
+            // 1. [본인 확인] 현재 URL과 메뉴 URL 매칭
+            if (menu.getUrl() != null && !menu.getUrl().isEmpty() && !menu.getUrl().equals("#")) {
+
+                // (1) 정확히 일치하는 경우 (예: /mng/main.do)
                 if (currentUri.equals(menu.getUrl())) {
                     isSelfActive = true;
                 }
-                // (옵션) 상세 페이지 등 서브 URL도 활성화하고 싶다면 아래와 같은 로직 추가 가능
-                else if (currentUri.startsWith(menu.getUrl())) {
-                    isSelfActive = true;
+                // (2) [수정] 서브 페이지 진입 시 유지 로직 개선
+                // 메뉴의 URL에서 마지막 경로(예: /list)를 제외한 부모 경로(예: /mng/inquiry/)를 추출하여,
+                // 현재 URL이 그 부모 경로에 포함되면 하위 상세 페이지로 간주하고 활성화시킴.
+                // 단, "/" 나 "/mng/" 처럼 너무 짧은 공통 경로에서 오작동하지 않도록 뎁스(depth) 검증.
+                else {
+                    int lastSlashIdx = menu.getUrl().lastIndexOf("/");
+                    if (lastSlashIdx > 0) { // "/" 가 루트 하나만 있는게 아닐 때
+                        String parentPath = menu.getUrl().substring(0, lastSlashIdx + 1); // "/mng/inquiry/"
+                        // 상위 경로가 "/mng/" 같은 루트급이 아니고, 현재 URI가 해당 경로를 포함할 때
+                        if (parentPath.length() > 5 && currentUri.startsWith(parentPath)) {
+                            isSelfActive = true;
+                        }
+                    }
                 }
             }
 

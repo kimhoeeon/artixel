@@ -76,7 +76,9 @@
                                                     <i class="ki-outline ki-message-text-2 fs-2x mb-4 d-block text-primary neon-primary"></i>
                                                     <div class="text-gray-400 fw-bolder fs-5 mb-2 text-nowrap">누적 문의 건수</div>
                                                 </div>
-                                                <div class="fw-bolder text-white fs-1"><fmt:formatNumber value="${totalInquiryCount}" pattern="#,###"/> <span class="fs-5 text-gray-600">건</span></div>
+                                                <div class="fw-bolder text-white fs-1">
+                                                    <fmt:formatNumber value="${totalInquiryCount}" pattern="#,###"/> <span class="fs-5 text-gray-600">건</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -87,7 +89,9 @@
                                                     <i class="ki-outline ki-user fs-2x mb-4 d-block text-success neon-success"></i>
                                                     <div class="text-gray-400 fw-bolder fs-5 mb-2 text-nowrap">누적 순 방문자</div>
                                                 </div>
-                                                <div class="fw-bolder text-white fs-1"><fmt:formatNumber value="${totalUniqueVisitors}" pattern="#,###"/> <span class="fs-5 text-gray-600">명</span></div>
+                                                <div class="fw-bolder text-white fs-1">
+                                                    <fmt:formatNumber value="${totalUniqueVisitors}" pattern="#,###"/> <span class="fs-5 text-gray-600">명</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -98,7 +102,9 @@
                                                     <i class="ki-outline ki-profile-user fs-2x mb-4 d-block text-info neon-info"></i>
                                                     <div class="text-gray-400 fw-bolder fs-5 mb-2 text-nowrap">누적 전체 방문자</div>
                                                 </div>
-                                                <div class="fw-bolder text-white fs-1"><fmt:formatNumber value="${totalVisitors}" pattern="#,###"/> <span class="fs-5 text-gray-600">명</span></div>
+                                                <div class="fw-bolder text-white fs-1">
+                                                    <fmt:formatNumber value="${totalVisitors}" pattern="#,###"/> <span class="fs-5 text-gray-600">명</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -109,7 +115,9 @@
                                                     <i class="ki-outline ki-sms fs-2x mb-4 d-block text-warning neon-warning"></i>
                                                     <div class="text-gray-400 fw-bolder fs-5 mb-2 text-nowrap">오늘 신규 의뢰</div>
                                                 </div>
-                                                <div class="fw-bolder text-white fs-1"><fmt:formatNumber value="${todayInquiryCount}" pattern="#,###"/> <span class="fs-5 text-gray-600">건</span></div>
+                                                <div class="fw-bolder text-white fs-1">
+                                                    <fmt:formatNumber value="${todayInquiryCount}" pattern="#,###"/> <span class="fs-5 text-gray-600">건</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -125,47 +133,59 @@
                                         <div class="table-responsive">
                                             <table class="table align-middle table-row-dashed table-row-gray-800 fs-6 gy-4">
                                                 <thead>
-                                                <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
-                                                    <th class="w-60px text-center">순위</th>
-                                                    <th class="min-w-150px">페이지명</th>
-                                                    <th class="min-w-200px">URL 주소</th>
-                                                    <th class="text-end">조회수</th>
-                                                </tr>
+                                                    <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
+                                                        <th class="w-60px text-center">순위</th>
+                                                        <th class="min-w-150px">페이지명</th>
+                                                        <th class="min-w-200px">URL 주소</th>
+                                                        <th class="text-end">조회수</th>
+                                                    </tr>
                                                 </thead>
                                                 <tbody class="fw-bold text-gray-400">
-                                                <c:choose>
-                                                    <c:when test="${empty topPages}">
-                                                        <tr><td colspan="4" class="text-center text-muted py-10">수집된 페이지 조회 데이터가 없습니다.</td></tr>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <c:forEach var="item" items="${topPages}" varStatus="status">
+                                                    <c:choose>
+                                                        <c:when test="${empty topPages}">
+                                                            <tr><td colspan="4" class="text-center text-muted py-10">수집된 페이지 조회 데이터가 없습니다.</td></tr>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <c:forEach var="item" items="${topPages}" varStatus="status">
 
-                                                            <c:set var="badgeClass" value="badge-dark" />
-                                                            <c:set var="textClass" value="text-gray-400" />
-                                                            <c:if test="${status.index == 0}"> <c:set var="badgeClass" value="badge-danger neon-danger" /> <c:set var="textClass" value="text-white" /> </c:if>
-                                                            <c:if test="${status.index == 1}"> <c:set var="badgeClass" value="badge-warning neon-warning" /> <c:set var="textClass" value="text-white" /> </c:if>
-                                                            <c:if test="${status.index == 2}"> <c:set var="badgeClass" value="badge-success neon-success" /> <c:set var="textClass" value="text-white" /> </c:if>
-                                                            <c:if test="${status.index == 3}"> <c:set var="badgeClass" value="badge-info neon-info" /> <c:set var="textClass" value="text-white" /> </c:if>
+                                                                <c:set var="badgeClass" value="badge-dark" />
+                                                                <c:set var="textClass" value="text-gray-400" />
+                                                                <c:if test="${status.index == 0}">
+                                                                    <c:set var="badgeClass" value="badge-danger neon-danger" />
+                                                                    <c:set var="textClass" value="text-white" />
+                                                                </c:if>
+                                                                <c:if test="${status.index == 1}">
+                                                                    <c:set var="badgeClass" value="badge-warning neon-warning" />
+                                                                    <c:set var="textClass" value="text-white" />
+                                                                </c:if>
+                                                                <c:if test="${status.index == 2}">
+                                                                    <c:set var="badgeClass" value="badge-success neon-success" />
+                                                                    <c:set var="textClass" value="text-white" />
+                                                                </c:if>
+                                                                <c:if test="${status.index == 3}">
+                                                                    <c:set var="badgeClass" value="badge-info neon-info" />
+                                                                    <c:set var="textClass" value="text-white" />
+                                                                </c:if>
 
-                                                            <tr class="hover-elevate-up">
-                                                                <td class="text-center">
-                                                                    <span class="badge badge-square ${badgeClass} ${textClass} fw-bolder px-3 py-2 border-0">${status.index + 1}</span>
-                                                                </td>
-                                                                <td>
-                                                                    <a href="${item.pageUrl}" target="_blank" class="text-white text-hover-primary fs-6 fw-bolder">${item.pageName}</a>
-                                                                </td>
-                                                                <td>
-                                                                    <a href="${item.pageUrl}" target="_blank" class="text-muted text-hover-info fs-7 d-flex align-items-center">
-                                                                        <i class="ki-outline ki-link fs-6 me-2"></i>${item.pageUrl}
-                                                                    </a>
-                                                                </td>
-                                                                <td class="text-end text-primary fs-5 fw-bolder">
-                                                                    <fmt:formatNumber value="${item.viewCount}" pattern="#,###"/>
-                                                                </td>
-                                                            </tr>
-                                                        </c:forEach>
-                                                    </c:otherwise>
-                                                </c:choose>
+                                                                <tr class="hover-elevate-up">
+                                                                    <td class="text-center">
+                                                                        <span class="badge badge-square ${badgeClass} ${textClass} fw-bolder px-3 py-2 border-0">${status.index + 1}</span>
+                                                                    </td>
+                                                                    <td>
+                                                                        <a href="${item.pageUrl}" target="_blank" class="text-white text-hover-primary fs-6 fw-bolder">${item.pageName}</a>
+                                                                    </td>
+                                                                    <td>
+                                                                        <a href="${item.pageUrl}" target="_blank" class="text-muted text-hover-info fs-7 d-flex align-items-center">
+                                                                            <i class="ki-outline ki-link fs-6 me-2"></i>${item.pageUrl}
+                                                                        </a>
+                                                                    </td>
+                                                                    <td class="text-end text-primary fs-5 fw-bolder">
+                                                                        <fmt:formatNumber value="${item.viewCount}" pattern="#,###"/>
+                                                                    </td>
+                                                                </tr>
+                                                            </c:forEach>
+                                                        </c:otherwise>
+                                                    </c:choose>
                                                 </tbody>
                                             </table>
                                         </div>
@@ -181,9 +201,15 @@
                                                 </h3>
                                                 <div class="card-toolbar">
                                                     <ul class="nav nav-pills nav-pills-custom mb-0">
-                                                        <li class="nav-item mb-3 me-3"><a class="nav-link btn btn-sm btn-color-muted btn-active btn-active-primary fw-bolder px-4" data-bs-toggle="tab" onclick="updateVisitChart('DAY')">Day</a></li>
-                                                        <li class="nav-item mb-3 me-3"><a class="nav-link btn btn-sm btn-color-muted btn-active btn-active-primary fw-bolder px-4 active" data-bs-toggle="tab" onclick="updateVisitChart('WEEK')">Week</a></li>
-                                                        <li class="nav-item mb-3"><a class="nav-link btn btn-sm btn-color-muted btn-active btn-active-primary fw-bolder px-4" data-bs-toggle="tab" onclick="updateVisitChart('MONTH')">Month</a></li>
+                                                        <li class="nav-item mb-3 me-3">
+                                                            <a class="nav-link btn btn-sm btn-color-muted btn-active btn-active-primary fw-bolder px-4" data-bs-toggle="tab" onclick="updateVisitChart('DAY')">Day</a>
+                                                        </li>
+                                                        <li class="nav-item mb-3 me-3">
+                                                            <a class="nav-link btn btn-sm btn-color-muted btn-active btn-active-primary fw-bolder px-4 active" data-bs-toggle="tab" onclick="updateVisitChart('WEEK')">Week</a>
+                                                        </li>
+                                                        <li class="nav-item mb-3">
+                                                            <a class="nav-link btn btn-sm btn-color-muted btn-active btn-active-primary fw-bolder px-4" data-bs-toggle="tab" onclick="updateVisitChart('MONTH')">Month</a>
+                                                        </li>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -201,9 +227,15 @@
                                                 </h3>
                                                 <div class="card-toolbar">
                                                     <ul class="nav nav-pills nav-pills-custom mb-0">
-                                                        <li class="nav-item mb-3 me-3"><a class="nav-link btn btn-sm btn-color-muted btn-active btn-active-primary fw-bolder px-4" data-bs-toggle="tab" onclick="updateInquiryChart('DAY')">Day</a></li>
-                                                        <li class="nav-item mb-3 me-3"><a class="nav-link btn btn-sm btn-color-muted btn-active btn-active-primary fw-bolder px-4 active" data-bs-toggle="tab" onclick="updateInquiryChart('WEEK')">Week</a></li>
-                                                        <li class="nav-item mb-3"><a class="nav-link btn btn-sm btn-color-muted btn-active btn-active-primary fw-bolder px-4" data-bs-toggle="tab" onclick="updateInquiryChart('MONTH')">Month</a></li>
+                                                        <li class="nav-item mb-3 me-3">
+                                                            <a class="nav-link btn btn-sm btn-color-muted btn-active btn-active-primary fw-bolder px-4" data-bs-toggle="tab" onclick="updateInquiryChart('DAY')">Day</a>
+                                                        </li>
+                                                        <li class="nav-item mb-3 me-3">
+                                                            <a class="nav-link btn btn-sm btn-color-muted btn-active btn-active-primary fw-bolder px-4 active" data-bs-toggle="tab" onclick="updateInquiryChart('WEEK')">Week</a>
+                                                        </li>
+                                                        <li class="nav-item mb-3">
+                                                            <a class="nav-link btn btn-sm btn-color-muted btn-active btn-active-primary fw-bolder px-4" data-bs-toggle="tab" onclick="updateInquiryChart('MONTH')">Month</a>
+                                                        </li>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -223,9 +255,15 @@
                                                 </h3>
                                                 <div class="card-toolbar">
                                                     <ul class="nav nav-pills nav-pills-custom mb-0">
-                                                        <li class="nav-item mb-3 me-3"><a class="nav-link btn btn-sm btn-color-muted btn-active btn-active-primary fw-bolder px-4" data-bs-toggle="tab" onclick="updateCountryChart('DAY')">Day</a></li>
-                                                        <li class="nav-item mb-3 me-3"><a class="nav-link btn btn-sm btn-color-muted btn-active btn-active-primary fw-bolder px-4 active" data-bs-toggle="tab" onclick="updateCountryChart('WEEK')">Week</a></li>
-                                                        <li class="nav-item mb-3"><a class="nav-link btn btn-sm btn-color-muted btn-active btn-active-primary fw-bolder px-4" data-bs-toggle="tab" onclick="updateCountryChart('MONTH')">Month</a></li>
+                                                        <li class="nav-item mb-3 me-3">
+                                                            <a class="nav-link btn btn-sm btn-color-muted btn-active btn-active-primary fw-bolder px-4" data-bs-toggle="tab" onclick="updateCountryChart('DAY')">Day</a>
+                                                        </li>
+                                                        <li class="nav-item mb-3 me-3">
+                                                            <a class="nav-link btn btn-sm btn-color-muted btn-active btn-active-primary fw-bolder px-4 active" data-bs-toggle="tab" onclick="updateCountryChart('WEEK')">Week</a>
+                                                        </li>
+                                                        <li class="nav-item mb-3">
+                                                            <a class="nav-link btn btn-sm btn-color-muted btn-active btn-active-primary fw-bolder px-4" data-bs-toggle="tab" onclick="updateCountryChart('MONTH')">Month</a>
+                                                        </li>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -247,7 +285,9 @@
 
                                                     <div class="d-flex align-items-center p-4 rounded glass-box">
                                                         <div class="symbol symbol-50px me-5">
-                                                            <span class="symbol-label bg-light-primary"><i class="ki-outline ki-setting-2 fs-2x text-primary neon-primary"></i></span>
+                                                            <span class="symbol-label bg-light-primary">
+                                                                <i class="ki-outline ki-setting-2 fs-2x text-primary neon-primary"></i>
+                                                            </span>
                                                         </div>
                                                         <div class="d-flex flex-column flex-grow-1">
                                                             <span class="text-white fw-bolder fs-5 mb-1">${sysInfo.osName} (${sysInfo.osArch})</span>
@@ -257,38 +297,50 @@
 
                                                     <div class="d-flex align-items-center p-4 rounded glass-box">
                                                         <div class="symbol symbol-50px me-5">
-                                                            <span class="symbol-label bg-light-success"><i class="ki-outline ki-chart-pie-4 fs-2x text-success neon-success"></i></span>
+                                                            <span class="symbol-label bg-light-success">
+                                                                <i class="ki-outline ki-chart-pie-4 fs-2x text-success neon-success"></i>
+                                                            </span>
                                                         </div>
                                                         <div class="d-flex flex-column flex-grow-1">
                                                             <div class="d-flex justify-content-between mb-2">
                                                                 <span class="text-gray-300 fw-bolder fs-6">메모리 사용량</span>
                                                                 <span class="text-muted fw-bold">${sysInfo.usedMemory} MB <span class="text-gray-600">/ ${sysInfo.totalMemory} MB</span></span>
                                                             </div>
-                                                            <div class="progress h-6px w-100 bg-light-success"><div class="progress-bar bg-success rounded" role="progressbar" style="width: ${(sysInfo.usedMemory / sysInfo.totalMemory) * 100}%"></div></div>
+                                                            <div class="progress h-6px w-100 bg-light-success">
+                                                                <div class="progress-bar bg-success rounded" role="progressbar" style="width: ${(sysInfo.usedMemory / sysInfo.totalMemory) * 100}%"></div>
+                                                            </div>
                                                         </div>
                                                     </div>
 
                                                     <div class="d-flex align-items-center p-4 rounded glass-box">
                                                         <div class="symbol symbol-50px me-5">
-                                                            <span class="symbol-label bg-light-danger"><i class="ki-outline ki-archive fs-2x text-danger neon-danger"></i></span>
+                                                            <span class="symbol-label bg-light-danger">
+                                                                <i class="ki-outline ki-archive fs-2x text-danger neon-danger"></i>
+                                                            </span>
                                                         </div>
                                                         <div class="d-flex flex-column flex-grow-1">
                                                             <div class="d-flex justify-content-between mb-2">
                                                                 <span class="text-gray-300 fw-bolder fs-6">디스크 사용량</span>
                                                                 <span class="text-muted fw-bold">${sysInfo.usedSpace} GB <span class="text-gray-600">/ ${sysInfo.totalSpace} GB</span></span>
                                                             </div>
-                                                            <div class="progress h-6px w-100 bg-light-danger"><div class="progress-bar bg-danger rounded" role="progressbar" style="width: ${(sysInfo.usedSpace / sysInfo.totalSpace) * 100}%"></div></div>
+                                                            <div class="progress h-6px w-100 bg-light-danger">
+                                                                <div class="progress-bar bg-danger rounded" role="progressbar" style="width: ${(sysInfo.usedSpace / sysInfo.totalSpace) * 100}%"></div>
+                                                            </div>
                                                         </div>
                                                     </div>
 
                                                     <div class="d-flex justify-content-between gap-4 mt-2">
                                                         <div class="d-flex align-items-center p-4 rounded w-100 glass-box">
                                                             <i class="ki-outline ki-route fs-2x text-info me-4 neon-info"></i>
-                                                            <div class="d-flex flex-column"><span class="text-muted fs-7">Server IP</span><span class="text-white fw-bolder fs-5">${sysInfo.serverIp}</span></div>
+                                                            <div class="d-flex flex-column">
+                                                                <span class="text-muted fs-7">Server IP</span><span class="text-white fw-bolder fs-5">${sysInfo.serverIp}</span>
+                                                            </div>
                                                         </div>
                                                         <div class="d-flex align-items-center p-4 rounded w-100 glass-box">
                                                             <i class="ki-outline ki-user fs-2x text-warning me-4 neon-warning"></i>
-                                                            <div class="d-flex flex-column"><span class="text-muted fs-7">Client IP</span><span class="text-white fw-bolder fs-5">${sysInfo.clientIp}</span></div>
+                                                            <div class="d-flex flex-column">
+                                                                <span class="text-muted fs-7">Client IP</span><span class="text-white fw-bolder fs-5">${sysInfo.clientIp}</span>
+                                                            </div>
                                                         </div>
                                                     </div>
 
@@ -323,7 +375,7 @@
                 chart: { background: 'transparent', toolbar: { show: false }, fontFamily: 'Pretendard' }
             };
 
-            // [1] 방문 현황
+            // 방문 현황
             var visitOptions = $.extend(true, {}, commonChartOptions, {
                 series: [{ name: '방문자 수', data: [] }],
                 chart: { type: 'area', height: 350 },
@@ -338,7 +390,7 @@
             visitChart = new ApexCharts(document.querySelector("#kt_visit_chart"), visitOptions);
             visitChart.render();
 
-            // [2] 문의 현황
+            // 문의 현황
             var inquiryOptions = $.extend(true, {}, commonChartOptions, {
                 series: [],
                 chart: { type: 'bar', height: 350, stacked: true },
@@ -353,7 +405,7 @@
             inquiryChart = new ApexCharts(document.querySelector("#kt_inquiry_chart"), inquiryOptions);
             inquiryChart.render();
 
-            // [3] 국가별 통계
+            // 국가별 통계
             var pieOptions = $.extend(true, {}, commonChartOptions, {
                 series: [],
                 labels: [],

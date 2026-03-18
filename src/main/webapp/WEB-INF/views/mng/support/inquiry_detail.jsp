@@ -104,56 +104,56 @@
 
                                         <table class="table table-bordered detail-table align-middle fs-5 gy-5">
                                             <tbody>
-                                            <tr>
-                                                <th>구 분</th>
-                                                <td style="width: 35%;"><span class="text-primary fw-bolder">${inquiry.category}</span></td>
-                                                <th>의뢰인(기업)명</th>
-                                                <td style="width: 35%;">${inquiry.clientName}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>연 락 처</th>
-                                                <td><span class="text-gray-400 me-2">${inquiry.countryCode}</span> ${inquiry.contact}</td>
-                                                <th>이 메 일</th>
-                                                <td>
-                                                    <a href="mailto:${inquiry.email}" class="text-white text-hover-primary">${inquiry.email}</a>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th>국 가</th>
-                                                <td>${inquiry.country}</td>
-                                                <th>개인정보 동의</th>
-                                                <td>
-                                                    <c:choose>
-                                                        <c:when test="${inquiry.agreePrivacy == 'Y'}"><span class="badge badge-light-success">동의 (Y)</span></c:when>
-                                                        <c:otherwise><span class="badge badge-light-danger">미동의 (N)</span></c:otherwise>
-                                                    </c:choose>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th>작품 제목</th>
-                                                <td>${inquiry.artworkTitle}</td>
-                                                <th>작 가 명</th>
-                                                <td>${inquiry.artistName}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>작품 크기</th>
-                                                <td colspan="3">${inquiry.artworkSize}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>첨부 파일 / URL</th>
-                                                <td colspan="3">
-                                                    <c:choose>
-                                                        <c:when test="${not empty inquiry.fileUrl}">
-                                                            <a href="${inquiry.fileUrl}" target="_blank" class="d-inline-flex align-items-center text-info text-hover-primary fw-bold bg-light-info px-4 py-2 rounded">
-                                                                <i class="ki-outline ki-file-down fs-3 me-2"></i> ${inquiry.fileOriginName} 다운로드 및 확인
-                                                            </a>
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            <span class="text-muted"><i class="ki-outline ki-file-deleted fs-4 me-2"></i>첨부된 파일이나 링크가 없습니다.</span>
-                                                        </c:otherwise>
-                                                    </c:choose>
-                                                </td>
-                                            </tr>
+                                                <tr>
+                                                    <th>구 분</th>
+                                                    <td style="width: 35%;"><span class="text-primary fw-bolder">${inquiry.category}</span></td>
+                                                    <th>의뢰인(기업)명</th>
+                                                    <td style="width: 35%;">${inquiry.clientName}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>연 락 처</th>
+                                                    <td><span class="text-gray-400 me-2">${inquiry.countryCode}</span> ${inquiry.contact}</td>
+                                                    <th>이 메 일</th>
+                                                    <td>
+                                                        <a href="mailto:${inquiry.email}" class="text-white text-hover-primary">${inquiry.email}</a>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>국 가</th>
+                                                    <td>${inquiry.country}</td>
+                                                    <th>개인정보 동의</th>
+                                                    <td>
+                                                        <c:choose>
+                                                            <c:when test="${inquiry.agreePrivacy == 'Y'}"><span class="badge badge-light-success">동의 (Y)</span></c:when>
+                                                            <c:otherwise><span class="badge badge-light-danger">미동의 (N)</span></c:otherwise>
+                                                        </c:choose>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>작품 제목</th>
+                                                    <td>${inquiry.artworkTitle}</td>
+                                                    <th>작 가 명</th>
+                                                    <td>${inquiry.artistName}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>작품 크기</th>
+                                                    <td colspan="3">${inquiry.artworkSize}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>첨부 파일 / URL</th>
+                                                    <td colspan="3">
+                                                        <c:choose>
+                                                            <c:when test="${not empty inquiry.fileUrl}">
+                                                                <a href="${inquiry.fileUrl}" target="_blank" class="d-inline-flex align-items-center text-info text-hover-primary fw-bold bg-light-info px-4 py-2 rounded">
+                                                                    <i class="ki-outline ki-file-down fs-3 me-2"></i> ${inquiry.fileOriginName} 다운로드 및 확인
+                                                                </a>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <span class="text-muted"><i class="ki-outline ki-file-deleted fs-4 me-2"></i>첨부된 파일이나 링크가 없습니다.</span>
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </td>
+                                                </tr>
                                             </tbody>
                                         </table>
 

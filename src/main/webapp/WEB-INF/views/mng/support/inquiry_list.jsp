@@ -92,85 +92,89 @@
                                         <div class="table-responsive">
                                             <table class="table align-middle table-row-dashed table-row-gray-800 fs-6 gy-5 table-hover" id="kt_inquiry_table">
                                                 <thead>
-                                                <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0 border-bottom border-gray-800">
-                                                    <th class="w-60px text-center">NO</th>
-                                                    <th class="min-w-100px text-center">구분</th>
-                                                    <th class="min-w-150px">의뢰인명 / 기업명</th>
-                                                    <th class="min-w-150px">연락처 / 이메일</th>
-                                                    <th class="min-w-150px">국가</th>
-                                                    <th class="min-w-100px text-center">상태</th>
-                                                    <th class="min-w-125px text-center">등록일</th>
-                                                    <th class="text-end min-w-70px">관리</th>
-                                                </tr>
+                                                    <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0 border-bottom border-gray-800">
+                                                        <th class="w-60px text-center">NO</th>
+                                                        <th class="min-w-100px text-center">구분</th>
+                                                        <th class="min-w-150px">의뢰인명 / 기업명</th>
+                                                        <th class="min-w-150px">연락처 / 이메일</th>
+                                                        <th class="min-w-150px">국가</th>
+                                                        <th class="min-w-100px text-center">상태</th>
+                                                        <th class="min-w-125px text-center">등록일</th>
+                                                        <th class="text-end min-w-70px">관리</th>
+                                                    </tr>
                                                 </thead>
                                                 <tbody class="text-gray-400 fw-semibold">
-                                                <c:choose>
-                                                    <c:when test="${empty list}">
-                                                        <tr>
-                                                            <td colspan="8" class="text-center py-10 text-muted">등록된 문의 내역이 없습니다.</td>
-                                                        </tr>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <c:forEach var="item" items="${list}">
+                                                    <c:choose>
+                                                        <c:when test="${empty list}">
                                                             <tr>
-                                                                <td class="text-center text-gray-500">${item.inquiryId}</td>
-                                                                <td class="text-center">
-                                                                    <span class="badge badge-light-dark text-gray-300 px-3 py-2">${item.category}</span>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="d-flex align-items-center">
-                                                                        <div class="symbol symbol-circle symbol-40px overflow-hidden me-3">
-                                                                            <div class="symbol-label fs-3 bg-light-primary text-primary">
+                                                                <td colspan="8" class="text-center py-10 text-muted">등록된 문의 내역이 없습니다.</td>
+                                                            </tr>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <c:forEach var="item" items="${list}">
+                                                                <tr>
+                                                                    <td class="text-center text-gray-500">${item.inquiryId}</td>
+                                                                    <td class="text-center">
+                                                                        <span class="badge badge-light-dark text-gray-300 px-3 py-2">${item.category}</span>
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="d-flex align-items-center">
+                                                                            <div class="symbol symbol-circle symbol-40px overflow-hidden me-3">
+                                                                                <div class="symbol-label fs-3 bg-light-primary text-primary">
                                                                                     ${fn:substring(item.clientName, 0, 1)}
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="d-flex flex-column">
+                                                                                <a href="/mng/inquiry/detail?inquiryId=${item.inquiryId}" class="text-white text-hover-primary mb-1 fw-bold fs-6">${item.clientName}</a>
                                                                             </div>
                                                                         </div>
+                                                                    </td>
+                                                                    <td>
                                                                         <div class="d-flex flex-column">
-                                                                            <a href="/mng/inquiry/detail?inquiryId=${item.inquiryId}" class="text-white text-hover-primary mb-1 fw-bold fs-6">${item.clientName}</a>
+                                                                            <span class="text-gray-300 fs-7 mb-1">
+                                                                                <i class="ki-outline ki-phone fs-7 me-2"></i>${item.contact}
+                                                                            </span>
+                                                                            <span class="text-muted fs-7">
+                                                                                <i class="ki-outline ki-sms fs-7 me-2"></i>${item.email}
+                                                                            </span>
                                                                         </div>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="d-flex flex-column">
-                                                                        <span class="text-gray-300 fs-7 mb-1"><i class="ki-outline ki-phone fs-7 me-2"></i>${item.contact}</span>
-                                                                        <span class="text-muted fs-7"><i class="ki-outline ki-sms fs-7 me-2"></i>${item.email}</span>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="d-flex align-items-center">
-                                                                        <span class="text-gray-400 fs-6">${item.country}</span>
-                                                                    </div>
-                                                                </td>
-                                                                <td class="text-center">
-                                                                    <c:choose>
-                                                                        <c:when test="${item.status == 'PENDING'}">
-                                                                            <span class="badge badge-glow-pending px-3 py-2">대기중</span>
-                                                                        </c:when>
-                                                                        <c:when test="${item.status == 'IN_PROGRESS'}">
-                                                                            <span class="badge badge-glow-progress px-3 py-2">진행중</span>
-                                                                        </c:when>
-                                                                        <c:when test="${item.status == 'COMPLETED'}">
-                                                                            <span class="badge badge-glow-completed px-3 py-2">답변완료</span>
-                                                                        </c:when>
-                                                                        <c:otherwise>
-                                                                            <span class="badge badge-light-dark px-3 py-2">${item.status}</span>
-                                                                        </c:otherwise>
-                                                                    </c:choose>
-                                                                </td>
-                                                                <td class="text-center text-gray-500">
-                                                                    <fmt:formatDate value="${item.createdAt}" pattern="yyyy.MM.dd HH:mm"/>
-                                                                </td>
-                                                                <td class="text-end">
-                                                                    <a href="/mng/inquiry/detail?inquiryId=${item.inquiryId}" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1" title="상세보기">
-                                                                        <i class="ki-outline ki-eye fs-2"></i>
-                                                                    </a>
-                                                                    <button type="button" class="btn btn-icon btn-bg-light btn-active-color-danger btn-sm" onclick="deleteInquiry(${item.inquiryId})" title="삭제">
-                                                                        <i class="ki-outline ki-trash fs-2"></i>
-                                                                    </button>
-                                                                </td>
-                                                            </tr>
-                                                        </c:forEach>
-                                                    </c:otherwise>
-                                                </c:choose>
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="d-flex align-items-center">
+                                                                            <span class="text-gray-400 fs-6">${item.country}</span>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <c:choose>
+                                                                            <c:when test="${item.status == 'PENDING'}">
+                                                                                <span class="badge badge-glow-pending px-3 py-2">대기중</span>
+                                                                            </c:when>
+                                                                            <c:when test="${item.status == 'IN_PROGRESS'}">
+                                                                                <span class="badge badge-glow-progress px-3 py-2">진행중</span>
+                                                                            </c:when>
+                                                                            <c:when test="${item.status == 'COMPLETED'}">
+                                                                                <span class="badge badge-glow-completed px-3 py-2">답변완료</span>
+                                                                            </c:when>
+                                                                            <c:otherwise>
+                                                                                <span class="badge badge-light-dark px-3 py-2">${item.status}</span>
+                                                                            </c:otherwise>
+                                                                        </c:choose>
+                                                                    </td>
+                                                                    <td class="text-center text-gray-500">
+                                                                        <fmt:formatDate value="${item.createdAt}" pattern="yyyy.MM.dd HH:mm"/>
+                                                                    </td>
+                                                                    <td class="text-end">
+                                                                        <a href="/mng/inquiry/detail?inquiryId=${item.inquiryId}" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1" title="상세보기">
+                                                                            <i class="ki-outline ki-eye fs-2"></i>
+                                                                        </a>
+                                                                        <button type="button" class="btn btn-icon btn-bg-light btn-active-color-danger btn-sm" onclick="deleteInquiry(${item.inquiryId})" title="삭제">
+                                                                            <i class="ki-outline ki-trash fs-2"></i>
+                                                                        </button>
+                                                                    </td>
+                                                                </tr>
+                                                            </c:forEach>
+                                                        </c:otherwise>
+                                                    </c:choose>
                                                 </tbody>
                                             </table>
                                         </div>

@@ -68,10 +68,7 @@
                     <form class="form w-100" novalidate="novalidate" id="login_form" action="/mng/login" method="post">
 
                         <div class="text-center mb-10">
-                            <img alt="Logo" src="/img/logo.png" class="h-60px mb-3"/>
-                            <h1 class="logo-text mb-3">
-                                Admin System
-                            </h1>
+                            <img alt="Logo" src="/img/logo.png" class="h-40px mb-8"/>
                             <div class="text-gray-500 fw-semibold fs-4">
                                 Artixel 관리자 시스템
                             </div>
@@ -80,7 +77,8 @@
                         <c:if test="${not empty msg and param.expired ne 'true'}">
                             <div class="alert alert-danger d-flex align-items-center p-5 mb-5">
                                 <i class="ki-duotone ki-shield-cross fs-2hx text-danger me-4">
-                                    <span class="path1"></span><span class="path2"></span>
+                                    <span class="path1"></span>
+                                    <span class="path2"></span>
                                 </i>
                                 <div class="d-flex flex-column">
                                     <h4 class="mb-1 text-danger">Login Failed</h4>
@@ -109,7 +107,8 @@
                             <button type="submit" id="kt_sign_in_submit" class="btn btn-primary-custom btn-lg">
                                 <span class="indicator-label">로그인</span>
                                 <span class="indicator-progress">Please wait...
-                                    <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+                                    <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                </span>
                             </button>
                         </div>
 
@@ -131,7 +130,7 @@
     <script src="/assets/js/scripts.bundle.js"></script>
     <script>
 
-        // [핵심 로직] 세션 만료로 튕겨져 왔을 경우 브라우저 Alert을 띄웁니다.
+        // 세션 만료로 튕겨져 왔을 경우 브라우저 Alert을 띄웁니다.
         <c:if test="${param.expired == 'true' or msg eq '로그인이 필요한 서비스입니다.'}">
             alert('로그인이 필요한 서비스입니다.');
             // Alert 창을 띄운 후 URL에서 ?expired=true 파라미터를 조용히 지워줍니다. (새로고침 시 Alert 재발생 방지)
@@ -141,7 +140,7 @@
         var form = document.querySelector('#login_form');
         var submitButton = document.querySelector('#kt_sign_in_submit');
 
-        // [3] 뒤로 가기(BF Cache) 감지하여 버튼 상태 리셋
+        // 뒤로 가기(BF Cache) 감지하여 버튼 상태 리셋
         window.addEventListener('pageshow', function(event) {
             var historyTraversal = event.persisted ||
                 (typeof window.performance != "undefined" &&

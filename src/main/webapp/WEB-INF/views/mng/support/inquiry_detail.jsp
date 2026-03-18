@@ -16,8 +16,21 @@
 
     <title>문의 상세 | Artixel 관리자</title>
     <link href="/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css"/>
-    <link href="/assets/css/style.bundle.css" rel="stylesheet" type="text/css"/>x
-    <link href="/css/mngStyle.css" rel="stylesheet">
+    <link href="/assets/css/style.bundle.css" rel="stylesheet" type="text/css"/>
+
+    <style>
+        .premium-card { background-color: #15161d !important; border: 1px solid rgba(255, 255, 255, 0.05) !important; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.3) !important; }
+        .glass-box { background-color: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 8px; padding: 20px;}
+
+        /* 다크 테마용 테이블 스타일 최적화 */
+        .detail-table th { background-color: rgba(255,255,255,0.03) !important; color: #a1a5b7 !important; font-weight: 600; width: 15%; text-align: center; border-color: rgba(255,255,255,0.05) !important; }
+        .detail-table td { background-color: transparent !important; color: #ffffff !important; border-color: rgba(255,255,255,0.05) !important; padding-left: 20px !important; }
+
+        /* 네온 뱃지 이펙트 */
+        .badge-glow-pending { background-color: rgba(255, 199, 0, 0.1); color: #ffc700; border: 1px solid rgba(255, 199, 0, 0.3); box-shadow: 0 0 10px rgba(255, 199, 0, 0.2); }
+        .badge-glow-progress { background-color: rgba(0, 158, 247, 0.1); color: #009ef7; border: 1px solid rgba(0, 158, 247, 0.3); box-shadow: 0 0 10px rgba(0, 158, 247, 0.2); }
+        .badge-glow-completed { background-color: rgba(80, 205, 137, 0.1); color: #50cd89; border: 1px solid rgba(80, 205, 137, 0.3); box-shadow: 0 0 10px rgba(80, 205, 137, 0.2); }
+    </style>
 </head>
 <body id="kt_app_body"
       data-kt-app-layout="dark-sidebar"
@@ -39,110 +52,157 @@
 
                 <div class="app-main flex-column flex-row-fluid" id="kt_app_main">
                     <div class="d-flex flex-column flex-column-fluid">
-
-                        <div id="kt_app_toolbar" class="app-toolbar pt-6 pb-2 pt-lg-10 pb-lg-2">
-                            <div id="kt_app_toolbar_container" class="app-container container-xxl d-flex flex-stack">
-                                <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
-                                    <h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">
-                                        문의 상세보기
-                                    </h1>
-
-                                    <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
-                                        <li class="breadcrumb-item text-muted">
-                                            <a href="/mng/main.do" class="text-muted text-hover-primary">Home</a>
-                                        </li>
-                                        <li class="breadcrumb-item">
-                                            <span class="bullet bg-gray-400 w-5px h-2px"></span>
-                                        </li>
-                                        <li class="breadcrumb-item text-muted">문의 관리</li>
-                                        <li class="breadcrumb-item">
-                                            <span class="bullet bg-gray-400 w-5px h-2px"></span>
-                                        </li>
-                                        <li class="breadcrumb-item text-dark">문의 목록</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
                         <div id="kt_app_content" class="app-content flex-column-fluid">
                             <div id="kt_app_content_container" class="app-container container-xxl">
 
-                                <div class="d-flex justify-content-between align-items-center mb-5">
-                                    <h1>의뢰 문의 상세 내역</h1>
-                                    <div>
-                                        <a href="/mng/inquiry/list" class="btn btn-secondary me-2">목록으로</a>
+                                <div class="d-flex justify-content-between align-items-center mb-8 mt-5">
+                                    <h1 class="d-flex align-items-center fw-bolder fs-1 my-1 text-white">
+                                        의뢰 상세 내역
+                                        <span class="h-20px border-gray-600 border-start ms-4 mx-2"></span>
+                                        <small class="text-muted fs-6 fw-bold my-1 ms-3">Inquiry Detail Info</small>
+                                    </h1>
+
+                                    <div class="d-flex align-items-center gap-2">
+                                        <a href="/mng/inquiry/list" class="btn btn-sm btn-light">
+                                            <i class="ki-outline ki-arrow-left fs-3"></i> 목록으로
+                                        </a>
                                         <form action="/mng/inquiry/delete" method="post" style="display:inline;" onsubmit="return confirm('삭제 시 복구가 불가능합니다. 정말 삭제하시겠습니까?');">
                                             <input type="hidden" name="inquiryId" value="${inquiry.inquiryId}">
-                                            <button type="submit" class="btn btn-danger">삭제하기</button>
+                                            <button type="submit" class="btn btn-sm btn-danger">
+                                                <i class="ki-outline ki-trash fs-3"></i> 영구 삭제
+                                            </button>
                                         </form>
                                     </div>
                                 </div>
 
-                                <div class="card">
-                                    <div class="card-body">
-                                        <table class="table table-bordered align-middle table-row-dashed fs-6">
-                                            <colgroup>
-                                                <col style="width: 15%; background: #f8f9fa;">
-                                                <col style="width: 35%;">
-                                                <col style="width: 15%; background: #f8f9fa;">
-                                                <col style="width: 35%;">
-                                            </colgroup>
+                                <div class="card premium-card mb-10">
+                                    <div class="card-body p-9">
+
+                                        <div class="d-flex flex-stack mb-8">
+                                            <div class="d-flex align-items-center gap-3">
+                                                <div class="badge badge-light-dark fs-6 fw-bold px-4 py-2 border border-gray-700">No. ${inquiry.inquiryId}</div>
+                                                <c:choose>
+                                                    <c:when test="${inquiry.status == 'PENDING'}">
+                                                        <span class="badge badge-glow-pending px-4 py-2 fs-6 fw-bolder">상태: 대기중</span>
+                                                    </c:when>
+                                                    <c:when test="${inquiry.status == 'IN_PROGRESS'}">
+                                                        <span class="badge badge-glow-progress px-4 py-2 fs-6 fw-bolder">상태: 진행중</span>
+                                                    </c:when>
+                                                    <c:when test="${inquiry.status == 'COMPLETED'}">
+                                                        <span class="badge badge-glow-completed px-4 py-2 fs-6 fw-bolder">상태: 답변완료</span>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <span class="badge badge-light-dark px-4 py-2 fs-6 fw-bolder">상태: ${inquiry.status}</span>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </div>
+                                            <div class="text-muted fs-7">
+                                                <i class="ki-outline ki-time fs-4 me-1"></i> 접수일시: ${inquiry.createdAt}
+                                                <span class="ms-4"><i class="ki-outline ki-geolocation fs-4 me-1"></i> IP: ${inquiry.clientIp}</span>
+                                            </div>
+                                        </div>
+
+                                        <table class="table table-bordered detail-table align-middle fs-5 gy-5">
                                             <tbody>
                                             <tr>
-                                                <th class="text-center">접수 일시</th>
-                                                <td>${inquiry.createdAt}</td>
-                                                <th class="text-center">구분</th>
-                                                <td>${inquiry.category}</td>
+                                                <th>구 분</th>
+                                                <td style="width: 35%;"><span class="text-primary fw-bolder">${inquiry.category}</span></td>
+                                                <th>의뢰인(기업)명</th>
+                                                <td style="width: 35%;">${inquiry.clientName}</td>
                                             </tr>
                                             <tr>
-                                                <th class="text-center">성함</th>
-                                                <td>${inquiry.clientName}</td>
-                                                <th class="text-center">연락처</th>
-                                                <td>${inquiry.countryCode} ${inquiry.contact}</td>
+                                                <th>연 락 처</th>
+                                                <td><span class="text-gray-400 me-2">${inquiry.countryCode}</span> ${inquiry.contact}</td>
+                                                <th>이 메 일</th>
+                                                <td>
+                                                    <a href="mailto:${inquiry.email}" class="text-white text-hover-primary">${inquiry.email}</a>
+                                                </td>
                                             </tr>
                                             <tr>
-                                                <th class="text-center">이메일</th>
-                                                <td>${inquiry.email}</td>
-                                                <th class="text-center">국가</th>
+                                                <th>국 가</th>
                                                 <td>${inquiry.country}</td>
-                                            </tr>
-                                            <tr>
-                                                <th class="text-center">작품 제목</th>
-                                                <td>${inquiry.artworkTitle}</td>
-                                                <th class="text-center">작가명</th>
-                                                <td>${inquiry.artistName}</td>
-                                            </tr>
-                                            <tr>
-                                                <th class="text-center">작품 크기</th>
-                                                <td colspan="3">${inquiry.artworkSize}</td>
-                                            </tr>
-                                            <tr>
-                                                <th class="text-center">첨부 파일/URL</th>
-                                                <td colspan="3">
+                                                <th>개인정보 동의</th>
+                                                <td>
                                                     <c:choose>
-                                                        <c:when test="${not empty inquiry.fileUrl}">
-                                                            <a href="${inquiry.fileUrl}" target="_blank" class="text-primary fw-bolder text-hover-primary">
-                                                                <i class="bi bi-link-45deg"></i> 원본 확인 및 다운로드 (${inquiry.fileOriginName})
-                                                            </a>
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            <span class="text-muted">첨부된 파일이 없습니다.</span>
-                                                        </c:otherwise>
+                                                        <c:when test="${inquiry.agreePrivacy == 'Y'}"><span class="badge badge-light-success">동의 (Y)</span></c:when>
+                                                        <c:otherwise><span class="badge badge-light-danger">미동의 (N)</span></c:otherwise>
                                                     </c:choose>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <th class="text-center">문의 내용</th>
-                                                <td colspan="3" style="white-space: pre-wrap; padding: 20px;">${inquiry.content}</td>
+                                                <th>작품 제목</th>
+                                                <td>${inquiry.artworkTitle}</td>
+                                                <th>작 가 명</th>
+                                                <td>${inquiry.artistName}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>작품 크기</th>
+                                                <td colspan="3">${inquiry.artworkSize}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>첨부 파일 / URL</th>
+                                                <td colspan="3">
+                                                    <c:choose>
+                                                        <c:when test="${not empty inquiry.fileUrl}">
+                                                            <a href="${inquiry.fileUrl}" target="_blank" class="d-inline-flex align-items-center text-info text-hover-primary fw-bold bg-light-info px-4 py-2 rounded">
+                                                                <i class="ki-outline ki-file-down fs-3 me-2"></i> ${inquiry.fileOriginName} 다운로드 및 확인
+                                                            </a>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <span class="text-muted"><i class="ki-outline ki-file-deleted fs-4 me-2"></i>첨부된 파일이나 링크가 없습니다.</span>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </td>
                                             </tr>
                                             </tbody>
                                         </table>
 
+                                        <div class="mt-8">
+                                            <h4 class="text-gray-400 mb-4"><i class="ki-outline ki-text-align-left fs-3 me-2"></i>문의 상세 내용</h4>
+                                            <div class="glass-box text-white fs-5 lh-lg" style="white-space: pre-wrap; min-height: 150px;">${inquiry.content}</div>
+                                        </div>
+
                                         <c:if test="${not empty inquiry.fileUrl and (fn:endsWith(fn:toLowerCase(inquiry.fileUrl), '.jpg') or fn:endsWith(fn:toLowerCase(inquiry.fileUrl), '.jpeg') or fn:endsWith(fn:toLowerCase(inquiry.fileUrl), '.png') or fn:endsWith(fn:toLowerCase(inquiry.fileUrl), '.gif'))}">
                                             <div class="mt-10 text-center">
-                                                <h3 class="mb-5">첨부 이미지 미리보기</h3>
-                                                <img src="${inquiry.fileUrl}" alt="첨부된 작품 이미지" class="img-fluid border" style="max-height: 800px; object-fit: contain;">
+                                                <h4 class="text-gray-400 mb-5 d-flex align-items-center justify-content-center">
+                                                    <i class="ki-outline ki-picture fs-3 me-2"></i> 첨부 이미지 확인
+                                                </h4>
+
+                                                <div class="glass-box d-inline-block p-8 text-center" id="img-preview-box" style="min-width: 300px;">
+                                                    <div class="text-muted mb-5 fs-6">
+                                                        <i class="ki-outline ki-information-5 fs-5 me-1 text-info"></i>
+                                                        대용량 이미지일 수 있으므로 트래픽 절약을 위해 수동으로 로드합니다.
+                                                    </div>
+                                                    <button type="button" class="btn btn-outline btn-outline-dashed btn-outline-info btn-active-light-info" onclick="loadLargeImage('${inquiry.fileUrl}')">
+                                                        <i class="ki-outline ki-eye fs-2 me-2"></i> 원본 이미지 불러오기
+                                                    </button>
+                                                </div>
                                             </div>
+
+                                            <script>
+                                                function loadLargeImage(url) {
+                                                    var $box = $('#img-preview-box');
+
+                                                    // 버튼을 숨기고 로딩 스피너 표출
+                                                    $box.html(
+                                                        '<div class="spinner-border text-info mb-3" role="status"></div>' +
+                                                        '<div class="text-muted fs-6 mt-2">대용량 이미지를 다운로드 중입니다...</div>'
+                                                    );
+
+                                                    // 백그라운드에서 이미지 객체 생성 및 로드
+                                                    var $img = $('<img>').attr('src', url)
+                                                        .addClass('img-fluid rounded shadow-sm')
+                                                        .css({'max-height': '800px', 'object-fit': 'contain', 'display': 'none'})
+                                                        .on('load', function() {
+                                                            // 로드 완료 시 스피너를 지우고 이미지를 페이드인 효과로 노출
+                                                            $box.empty().append($img);
+                                                            $img.fadeIn(400);
+                                                        })
+                                                        .on('error', function() {
+                                                            $box.html('<span class="text-danger"><i class="ki-outline ki-cross-circle fs-2 me-1"></i> 이미지 로드에 실패했습니다. (URL 만료 또는 손상)</span>');
+                                                        });
+                                                }
+                                            </script>
                                         </c:if>
 
                                     </div>

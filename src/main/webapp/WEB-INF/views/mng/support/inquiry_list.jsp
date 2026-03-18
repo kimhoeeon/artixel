@@ -159,7 +159,7 @@
                                                                         </c:choose>
                                                                     </td>
                                                                     <td class="text-center text-gray-500">
-                                                                        <fmt:formatDate value="${item.createdAt}" pattern="yyyy.MM.dd HH:mm"/>
+                                                                        <c:out value="${fn:substring(item.createdAt, 0, 16)}" />
                                                                     </td>
                                                                     <td class="text-end">
                                                                         <a href="/mng/inquiry/detail?inquiryId=${item.inquiryId}" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1" title="상세보기">

@@ -19,11 +19,28 @@
     <link href="/assets/css/style.bundle.css" rel="stylesheet" type="text/css"/>
 
     <style>
+        /* ====================================================
+           [핵심] 메인 대시보드와 동일한 다크 테마 강제 덮어쓰기
+        ==================================================== */
+        body, #kt_body, #kt_wrapper, #kt_content, .page, .content { background-color: #0c0d12 !important; }
+        #kt_aside { background-color: #12131a !important; }
+        #kt_header { background-color: #12131a !important; border-bottom: 1px solid #1f212a !important; }
+
+        .aside-menu .menu-title { color: #878c9f !important; font-weight: 500; transition: color 0.2s ease;}
+        .aside-menu .menu-link:hover .menu-title,
+        .aside-menu .menu-link.active .menu-title { color: #ffffff !important; font-weight: 600; }
+        .aside-menu .menu-icon i { color: #56596b !important; transition: color 0.2s ease;}
+        .aside-menu .menu-link:hover .menu-icon i,
+        .aside-menu .menu-link.active .menu-icon i { color: #009ef7 !important; }
+
+        /* 텍스트 묻힘 방지 처리 */
+        h1, h2, h3, h4, h5, h6, .text-dark, .text-gray-800, .text-gray-900 { color: #ffffff !important; }
+
         /* 프리미엄 다크 커스텀 요소 */
         .premium-card { background-color: #15161d !important; border: 1px solid rgba(255, 255, 255, 0.05) !important; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.3) !important; }
         .table-hover tbody tr:hover td { background-color: rgba(255,255,255,0.02) !important; transition: background-color 0.2s ease; }
 
-        /* 상태 뱃지 네온 효과 (간지 포인트) */
+        /* 상태 뱃지 네온 효과 */
         .badge-glow-pending { background-color: rgba(255, 199, 0, 0.1); color: #ffc700; border: 1px solid rgba(255, 199, 0, 0.3); box-shadow: 0 0 10px rgba(255, 199, 0, 0.2); }
         .badge-glow-progress { background-color: rgba(0, 158, 247, 0.1); color: #009ef7; border: 1px solid rgba(0, 158, 247, 0.3); box-shadow: 0 0 10px rgba(0, 158, 247, 0.2); }
         .badge-glow-completed { background-color: rgba(80, 205, 137, 0.1); color: #50cd89; border: 1px solid rgba(80, 205, 137, 0.3); box-shadow: 0 0 10px rgba(80, 205, 137, 0.2); }
@@ -31,6 +48,7 @@
         /* 다크 글래스 검색 박스 */
         .search-box { background-color: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); color: #fff; }
         .search-box:focus { border-color: #009ef7; box-shadow: 0 0 10px rgba(0, 158, 247, 0.3); background-color: rgba(255,255,255,0.05); color: #fff;}
+        .select2-container--bootstrap5 .select2-selection { background-color: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); color: #fff; }
     </style>
 
 </head>
@@ -80,9 +98,9 @@
                                                     <i class="ki-outline ki-magnifier fs-2 text-gray-500 position-absolute top-50 translate-middle-y ms-4"></i>
                                                     <input type="text" name="keyword" value="${param.keyword}" class="form-control form-control-sm form-control-solid w-250px ps-12 search-box" placeholder="검색어를 입력하세요"/>
                                                 </div>
-                                                <button type="submit" class="btn btn-sm btn-primary">검색</button>
+                                                <button type="submit" class="btn btn-sm btn-primary flex-shrink-0 text-nowrap px-4">검색</button>
                                                 <c:if test="${not empty param.keyword}">
-                                                    <a href="/mng/inquiry/list" class="btn btn-sm btn-light-danger">초기화</a>
+                                                    <a href="/mng/inquiry/list" class="btn btn-sm btn-light-danger flex-shrink-0 text-nowrap px-4">초기화</a>
                                                 </c:if>
                                             </form>
                                         </div>
@@ -179,29 +197,46 @@
                                             </table>
                                         </div>
 
-                                        <div class="row mt-5">
-                                            <div class="col-sm-12 d-flex align-items-center justify-content-center">
-                                                <div class="dataTables_paginate paging_simple_numbers">
-                                                    <ul class="pagination">
-                                                        <c:if test="${pageMaker.prev}">
-                                                            <li class="paginate_button page-item previous">
-                                                                <a href="?page=${pageMaker.startPage - 1}&searchType=${param.searchType}&keyword=${param.keyword}" class="page-link bg-dark border-gray-800 text-gray-500"><i class="previous"></i></a>
-                                                            </li>
-                                                        </c:if>
-                                                        <c:forEach var="num" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
-                                                            <li class="paginate_button page-item ${pageMaker.cri.page == num ? 'active' : ''}">
-                                                                <a href="?page=${num}&searchType=${param.searchType}&keyword=${param.keyword}" class="page-link ${pageMaker.cri.page == num ? 'bg-primary text-white' : 'bg-dark border-gray-800 text-gray-400'}">${num}</a>
-                                                            </li>
-                                                        </c:forEach>
-                                                        <c:if test="${pageMaker.next}">
-                                                            <li class="paginate_button page-item next">
-                                                                <a href="?page=${pageMaker.endPage + 1}&searchType=${param.searchType}&keyword=${param.keyword}" class="page-link bg-dark border-gray-800 text-gray-500"><i class="next"></i></a>
-                                                            </li>
-                                                        </c:if>
-                                                    </ul>
+                                        <c:if test="${totalCount > 0}">
+                                            <c:set var="pageSize" value="10" />
+                                            <c:set var="recordSize" value="10" />
+                                            <c:set var="totalPages" value="${totalCount / recordSize + (totalCount % recordSize == 0 ? 0 : 1)}" />
+                                            <fmt:parseNumber var="totalPages" value="${totalPages}" integerOnly="true" />
+
+                                            <c:set var="cp" value="${empty currentPage ? 1 : currentPage}" />
+                                            <c:set var="startPage" value="${cp - ((cp - 1) % pageSize)}" />
+                                            <c:set var="endPage" value="${startPage + pageSize - 1}" />
+                                            <c:if test="${endPage > totalPages}">
+                                                <c:set var="endPage" value="${totalPages}" />
+                                            </c:if>
+
+                                            <c:set var="prev" value="${startPage > 1}" />
+                                            <c:set var="next" value="${endPage < totalPages}" />
+
+                                            <div class="row mt-5">
+                                                <div class="col-sm-12 d-flex align-items-center justify-content-center">
+                                                    <div class="dataTables_paginate paging_simple_numbers">
+                                                        <ul class="pagination">
+                                                            <c:if test="${prev}">
+                                                                <li class="paginate_button page-item previous">
+                                                                    <a href="?page=${startPage - 1}&searchType=${param.searchType}&keyword=${param.keyword}" class="page-link bg-dark border-gray-800 text-gray-500"><i class="previous"></i></a>
+                                                                </li>
+                                                            </c:if>
+                                                            <c:forEach var="num" begin="${startPage}" end="${endPage}">
+                                                                <li class="paginate_button page-item ${cp == num ? 'active' : ''}">
+                                                                    <a href="?page=${num}&searchType=${param.searchType}&keyword=${param.keyword}" class="page-link ${cp == num ? 'bg-primary text-white' : 'bg-dark border-gray-800 text-gray-400'}">${num}</a>
+                                                                </li>
+                                                            </c:forEach>
+                                                            <c:if test="${next}">
+                                                                <li class="paginate_button page-item next">
+                                                                    <a href="?page=${endPage + 1}&searchType=${param.searchType}&keyword=${param.keyword}" class="page-link bg-dark border-gray-800 text-gray-500"><i class="next"></i></a>
+                                                                </li>
+                                                            </c:if>
+                                                        </ul>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </c:if>
                                     </div>
                                 </div>
 

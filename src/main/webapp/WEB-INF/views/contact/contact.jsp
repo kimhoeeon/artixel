@@ -35,11 +35,74 @@
 
     <title>Artixel</title>
 
+    <style>
+        /* 전체 화면 업로드 로딩 오버레이 CSS */
+        #global-upload-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.85);
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        #global-upload-loader.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .loader-spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(255, 255, 255, 0.2);
+            border-top: 5px solid #009ef7;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loader-text {
+            color: #ffffff;
+            font-size: 1.2rem;
+            font-weight: 600;
+            font-family: 'Pretendard', sans-serif;
+            text-align: center;
+            line-height: 1.5;
+            letter-spacing: -0.5px;
+        }
+
+        .loader-sub-text {
+            color: #a1a5b7;
+            font-size: 0.9rem;
+            margin-top: 8px;
+            font-family: 'Pretendard', sans-serif;
+        }
+    </style>
+
 </head>
 
 <body>
 
     <%@ include file="../header.jsp" %>
+
+    <div id="global-upload-loader">
+        <div class="loader-spinner"></div>
+        <div class="loader-text">대용량 파일과 데이터를 안전하게 전송 중입니다.</div>
+        <div class="loader-sub-text">잠시만 기다려주세요. 화면을 벗어나거나 새로고침하지 마세요.</div>
+    </div>
 
     <!-- container -->
     <div id="container">
@@ -308,6 +371,20 @@
     </div>
     <!-- 팝업 -->
 
+    <!-- 완료 팝업 -->
+    <div class="center-popup-backdrop" id="alertPopup" style="display: none; z-index: 99999;">
+        <div class="center-popup" style="text-align: center;">
+            <div class="center-popup_body" style="padding-top: 30px; padding-bottom: 10px;">
+                <div class="center-popup_title" style="margin-bottom: 15px;">알림</div>
+                <div class="center-popup_txt" id="alertPopupTxt" style="word-break: keep-all; line-height: 1.5;"></div>
+            </div>
+            <div class="one_btn">
+                <button type="button" class="btn btn-primary st2" onclick="$('#alertPopup').fadeOut(200);">확인</button>
+            </div>
+        </div>
+    </div>
+    <!-- 완료 팝업 -->
+
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="/js/jquery-3.6.0.min.js"></script>
     <script src="/js/script.js"></script>
@@ -317,7 +394,8 @@
             // 1. 서버 측 전송 결과 메시지 처리
             var serverMsg = '${msg}';
             if (serverMsg) {
-                alert(serverMsg);
+                $('#alertPopupTxt').html(serverMsg);
+                $('#alertPopup').css('display', 'flex').hide().fadeIn(300);
             }
 
             // 2. 연락처(전화번호) 하이픈 자동 생성 및 숫자만 입력 처리
@@ -368,13 +446,12 @@
             $('#btnSubmit').on('click', function(e) {
                 e.preventDefault();
 
-                // [검증] 구분 (라디오 버튼) 및 기타 직접입력 처리
+                // 구분 (라디오 버튼) 및 기타 직접입력 처리
                 var categoryVal = $('input[name="category"]:checked').val();
                 if (!categoryVal) {
                     alert('구분을 선택해주세요.');
                     return;
                 }
-
                 if (categoryVal === '기타') {
                     var etcVal = $('.etc_input').val().trim();
                     if (!etcVal) {
@@ -386,14 +463,14 @@
                     $('#cat_etc').val('기타 - ' + etcVal);
                 }
 
-                // [검증] 성함
+                // 성함
                 if (!$('#clientName').val().trim()) {
                     alert('성함을 입력해주세요.');
                     $('#clientName').focus();
                     return;
                 }
 
-                // [검증] 이메일 조합
+                // 이메일 조합
                 var email1 = $('#email1').val().trim();
                 var emailDomain = $('#emailDomain').val().trim();
                 if (!email1 || !emailDomain) {
@@ -403,28 +480,28 @@
                 }
                 $('#fullEmail').val(email1 + '@' + emailDomain);
 
-                // [검증] 연락처
+                // 연락처
                 if (!$('#contact').val().trim()) {
                     alert('연락처를 입력해주세요.');
                     $('#contact').focus();
                     return;
                 }
 
-                // [검증] 국가 선택
+                // 국가 선택
                 if (!$('#country').val().trim()) {
                     alert('국가를 선택해주세요.');
                     $('#country').focus();
                     return;
                 }
 
-                // [검증] 작품 크기
+                // 작품 크기
                 if (!$('#artworkSize').val().trim()) {
                     alert('작품 크기를 입력해주세요.');
                     $('#artworkSize').focus();
                     return;
                 }
 
-                // [검증] 첨부파일 & URL 확인
+                // 첨부파일 & URL 확인
                 var uploadFile = $('#uploadFile').val();
                 var fileUrl = $('#fileUrl').val().trim();
 
@@ -439,21 +516,21 @@
                     return;
                 }
 
-                // [검증] 문의 내용
+                // 문의 내용
                 if (!$('#content').val().trim()) {
                     alert('문의 내용을 입력해주세요.');
                     $('#content').focus();
                     return;
                 }
 
-                // [검증] 개인정보 동의
+                // 개인정보 동의
                 if (!$('#agreePrivacy').is(':checked')) {
                     alert('개인정보 수집 및 이용에 동의해주세요.');
                     return;
                 }
 
-                // 중복 전송 방지
-                $(this).prop('disabled', true).text('접수 중...');
+                // 모든 유효성 검사를 통과하면 즉시 오버레이 스피너 표출 (화면 클릭 및 뒤로가기 차단)
+                $('#global-upload-loader').addClass('active');
 
                 // 폼 전송
                 $('#inquiryForm').submit();

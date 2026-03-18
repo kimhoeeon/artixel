@@ -60,7 +60,7 @@
                             <div id="kt_app_content_container" class="app-container container-xxl">
 
                                 <div class="d-flex justify-content-between align-items-center mb-8 mt-5">
-                                    <h1 class="d-flex align-items-center fw-bolder fs-1 my-1 text-white">
+                                    <h1 class="d-flex align-items-center fw-bolder fs-1 my-1">
                                         문의 목록
                                         <span class="h-20px border-gray-600 border-start ms-4 mx-2"></span>
                                         <small class="text-muted fs-6 fw-bold my-1 ms-3">Inquiry Management</small>

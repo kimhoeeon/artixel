@@ -80,9 +80,10 @@
                                         <div class="card-title w-100 m-0">
                                             <form action="/mng/inquiry/list" method="get" class="d-flex align-items-center w-100">
 
-                                                <div class="input-group input-group-sm input-group-solid rounded overflow-hidden search-group-custom" style="max-width: 550px;">
+                                                <div class="input-group input-group-sm input-group-solid rounded overflow-hidden search-group-custom" style="max-width: 650px;">
 
-                                                    <select name="searchType" class="form-select form-select-sm border-0 shadow-none w-100px flex-shrink-0" style="background-color: transparent; cursor: pointer;">
+                                                    <select name="searchType" class="form-select form-select-sm border-0 shadow-none flex-shrink-0"
+                                                            style="width: 95px; padding-left: 12px; padding-right: 25px; background-position: right 0.5rem center; background-color: transparent; cursor: pointer;">
                                                         <option value="">전체 검색</option>
                                                         <option value="name" ${param.searchType == 'name' ? 'selected' : ''}>의뢰인명</option>
                                                         <option value="contact" ${param.searchType == 'contact' ? 'selected' : ''}>연락처</option>

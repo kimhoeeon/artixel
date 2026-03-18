@@ -398,19 +398,41 @@
                 $('#alertPopup').css('display', 'flex').hide().fadeIn(300);
             }
 
-            // 2. 연락처(전화번호) 하이픈 자동 생성 및 숫자만 입력 처리
-            $('#contact').on('input', function() {
-                var val = $(this).val().replace(/[^0-9]/g, '');
-                var len = val.length;
-                if(len < 4) {
-                    $(this).val(val);
-                } else if(len < 8) {
-                    $(this).val(val.substring(0, 3) + '-' + val.substring(3));
-                } else if(len < 11) {
-                    $(this).val(val.substring(0, 3) + '-' + val.substring(3, 3) + '-' + val.substring(6));
+            // [핵심 수정] 국가별 번호 체계를 고려한 입력 필터링 하이브리드 로직
+            function formatPhoneNumber() {
+                var countryCode = $('#countryCode').val();
+                var $contact = $('#contact');
+
+                if (countryCode === '+82') {
+                    // 대한민국(+82)일 경우: 자동 하이픈 삽입 및 11자리 글자수 제한
+                    var val = $contact.val().replace(/[^0-9]/g, '');
+                    var formatted = '';
+
+                    if (val.length < 4) {
+                        formatted = val;
+                    } else if (val.length < 7) {
+                        formatted = val.substring(0, 3) + '-' + val.substring(3);
+                    } else if (val.length < 11) {
+                        formatted = val.substring(0, 3) + '-' + val.substring(3, 6) + '-' + val.substring(6);
+                    } else {
+                        formatted = val.substring(0, 3) + '-' + val.substring(3, 7) + '-' + val.substring(7, 11);
+                    }
+
+                    $contact.val(formatted);
+                    $contact.attr('maxlength', '13');
                 } else {
-                    $(this).val(val.substring(0, 3) + '-' + val.substring(3, 4) + '-' + val.substring(7));
+                    // 외국일 경우: 자유로운 번호 체계를 위해 숫자, 띄어쓰기, 하이픈만 입력 허용하고 자릿수 제한 해제
+                    var val = $contact.val().replace(/[^0-9\-\s]/g, '');
+                    $contact.val(val);
+                    $contact.removeAttr('maxlength');
                 }
+            }
+
+            // 연락처 입력 및 국가코드 변경 이벤트 바인딩
+            $('#contact').on('input', formatPhoneNumber);
+            $('#countryCode').on('change', function() {
+                formatPhoneNumber();
+                $('#contact').focus();
             });
 
             // 3. 이메일 도메인 선택 처리

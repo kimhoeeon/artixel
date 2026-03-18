@@ -117,10 +117,10 @@
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <th>작품 제목</th>
-                                                    <td>${inquiry.artworkTitle}</td>
                                                     <th>작 가 명</th>
                                                     <td>${inquiry.artistName}</td>
+                                                    <th>작품 제목</th>
+                                                    <td>${inquiry.artworkTitle}</td>
                                                 </tr>
                                                 <tr>
                                                     <th>작품 크기</th>

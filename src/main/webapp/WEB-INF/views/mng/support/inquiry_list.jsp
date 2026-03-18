@@ -58,18 +58,18 @@
                                         <div class="card-title w-100 m-0">
                                             <form action="/mng/inquiry/list" method="get" class="d-flex align-items-center w-100">
 
-                                                <div class="input-group input-group-sm input-group-solid rounded overflow-hidden search-group-custom" style="max-width: 650px;">
+                                                <div class="input-group input-group-sm input-group-solid rounded overflow-hidden search-group-custom" style="width: 500px; max-width: 100%;">
 
                                                     <select name="searchType" class="form-select form-select-sm border-0 shadow-none flex-shrink-0"
-                                                            style="width: 95px; padding-left: 12px; padding-right: 25px; background-position: right 0.5rem center; background-color: transparent; cursor: pointer;">
+                                                            style="padding-left: 10px; padding-right: 22px; background-position: right 0.3rem center; background-color: transparent; cursor: pointer;">
                                                         <option value="">전체 검색</option>
-                                                        <option value="name" ${param.searchType == 'name' ? 'selected' : ''}>의뢰인명</option>
+                                                        <option value="name" ${param.searchType == 'name' ? 'selected' : ''}>문의자명</option>
                                                         <option value="contact" ${param.searchType == 'contact' ? 'selected' : ''}>연락처</option>
                                                     </select>
 
                                                     <span class="border-end border-gray-600 my-2"></span>
 
-                                                    <input type="text" name="keyword" value="${param.keyword}" class="form-control form-control-sm border-0 shadow-none ps-4" style="background-color: transparent;" placeholder="검색어를 입력하세요"/>
+                                                    <input type="text" name="keyword" value="${param.keyword}" class="form-control form-control-sm border-0 shadow-none ps-4 flex-grow-1" style="width: 150px; background-color: transparent;" placeholder="검색어를 입력하세요"/>
 
                                                     <button type="submit" class="btn btn-sm btn-primary px-6" style="border-radius: 0;">
                                                         <i class="ki-outline ki-magnifier fs-2"></i> 검색
@@ -93,7 +93,7 @@
                                                     <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0 border-bottom border-gray-800">
                                                         <th class="w-60px text-center">NO</th>
                                                         <th class="min-w-100px text-center">구분</th>
-                                                        <th class="min-w-150px">의뢰인명 / 기업명</th>
+                                                        <th class="min-w-150px">문의자명</th>
                                                         <th class="min-w-150px">연락처 / 이메일</th>
                                                         <th class="min-w-150px">국가</th>
                                                         <th class="min-w-100px text-center">상태</th>

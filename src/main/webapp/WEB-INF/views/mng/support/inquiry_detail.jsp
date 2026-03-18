@@ -70,7 +70,7 @@
                                             <div class="d-flex align-items-center gap-3">
                                                 <div class="badge badge-light-dark fs-6 fw-bold px-4 py-2 border border-gray-700">No. ${inquiry.inquiryId}</div>
 
-                                                <select id="statusSelect" class="form-select form-select-sm w-150px fw-bolder text-white"
+                                                <select id="statusSelect" class="form-select form-select-sm w-220px fw-bolder text-white"
                                                         style="background-color: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); cursor: pointer;"
                                                         onchange="updateInquiryStatus(${inquiry.inquiryId}, this.value)">
                                                     <option value="PENDING" ${inquiry.status == 'PENDING' ? 'selected' : ''}>대기중 (PENDING)</option>

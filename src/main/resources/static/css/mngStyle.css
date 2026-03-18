@@ -105,14 +105,23 @@ body, .content, .app-wrapper, .d-flex.flex-column.flex-row-fluid.wrapper {
 	Artixel Admin Premium Dark UI (공통 모듈화)
 *********************************************************************************************/
 
-/* 1. 프리미엄 다크 카드 & 호버 이펙트 */
+/* 1. 프리미엄 다크 카드 */
 .premium-card { background-color: #15161d !important; border: 1px solid rgba(0, 0, 0, 0.05) !important; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1) !important; }
-.premium-card .table-hover tbody tr:hover td { background-color: rgba(255,255,255,0.02) !important; transition: background-color 0.2s ease; }
+
+/* [핵심 수정 1] Bootstrap5의 box-shadow 호버 효과를 완벽하게 덮어쓰고 고급스러운 다크톤 적용 */
+.premium-card .table-hover > tbody > tr:hover > *,
+.premium-card .table-hover > tbody > tr:hover > td,
+.premium-card .table-hover > tbody > tr:hover > th {
+    background-color: #1c1d26 !important;
+    box-shadow: inset 0 0 0 9999px #1c1d26 !important; /* BS5 하얀색 번짐 완벽 차단 */
+    color: #ffffff !important;
+    transition: all 0.2s ease;
+}
 
 .hover-elevate-card { transition: all 0.3s ease; border: 1px solid rgba(255, 255, 255, 0.05); }
 .hover-elevate-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.3) !important; border-color: rgba(255, 255, 255, 0.1); }
 
-/* 2. 글래스모피즘 박스 (상세페이지, 리소스 카드 등) */
+/* 2. 글래스모피즘 박스 */
 .glass-box { background-color: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 8px; padding: 20px; }
 
 /* 3. 테이블 요소 디자인 */
@@ -137,7 +146,7 @@ body, .content, .app-wrapper, .d-flex.flex-column.flex-row-fluid.wrapper {
 .search-group-custom select, .search-group-custom input { color: #ffffff !important; }
 .search-group-custom select option { color: #000000 !important; }
 
-/* 7. 다크 카드 영역 내 강제 텍스트 색상 오버라이드 (보호색 방지) */
+/* 7. 다크 카드 영역 내 강제 텍스트 색상 오버라이드 */
 #kt_app_sidebar .menu-title { color: #a1a5b7 !important; }
 #kt_app_sidebar .menu-link:hover .menu-title, #kt_app_sidebar .menu-link.active .menu-title { color: #ffffff !important; }
 #kt_app_sidebar .menu-icon i { color: #6d6d80 !important; }
@@ -153,5 +162,4 @@ body, .content, .app-wrapper, .d-flex.flex-column.flex-row-fluid.wrapper {
 .premium-card .pagination .page-item.active .page-link { color: #ffffff !important; background-color: #009ef7 !important; border-color: #009ef7 !important; }
 .premium-card .pagination .page-link:hover { color: #009ef7 !important; background-color: rgba(255,255,255,0.1) !important; }
 
-/* 기타 공통 폼 컬러 오버라이드 */
 #statusSelect option { color: #000; }

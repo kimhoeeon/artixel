@@ -132,7 +132,7 @@
 
         // 세션 만료로 튕겨져 왔을 경우 브라우저 Alert을 띄웁니다.
         <c:if test="${param.expired == 'true' or msg eq '로그인이 필요한 서비스입니다.'}">
-            alert('로그인이 필요한 서비스입니다.');
+            // alert('로그인이 필요한 서비스입니다.');
             // Alert 창을 띄운 후 URL에서 ?expired=true 파라미터를 조용히 지워줍니다. (새로고침 시 Alert 재발생 방지)
             history.replaceState({}, null, location.pathname);
         </c:if>

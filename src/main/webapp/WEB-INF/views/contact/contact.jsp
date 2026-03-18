@@ -398,7 +398,42 @@
                 $('#alertPopup').css('display', 'flex').hide().fadeIn(300);
             }
 
-            // [핵심 수정] 국가별 번호 체계를 고려한 입력 필터링 하이브리드 로직
+            // 1. 실시간 특수문자 및 숫자 차단 (이름, 작가명)
+            // 허용: 한글, 영문 대소문자, 공백
+            $('#clientName, #artistName').on('input', function() {
+                var val = $(this).val();
+                var filtered = val.replace(/[^a-zA-Z가-힣\s]/g, '');
+                if (val !== filtered) {
+                    $(this).val(filtered);
+                }
+            });
+
+            // 2. 실시간 특수문자 제한 (작품 제목)
+            // 허용: 한글, 영문 대소문자, 숫자, 공백, 기본 기호(- _ . , ! ?)
+            $('#artworkTitle').on('input', function() {
+                var val = $(this).val();
+                var filtered = val.replace(/[^a-zA-Z0-9가-힣\s\-\_\.\,\!\?]/g, '');
+                if (val !== filtered) {
+                    $(this).val(filtered);
+                }
+            });
+
+            // 3. 비속어(금칙어) 사전 배열
+            const badWords = [
+                '씨발', '시발', '개새끼', '병신', '지랄', '좆', '썅', '미친',
+                '새끼', '니미', '애미', '애비', '염병', '존나', '창녀', '호구', '뒤져'
+            ];
+
+            // 텍스트 내 비속어 포함 여부 검사 함수
+            function containsBadWord(text) {
+                if (!text) return false;
+                for (let i = 0; i < badWords.length; i++) {
+                    if (text.includes(badWords[i])) return true;
+                }
+                return false;
+            }
+
+            // 국가별 번호 체계를 고려한 입력 필터링 하이브리드 로직
             function formatPhoneNumber() {
                 var countryCode = $('#countryCode').val();
                 var $contact = $('#contact');
@@ -467,6 +502,22 @@
             // 5. 폼 전송(Submit) 버튼 클릭 시 전체 유효성 검사
             $('#btnSubmit').on('click', function(e) {
                 e.preventDefault();
+
+                var inputsToCheck = [
+                    $('.etc_input').val(),
+                    $('#clientName').val(),
+                    $('#artistName').val(),
+                    $('#artworkTitle').val(),
+                    $('#artworkSize').val(),
+                    $('#content').val()
+                ];
+
+                for (var i = 0; i < inputsToCheck.length; i++) {
+                    if (containsBadWord(inputsToCheck[i])) {
+                        alert('입력하신 내용에 금칙어(비속어)가 포함되어 있습니다. 바른 말을 사용해주세요.');
+                        return; // 전송 중단
+                    }
+                }
 
                 // 구분 (라디오 버튼) 및 기타 직접입력 처리
                 var categoryVal = $('input[name="category"]:checked').val();

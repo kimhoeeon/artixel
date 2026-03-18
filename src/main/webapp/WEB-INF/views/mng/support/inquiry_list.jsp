@@ -19,36 +19,18 @@
     <link href="/assets/css/style.bundle.css" rel="stylesheet" type="text/css"/>
 
     <style>
-        /* ====================================================
-           [핵심] 메인 대시보드와 동일한 다크 테마 강제 덮어쓰기
-        ==================================================== */
-        body, #kt_body, #kt_wrapper, #kt_content, .page, .content { background-color: #0c0d12 !important; }
-        #kt_aside { background-color: #12131a !important; }
-        #kt_header { background-color: #12131a !important; border-bottom: 1px solid #1f212a !important; }
-
-        .aside-menu .menu-title { color: #878c9f !important; font-weight: 500; transition: color 0.2s ease;}
-        .aside-menu .menu-link:hover .menu-title,
-        .aside-menu .menu-link.active .menu-title { color: #ffffff !important; font-weight: 600; }
-        .aside-menu .menu-icon i { color: #56596b !important; transition: color 0.2s ease;}
-        .aside-menu .menu-link:hover .menu-icon i,
-        .aside-menu .menu-link.active .menu-icon i { color: #009ef7 !important; }
-
-        /* 텍스트 묻힘 방지 처리 */
-        h1, h2, h3, h4, h5, h6, .text-dark, .text-gray-800, .text-gray-900 { color: #ffffff !important; }
-
-        /* 프리미엄 다크 커스텀 요소 */
-        .premium-card { background-color: #15161d !important; border: 1px solid rgba(255, 255, 255, 0.05) !important; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.3) !important; }
+        /* 페이지 전체를 까맣게 만들던 억지 CSS를 폐기하고 '다크 카드' 영역에만 집중 */
+        .premium-card { background-color: #15161d !important; border: 1px solid rgba(0, 0, 0, 0.05) !important; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1) !important; }
         .table-hover tbody tr:hover td { background-color: rgba(255,255,255,0.02) !important; transition: background-color 0.2s ease; }
 
-        /* 상태 뱃지 네온 효과 */
         .badge-glow-pending { background-color: rgba(255, 199, 0, 0.1); color: #ffc700; border: 1px solid rgba(255, 199, 0, 0.3); box-shadow: 0 0 10px rgba(255, 199, 0, 0.2); }
         .badge-glow-progress { background-color: rgba(0, 158, 247, 0.1); color: #009ef7; border: 1px solid rgba(0, 158, 247, 0.3); box-shadow: 0 0 10px rgba(0, 158, 247, 0.2); }
         .badge-glow-completed { background-color: rgba(80, 205, 137, 0.1); color: #50cd89; border: 1px solid rgba(80, 205, 137, 0.3); box-shadow: 0 0 10px rgba(80, 205, 137, 0.2); }
 
-        /* 다크 글래스 검색 박스 */
         .search-box { background-color: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); color: #fff; }
         .search-box:focus { border-color: #009ef7; box-shadow: 0 0 10px rgba(0, 158, 247, 0.3); background-color: rgba(255,255,255,0.05); color: #fff;}
-        .select2-container--bootstrap5 .select2-selection { background-color: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); color: #fff; }
+        .select2-container--bootstrap5 .select2-selection { background-color: rgba(255,255,255,0.03) !important; border: 1px solid rgba(255,255,255,0.1) !important; color: #fff !important; }
+        .select2-container--bootstrap5 .select2-selection__rendered { color: #fff !important; }
     </style>
 
 </head>
@@ -87,20 +69,20 @@
 
                                 <div class="card premium-card">
                                     <div class="card-header border-0 pt-6">
-                                        <div class="card-title">
-                                            <form action="/mng/inquiry/list" method="get" class="d-flex align-items-center position-relative my-1 gap-3">
+                                        <div class="card-title w-100">
+                                            <form action="/mng/inquiry/list" method="get" class="d-flex align-items-center flex-wrap my-1 gap-3 w-100">
                                                 <select name="searchType" class="form-select form-select-sm form-select-solid w-125px search-box" data-control="select2" data-hide-search="true">
                                                     <option value="">전체 검색</option>
                                                     <option value="name" ${param.searchType == 'name' ? 'selected' : ''}>의뢰인명</option>
                                                     <option value="contact" ${param.searchType == 'contact' ? 'selected' : ''}>연락처</option>
                                                 </select>
-                                                <div class="position-relative">
+                                                <div class="position-relative flex-grow-1" style="max-width: 250px;">
                                                     <i class="ki-outline ki-magnifier fs-2 text-gray-500 position-absolute top-50 translate-middle-y ms-4"></i>
-                                                    <input type="text" name="keyword" value="${param.keyword}" class="form-control form-control-sm form-control-solid w-250px ps-12 search-box" placeholder="검색어를 입력하세요"/>
+                                                    <input type="text" name="keyword" value="${param.keyword}" class="form-control form-control-sm form-control-solid w-100 ps-12 search-box" placeholder="검색어를 입력하세요"/>
                                                 </div>
-                                                <button type="submit" class="btn btn-sm btn-primary flex-shrink-0 text-nowrap px-4">검색</button>
+                                                <button type="submit" class="btn btn-sm btn-primary text-nowrap" style="min-width: 70px;">검색</button>
                                                 <c:if test="${not empty param.keyword}">
-                                                    <a href="/mng/inquiry/list" class="btn btn-sm btn-light-danger flex-shrink-0 text-nowrap px-4">초기화</a>
+                                                    <a href="/mng/inquiry/list" class="btn btn-sm btn-light-danger text-nowrap" style="min-width: 70px;">초기화</a>
                                                 </c:if>
                                             </form>
                                         </div>

@@ -19,14 +19,13 @@
     <link href="/assets/css/style.bundle.css" rel="stylesheet" type="text/css"/>
 
     <style>
-        .premium-card { background-color: #15161d !important; border: 1px solid rgba(255, 255, 255, 0.05) !important; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.3) !important; }
+        /* 카드 영역만 다크모드 유지 */
+        .premium-card { background-color: #15161d !important; border: 1px solid rgba(0, 0, 0, 0.05) !important; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1) !important; }
         .glass-box { background-color: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 8px; padding: 20px;}
 
-        /* 다크 테마용 테이블 스타일 최적화 */
         .detail-table th { background-color: rgba(255,255,255,0.03) !important; color: #a1a5b7 !important; font-weight: 600; width: 15%; text-align: center; border-color: rgba(255,255,255,0.05) !important; }
         .detail-table td { background-color: transparent !important; color: #ffffff !important; border-color: rgba(255,255,255,0.05) !important; padding-left: 20px !important; }
 
-        /* 네온 뱃지 이펙트 */
         .badge-glow-pending { background-color: rgba(255, 199, 0, 0.1); color: #ffc700; border: 1px solid rgba(255, 199, 0, 0.3); box-shadow: 0 0 10px rgba(255, 199, 0, 0.2); }
         .badge-glow-progress { background-color: rgba(0, 158, 247, 0.1); color: #009ef7; border: 1px solid rgba(0, 158, 247, 0.3); box-shadow: 0 0 10px rgba(0, 158, 247, 0.2); }
         .badge-glow-completed { background-color: rgba(80, 205, 137, 0.1); color: #50cd89; border: 1px solid rgba(80, 205, 137, 0.3); box-shadow: 0 0 10px rgba(80, 205, 137, 0.2); }

@@ -1,13 +1,6 @@
 /**********************************************************************************************
 	일반
-*********************************************************************************************
-.table-focus input[type=text]:focus{ background-color:#e4fbff;}
-.table-focus input[type=email]:focus{ background-color:#e4fbff;}
-.table-focus input[type=number]:focus{ background-color:#e4fbff;}
-.table-focus input[type=image]:focus{ background-color:#e4fbff;}
-.table-focus textarea:focus{ background-color:#e4fbff;}
-*/
-
+*********************************************************************************************/
 .mb20 { margin-bottom: 20px !important }
 .mb25 { margin-bottom: 25px !important }
 .mb30 { margin-bottom: 30px !important }
@@ -100,12 +93,65 @@
     overflow: hidden;
 }
 
-/* 메인 콘텐츠 배경색을 연한 회색으로 변경 */
+/* 배경 및 사이드바 */
 body, .content, .app-wrapper, .d-flex.flex-column.flex-row-fluid.wrapper {
-    background-color: #EEF0F8 !important; /* 보트쇼와 유사한 쿨 그레이 톤 */
+    background-color: #EEF0F8 !important;
+}
+.aside-dark, .brand-dark {
+    background-color: #1e1e2d !important;
 }
 
-/* (옵션) 보트쇼 사이드바의 짙은 남색을 정확히 따라하고 싶다면 */
-.aside-dark, .brand-dark {
-    background-color: #1e1e2d !important; /* Metronic 기본 다크보다 약간 더 깊은 색 */
-}
+/**********************************************************************************************
+	Artixel Admin Premium Dark UI (공통 모듈화)
+*********************************************************************************************/
+
+/* 1. 프리미엄 다크 카드 & 호버 이펙트 */
+.premium-card { background-color: #15161d !important; border: 1px solid rgba(0, 0, 0, 0.05) !important; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1) !important; }
+.premium-card .table-hover tbody tr:hover td { background-color: rgba(255,255,255,0.02) !important; transition: background-color 0.2s ease; }
+
+.hover-elevate-card { transition: all 0.3s ease; border: 1px solid rgba(255, 255, 255, 0.05); }
+.hover-elevate-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.3) !important; border-color: rgba(255, 255, 255, 0.1); }
+
+/* 2. 글래스모피즘 박스 (상세페이지, 리소스 카드 등) */
+.glass-box { background-color: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 8px; padding: 20px; }
+
+/* 3. 테이블 요소 디자인 */
+.detail-table th { background-color: rgba(255,255,255,0.03) !important; color: #a1a5b7 !important; font-weight: 600; width: 15%; text-align: center; border-color: rgba(255,255,255,0.05) !important; }
+.detail-table td { background-color: transparent !important; color: #ffffff !important; border-color: rgba(255,255,255,0.05) !important; padding-left: 20px !important; }
+
+/* 4. 상태 뱃지 네온 발광 효과 */
+.badge-glow-pending { background-color: rgba(255, 199, 0, 0.1); color: #ffc700; border: 1px solid rgba(255, 199, 0, 0.3); box-shadow: 0 0 10px rgba(255, 199, 0, 0.2); }
+.badge-glow-progress { background-color: rgba(0, 158, 247, 0.1); color: #009ef7; border: 1px solid rgba(0, 158, 247, 0.3); box-shadow: 0 0 10px rgba(0, 158, 247, 0.2); }
+.badge-glow-completed { background-color: rgba(80, 205, 137, 0.1); color: #50cd89; border: 1px solid rgba(80, 205, 137, 0.3); box-shadow: 0 0 10px rgba(80, 205, 137, 0.2); }
+
+/* 5. 아이콘 네온 효과 */
+.neon-primary { filter: drop-shadow(0 0 10px rgba(114, 57, 234, 0.7)); }
+.neon-success { filter: drop-shadow(0 0 10px rgba(80, 205, 137, 0.7)); }
+.neon-info    { filter: drop-shadow(0 0 10px rgba(0, 158, 247, 0.7)); }
+.neon-warning { filter: drop-shadow(0 0 10px rgba(255, 199, 0, 0.7)); }
+.neon-danger  { filter: drop-shadow(0 0 10px rgba(241, 65, 108, 0.7)); }
+
+/* 6. 다크 테마 커스텀 통합 검색바 */
+.search-group-custom { background-color: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s ease; }
+.search-group-custom:focus-within { border-color: #009ef7; box-shadow: 0 0 10px rgba(0, 158, 247, 0.3); background-color: rgba(255,255,255,0.05); }
+.search-group-custom select, .search-group-custom input { color: #ffffff !important; }
+.search-group-custom select option { color: #000000 !important; }
+
+/* 7. 다크 카드 영역 내 강제 텍스트 색상 오버라이드 (보호색 방지) */
+#kt_app_sidebar .menu-title { color: #a1a5b7 !important; }
+#kt_app_sidebar .menu-link:hover .menu-title, #kt_app_sidebar .menu-link.active .menu-title { color: #ffffff !important; }
+#kt_app_sidebar .menu-icon i { color: #6d6d80 !important; }
+#kt_app_sidebar .menu-link:hover .menu-icon i, #kt_app_sidebar .menu-link.active .menu-icon i { color: #009ef7 !important; }
+
+.premium-card .table th { color: #a1a5b7 !important; border-bottom: 1px dashed rgba(255,255,255,0.1) !important; }
+.premium-card .table td { color: #e4e6ef !important; border-bottom: 1px dashed rgba(255,255,255,0.05) !important; }
+.premium-card .text-muted, .premium-card .text-gray-300, .premium-card .text-gray-400, .premium-card .text-gray-500 { color: #b5b5c3 !important; }
+.premium-card a.text-white { color: #ffffff !important; }
+.premium-card a.text-white:hover { color: #009ef7 !important; }
+
+.premium-card .pagination .page-link { color: #b5b5c3 !important; background-color: #1e1e2d !important; border-color: rgba(255,255,255,0.1) !important; }
+.premium-card .pagination .page-item.active .page-link { color: #ffffff !important; background-color: #009ef7 !important; border-color: #009ef7 !important; }
+.premium-card .pagination .page-link:hover { color: #009ef7 !important; background-color: rgba(255,255,255,0.1) !important; }
+
+/* 기타 공통 폼 컬러 오버라이드 */
+#statusSelect option { color: #000; }

@@ -17,22 +17,7 @@
     <title>관리자 메인 | Artixel 관리자</title>
     <link href="/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css"/>
     <link href="/assets/css/style.bundle.css" rel="stylesheet" type="text/css"/>
-
-    <style>
-        /* 억지 CSS 전부 폐기! 네온(Neon) 아이콘 발광 효과만 깔끔하게 추가 */
-        .neon-primary { filter: drop-shadow(0 0 10px rgba(114, 57, 234, 0.7)); }
-        .neon-success { filter: drop-shadow(0 0 10px rgba(80, 205, 137, 0.7)); }
-        .neon-info    { filter: drop-shadow(0 0 10px rgba(0, 158, 247, 0.7)); }
-        .neon-warning { filter: drop-shadow(0 0 10px rgba(255, 199, 0, 0.7)); }
-        .neon-danger  { filter: drop-shadow(0 0 10px rgba(241, 65, 108, 0.7)); }
-
-        /* 다크 테마 카드 호버 이펙트 */
-        .card { transition: all 0.3s ease; border: 1px solid rgba(255, 255, 255, 0.05); }
-        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.3) !important; border-color: rgba(255, 255, 255, 0.1); }
-
-        /* 글래스 느낌의 내부 박스 */
-        .glass-box { background-color: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); }
-    </style>
+    <link href="/css/mngStyle.css" rel="stylesheet" type="text/css"/>
 </head>
 <body id="kt_app_body"
       data-kt-app-layout="dark-sidebar"

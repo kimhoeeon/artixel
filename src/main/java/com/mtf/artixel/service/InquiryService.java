@@ -91,14 +91,14 @@ public class InquiryService {
                 mailReq.setSubject("[Artixel] 홈페이지 신규 의뢰 접수 알림 (" + inquiryVO.getClientName() + ")");
 
                 StringBuilder body = new StringBuilder();
-                body.append("Artixel 홈페이지에 새로운 문의/의뢰가 접수되었습니다.\n\n");
-                body.append("■ 구분: ").append(inquiryVO.getCategory()).append("\n");
-                body.append("■ 의뢰인(기업명): ").append(inquiryVO.getClientName()).append("\n");
-                body.append("■ 연락처: ").append(inquiryVO.getCountryCode()).append(" ").append(inquiryVO.getContact()).append("\n");
-                body.append("■ 이메일: ").append(inquiryVO.getEmail()).append("\n");
-                body.append("■ 국가: ").append(inquiryVO.getCountry()).append("\n\n");
-                body.append("관리자 대시보드에서 상세 내용을 확인해주세요.\n");
-                body.append("▶ https://artixel.kr/mng/index.do");
+                body.append("Artixel 홈페이지에 새로운 문의/의뢰가 접수되었습니다.<br><br>");
+                body.append("■ 구분: ").append(inquiryVO.getCategory()).append("<br>");
+                body.append("■ 의뢰인(기업명): ").append(inquiryVO.getClientName()).append("<br>");
+                body.append("■ 연락처: ").append(inquiryVO.getCountryCode()).append(" ").append(inquiryVO.getContact()).append("<br>");
+                body.append("■ 이메일: ").append(inquiryVO.getEmail()).append("<br>");
+                body.append("■ 국가: ").append(inquiryVO.getCountry()).append("<br><br>");
+                body.append("관리자 대시보드에서 상세 내용을 확인해주세요.<br>");
+                body.append("▶ <a href='https://artixel.kr/mng/index.do' target='_blank'>https://artixel.kr/mng/index.do</a>");
 
                 mailReq.setBody(body.toString());
 

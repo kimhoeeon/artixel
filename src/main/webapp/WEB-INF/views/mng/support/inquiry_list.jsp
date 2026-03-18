@@ -17,29 +17,7 @@
     <title>문의 목록 | Artixel 관리자</title>
     <link href="/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css"/>
     <link href="/assets/css/style.bundle.css" rel="stylesheet" type="text/css"/>
-
-    <style>
-        /* 메인 대시보드와 동일한 다크 테마 유지 */
-        .premium-card { background-color: #15161d !important; border: 1px solid rgba(0, 0, 0, 0.05) !important; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1) !important; }
-        .table-hover tbody tr:hover td { background-color: rgba(255,255,255,0.02) !important; transition: background-color 0.2s ease; }
-
-        .badge-glow-pending { background-color: rgba(255, 199, 0, 0.1); color: #ffc700; border: 1px solid rgba(255, 199, 0, 0.3); box-shadow: 0 0 10px rgba(255, 199, 0, 0.2); }
-        .badge-glow-progress { background-color: rgba(0, 158, 247, 0.1); color: #009ef7; border: 1px solid rgba(0, 158, 247, 0.3); box-shadow: 0 0 10px rgba(0, 158, 247, 0.2); }
-        .badge-glow-completed { background-color: rgba(80, 205, 137, 0.1); color: #50cd89; border: 1px solid rgba(80, 205, 137, 0.3); box-shadow: 0 0 10px rgba(80, 205, 137, 0.2); }
-
-        .search-group-custom {
-            background-color: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.1);
-            transition: all 0.3s ease;
-        }
-        .search-group-custom:focus-within {
-            border-color: #009ef7;
-            box-shadow: 0 0 10px rgba(0, 158, 247, 0.3);
-            background-color: rgba(255,255,255,0.05);
-        }
-        .search-group-custom select, .search-group-custom input { color: #ffffff !important; }
-        .search-group-custom select option { color: #000000 !important; } /* 셀렉트 드롭다운 옵션은 가독성을 위해 검은색 처리 */
-    </style>
+    <link href="/css/mngStyle.css" rel="stylesheet" type="text/css"/>
 
 </head>
 <body id="kt_app_body"

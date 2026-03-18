@@ -17,18 +17,8 @@
     <title>문의 상세 | Artixel 관리자</title>
     <link href="/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css"/>
     <link href="/assets/css/style.bundle.css" rel="stylesheet" type="text/css"/>
+    <link href="/css/mngStyle.css" rel="stylesheet" type="text/css"/>
 
-    <style>
-        /* 카드 영역만 다크모드 유지 */
-        .premium-card { background-color: #15161d !important; border: 1px solid rgba(0, 0, 0, 0.05) !important; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1) !important; }
-        .glass-box { background-color: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 8px; padding: 20px;}
-
-        .detail-table th { background-color: rgba(255,255,255,0.03) !important; color: #a1a5b7 !important; font-weight: 600; width: 15%; text-align: center; border-color: rgba(255,255,255,0.05) !important; }
-        .detail-table td { background-color: transparent !important; color: #ffffff !important; border-color: rgba(255,255,255,0.05) !important; padding-left: 20px !important; }
-
-        /* 다크 테마 셀렉트 박스 내부 옵션 컬러 교정 */
-        #statusSelect option { color: #000; }
-    </style>
 </head>
 <body id="kt_app_body"
       data-kt-app-layout="dark-sidebar"

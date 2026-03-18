@@ -31,7 +31,7 @@ public class AdminInterceptor implements HandlerInterceptor {
             return true;
         }
 
-        // 2. 💡 DB 기반 IP 접근 통제 검사
+        // 2. DB 기반 IP 접근 통제 검사
         // admin_access_ips 테이블에 등록된 전체 IP 리스트를 가져옵니다.
         List<String> allowedIps = adminMapper.selectAllAdminAccessIps();
 

@@ -26,9 +26,8 @@
         .detail-table th { background-color: rgba(255,255,255,0.03) !important; color: #a1a5b7 !important; font-weight: 600; width: 15%; text-align: center; border-color: rgba(255,255,255,0.05) !important; }
         .detail-table td { background-color: transparent !important; color: #ffffff !important; border-color: rgba(255,255,255,0.05) !important; padding-left: 20px !important; }
 
-        .badge-glow-pending { background-color: rgba(255, 199, 0, 0.1); color: #ffc700; border: 1px solid rgba(255, 199, 0, 0.3); box-shadow: 0 0 10px rgba(255, 199, 0, 0.2); }
-        .badge-glow-progress { background-color: rgba(0, 158, 247, 0.1); color: #009ef7; border: 1px solid rgba(0, 158, 247, 0.3); box-shadow: 0 0 10px rgba(0, 158, 247, 0.2); }
-        .badge-glow-completed { background-color: rgba(80, 205, 137, 0.1); color: #50cd89; border: 1px solid rgba(80, 205, 137, 0.3); box-shadow: 0 0 10px rgba(80, 205, 137, 0.2); }
+        /* 다크 테마 셀렉트 박스 내부 옵션 컬러 교정 */
+        #statusSelect option { color: #000; }
     </style>
 </head>
 <body id="kt_app_body"
@@ -80,21 +79,20 @@
                                         <div class="d-flex flex-stack mb-8">
                                             <div class="d-flex align-items-center gap-3">
                                                 <div class="badge badge-light-dark fs-6 fw-bold px-4 py-2 border border-gray-700">No. ${inquiry.inquiryId}</div>
-                                                <c:choose>
-                                                    <c:when test="${inquiry.status == 'PENDING'}">
-                                                        <span class="badge badge-glow-pending px-4 py-2 fs-6 fw-bolder">상태: 대기중</span>
-                                                    </c:when>
-                                                    <c:when test="${inquiry.status == 'IN_PROGRESS'}">
-                                                        <span class="badge badge-glow-progress px-4 py-2 fs-6 fw-bolder">상태: 진행중</span>
-                                                    </c:when>
-                                                    <c:when test="${inquiry.status == 'COMPLETED'}">
-                                                        <span class="badge badge-glow-completed px-4 py-2 fs-6 fw-bolder">상태: 답변완료</span>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <span class="badge badge-light-dark px-4 py-2 fs-6 fw-bolder">상태: ${inquiry.status}</span>
-                                                    </c:otherwise>
-                                                </c:choose>
+
+                                                <select id="statusSelect" class="form-select form-select-sm w-150px fw-bolder text-white"
+                                                        style="background-color: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); cursor: pointer;"
+                                                        onchange="updateInquiryStatus(${inquiry.inquiryId}, this.value)">
+                                                    <option value="PENDING" ${inquiry.status == 'PENDING' ? 'selected' : ''}>대기중 (PENDING)</option>
+                                                    <option value="IN_PROGRESS" ${inquiry.status == 'IN_PROGRESS' ? 'selected' : ''}>진행중 (IN_PROGRESS)</option>
+                                                    <option value="COMPLETED" ${inquiry.status == 'COMPLETED' ? 'selected' : ''}>답변완료 (COMPLETED)</option>
+                                                </select>
+
+                                                <span id="statusUpdateIndicator" class="ms-2 text-success fw-bold align-items-center" style="display:none; font-size: 0.95rem;">
+                                                    <i class="ki-outline ki-check-circle fs-3 text-success me-1"></i> 저장됨
+                                                </span>
                                             </div>
+
                                             <div class="text-muted fs-7">
                                                 <i class="ki-outline ki-time fs-4 me-1"></i> 접수일시: ${inquiry.createdAt}
                                                 <span class="ms-4"><i class="ki-outline ki-geolocation fs-4 me-1"></i> IP: ${inquiry.clientIp}</span>
@@ -217,5 +215,27 @@
 
     <script src="/assets/plugins/global/plugins.bundle.js"></script>
     <script src="/assets/js/scripts.bundle.js"></script>
+
+    <script>
+        function updateInquiryStatus(id, newStatus) {
+            $.ajax({
+                url: '/mng/inquiry/updateStatus',
+                type: 'POST',
+                data: { inquiryId: id, status: newStatus },
+                success: function(res) {
+                    if(res === 'ok') {
+                        // 변경 성공 시 "V 저장됨" 문구를 부드럽게 띄웠다 사라지게 함
+                        var indicator = $('#statusUpdateIndicator');
+                        indicator.css('display', 'inline-flex').hide().fadeIn(200).delay(1500).fadeOut(300);
+                    } else {
+                        Swal.fire("오류", "상태 변경 처리에 실패했습니다.", "error");
+                    }
+                },
+                error: function() {
+                    Swal.fire("오류", "서버 통신 중 문제가 발생했습니다.", "error");
+                }
+            });
+        }
+    </script>
 </body>
 </html>

@@ -19,7 +19,7 @@
     <link href="/assets/css/style.bundle.css" rel="stylesheet" type="text/css"/>
 
     <style>
-        /* 페이지 전체를 까맣게 만들던 억지 CSS를 폐기하고 '다크 카드' 영역에만 집중 */
+        /* 메인 대시보드와 동일한 다크 테마 유지 */
         .premium-card { background-color: #15161d !important; border: 1px solid rgba(0, 0, 0, 0.05) !important; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1) !important; }
         .table-hover tbody tr:hover td { background-color: rgba(255,255,255,0.02) !important; transition: background-color 0.2s ease; }
 
@@ -27,10 +27,18 @@
         .badge-glow-progress { background-color: rgba(0, 158, 247, 0.1); color: #009ef7; border: 1px solid rgba(0, 158, 247, 0.3); box-shadow: 0 0 10px rgba(0, 158, 247, 0.2); }
         .badge-glow-completed { background-color: rgba(80, 205, 137, 0.1); color: #50cd89; border: 1px solid rgba(80, 205, 137, 0.3); box-shadow: 0 0 10px rgba(80, 205, 137, 0.2); }
 
-        .search-box { background-color: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); color: #fff; }
-        .search-box:focus { border-color: #009ef7; box-shadow: 0 0 10px rgba(0, 158, 247, 0.3); background-color: rgba(255,255,255,0.05); color: #fff;}
-        .select2-container--bootstrap5 .select2-selection { background-color: rgba(255,255,255,0.03) !important; border: 1px solid rgba(255,255,255,0.1) !important; color: #fff !important; }
-        .select2-container--bootstrap5 .select2-selection__rendered { color: #fff !important; }
+        .search-group-custom {
+            background-color: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+        }
+        .search-group-custom:focus-within {
+            border-color: #009ef7;
+            box-shadow: 0 0 10px rgba(0, 158, 247, 0.3);
+            background-color: rgba(255,255,255,0.05);
+        }
+        .search-group-custom select, .search-group-custom input { color: #ffffff !important; }
+        .search-group-custom select option { color: #000000 !important; } /* 셀렉트 드롭다운 옵션은 가독성을 위해 검은색 처리 */
     </style>
 
 </head>
@@ -69,21 +77,32 @@
 
                                 <div class="card premium-card">
                                     <div class="card-header border-0 pt-6">
-                                        <div class="card-title w-100">
-                                            <form action="/mng/inquiry/list" method="get" class="d-flex align-items-center flex-wrap my-1 gap-3 w-100">
-                                                <select name="searchType" class="form-select form-select-sm form-select-solid w-125px search-box" data-control="select2" data-hide-search="true">
-                                                    <option value="">전체 검색</option>
-                                                    <option value="name" ${param.searchType == 'name' ? 'selected' : ''}>의뢰인명</option>
-                                                    <option value="contact" ${param.searchType == 'contact' ? 'selected' : ''}>연락처</option>
-                                                </select>
-                                                <div class="position-relative flex-grow-1" style="max-width: 250px;">
-                                                    <i class="ki-outline ki-magnifier fs-2 text-gray-500 position-absolute top-50 translate-middle-y ms-4"></i>
-                                                    <input type="text" name="keyword" value="${param.keyword}" class="form-control form-control-sm form-control-solid w-100 ps-12 search-box" placeholder="검색어를 입력하세요"/>
+                                        <div class="card-title w-100 m-0">
+                                            <form action="/mng/inquiry/list" method="get" class="d-flex align-items-center w-100">
+
+                                                <div class="input-group input-group-sm input-group-solid rounded overflow-hidden search-group-custom" style="max-width: 550px;">
+
+                                                    <select name="searchType" class="form-select form-select-sm border-0 shadow-none w-100px flex-shrink-0" style="background-color: transparent; cursor: pointer;">
+                                                        <option value="">전체 검색</option>
+                                                        <option value="name" ${param.searchType == 'name' ? 'selected' : ''}>의뢰인명</option>
+                                                        <option value="contact" ${param.searchType == 'contact' ? 'selected' : ''}>연락처</option>
+                                                    </select>
+
+                                                    <span class="border-end border-gray-600 my-2"></span>
+
+                                                    <input type="text" name="keyword" value="${param.keyword}" class="form-control form-control-sm border-0 shadow-none ps-4" style="background-color: transparent;" placeholder="검색어를 입력하세요"/>
+
+                                                    <button type="submit" class="btn btn-sm btn-primary px-6" style="border-radius: 0;">
+                                                        <i class="ki-outline ki-magnifier fs-2"></i> 검색
+                                                    </button>
+
+                                                    <c:if test="${not empty param.keyword}">
+                                                        <a href="/mng/inquiry/list" class="btn btn-sm btn-danger px-4 d-flex align-items-center justify-content-center" style="border-radius: 0;" title="검색 초기화">
+                                                            <i class="ki-outline ki-cross fs-2 p-0 m-0"></i>
+                                                        </a>
+                                                    </c:if>
                                                 </div>
-                                                <button type="submit" class="btn btn-sm btn-primary text-nowrap" style="min-width: 70px;">검색</button>
-                                                <c:if test="${not empty param.keyword}">
-                                                    <a href="/mng/inquiry/list" class="btn btn-sm btn-light-danger text-nowrap" style="min-width: 70px;">초기화</a>
-                                                </c:if>
+
                                             </form>
                                         </div>
                                     </div>

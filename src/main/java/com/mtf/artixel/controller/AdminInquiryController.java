@@ -67,6 +67,22 @@ public class AdminInquiryController {
         return "redirect:/mng/inquiry/list";
     }
 
+    // 3-1. 문의 진행 상태(Status) 즉시 변경 (AJAX)
+    @PostMapping("/updateStatus")
+    @ResponseBody
+    public String updateStatus(@RequestParam Long inquiryId, @RequestParam String status) {
+        try {
+            InquiryVO vo = new InquiryVO();
+            vo.setInquiryId(inquiryId);
+            vo.setStatus(status);
+            boolean result = inquiryService.updateInquiryStatus(vo);
+            return result ? "ok" : "fail";
+        } catch (Exception e) {
+            log.error("문의 상태 변경 중 오류 발생", e);
+            return "error";
+        }
+    }
+
     // 4. 전체 엑셀(Excel) 다운로드 로직
     @GetMapping("/excel")
     public void excelDownload(@ModelAttribute InquiryVO inquiryVO, HttpServletResponse response) throws Exception {

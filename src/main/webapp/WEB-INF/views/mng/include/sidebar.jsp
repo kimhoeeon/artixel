@@ -8,8 +8,7 @@
 
     <div class="app-sidebar-logo px-6 justify-content-center" id="kt_app_sidebar_logo">
         <a href="/mng/main.do">
-            <img alt="Logo" src="/img/logo.png" class="h-40px app-sidebar-logo-default theme-light-show" style="object-fit: contain;" />
-            <img alt="Logo" src="/img/logo.png" class="h-25px app-sidebar-logo-minimize" style="object-fit: contain;" />
+            <img alt="Logo" src="/img/logo.png" class="h-25px app-sidebar-logo-default theme-light-show" style="object-fit: contain;" />
         </a>
 
         <div id="kt_app_sidebar_toggle" class="app-sidebar-toggle btn btn-icon btn-shadow btn-sm btn-color-muted btn-active-color-primary body-bg h-30px w-30px position-absolute top-50 start-100 translate-middle rotate"

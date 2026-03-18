@@ -13,6 +13,9 @@ public interface AdminMapper {
     // ID로 관리자 정보 조회
     AdminVO selectAdminByLoginId(String loginId);
 
+    // 시스템 전체 허용 IP 목록 조회 (인터셉터 방어용)
+    List<String> selectAllAdminAccessIps();
+
     // 허용 IP 목록 조회
     List<String> selectAllowedIpsByAdminId(Long adminId);
 

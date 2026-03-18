@@ -16,6 +16,11 @@
         WHERE login_id = #{loginId}
     </select>
 
+    <select id="selectAllAdminAccessIps" resultType="string">
+        SELECT DISTINCT ip_address
+        FROM admin_access_ips
+    </select>
+
     <select id="selectAllowedIpsByAdminId" resultType="string">
         SELECT ip_address
         FROM admin_access_ips

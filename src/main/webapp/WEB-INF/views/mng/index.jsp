@@ -68,7 +68,7 @@
                     <form class="form w-100" novalidate="novalidate" id="login_form" action="/mng/login" method="post">
 
                         <div class="text-center mb-10">
-                            <img alt="Logo" src="/img/logo.png" class="h-40px mb-8"/>
+                            <img alt="Logo" src="/img/logo_w.png" class="h-40px mb-8"/>
                             <div class="text-gray-500 fw-semibold fs-4">
                                 Artixel 관리자 시스템
                             </div>

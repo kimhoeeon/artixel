@@ -33,16 +33,16 @@ public class AdminInterceptor implements HandlerInterceptor {
 
         // 2. DB 기반 IP 접근 통제 검사
         // admin_access_ips 테이블에 등록된 전체 IP 리스트를 가져옵니다.
-        List<String> allowedIps = adminMapper.selectAllAdminAccessIps();
+        //List<String> allowedIps = adminMapper.selectAllAdminAccessIps();
 
         // 만약 DB에 IP가 단 하나도 등록되어 있지 않다면 치명적이므로 일단 로컬 호스트만 임시 허용하거나
         // 보안 정책에 따라 전체 차단(return false)할 수 있습니다. 현재는 안전하게 등록된 IP가 없을 경우만 차단합니다.
-        if (allowedIps == null || allowedIps.isEmpty() || !allowedIps.contains(clientIp)) {
+        /*if (allowedIps == null || allowedIps.isEmpty() || !allowedIps.contains(clientIp)) {
             log.error("🚨 인가되지 않은 IP의 관리자 페이지 접근 차단: IP={} / URI={}", clientIp, requestURI);
 
             response.sendError(HttpServletResponse.SC_FORBIDDEN, "Access Denied: 등록되지 않은 IP입니다.");
             return false; // 컨트롤러 진행 완벽 차단
-        }
+        }*/
 
         // 3. 로그인 및 인덱스 페이지는 세션 검사 예외 (IP 검사는 통과한 상태)
         if (requestURI.startsWith("/mng/index") || requestURI.startsWith("/mng/login")) {

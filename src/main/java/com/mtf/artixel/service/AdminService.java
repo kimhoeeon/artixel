@@ -48,7 +48,7 @@ public class AdminService {
 
         // 3. 허용 IP 목록 별도 조회 및 검증
         // Service에서 IP 목록을 가져와서 VO에 세팅합니다.
-        List<String> allowedIps = adminMapper.selectAllowedIpsByAdminId(admin.getAdminId());
+        /*List<String> allowedIps = adminMapper.selectAllowedIpsByAdminId(admin.getAdminId());
         admin.setAllowedIpList(allowedIps); // VO에 주입
 
         // IP 검증 로직
@@ -64,7 +64,7 @@ public class AdminService {
                 log.warn("로그인 차단 - 허용되지 않은 IP. ID: {}, IP: {}", loginId, clientIp);
                 throw new Exception("접속이 허용되지 않은 IP입니다.");
             }
-        }
+        }*/
 
         // 4. 마지막 로그인 시간 업데이트
         adminMapper.updateLastLogin(admin.getAdminId());

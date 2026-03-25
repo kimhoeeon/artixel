@@ -136,7 +136,7 @@
                         <div class="big">
                             판단을 돕는 건<br />결론이 아니라 <span>근거</span>
                         </div>
-                        <a href="/contact/contact">Get Started <img src="/img/arrow-right_w.png" alt="화살표"></a>
+                        <a href="/contact">Get Started <img src="/img/arrow-right_w.png" alt="화살표"></a>
                     </div>
                 </div>
                 <div class="report_list">

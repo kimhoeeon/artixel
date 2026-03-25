@@ -225,7 +225,7 @@
                         예술을 더 믿을 수 있는 세상<br />
                         아티셀은 그 출발점이 되고자 합니다.
                     </div>
-                    <a href="/contact/contact">Get Started <img src="/img/arrow-right.png" alt="화살표"></a>
+                    <a href="/contact">Get Started <img src="/img/arrow-right.png" alt="화살표"></a>
                 </div>
                 <div class="main_contact-img">
                     <img src="/img/main_contact.png" alt="미술작품 이미지">

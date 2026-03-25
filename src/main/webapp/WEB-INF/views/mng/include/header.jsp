@@ -6,7 +6,7 @@
 
         <div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0">
             <a href="/mng/main.do" class="d-lg-none">
-                <img alt="Logo" src="/img/logo.png" class="h-30px" />
+                <img alt="Logo" src="/img/logo_w.png" class="h-30px" />
             </a>
             <div class="d-none d-md-flex align-items-center ms-2">
                 <span class="fs-4 fw-bold text-gray-800">Artixel</span>

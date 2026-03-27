@@ -96,7 +96,7 @@ public class AdminInquiryController {
         Sheet sheet = workbook.createSheet("문의내역");
         Row headerRow = sheet.createRow(0);
 
-        String[] headers = {"연번", "구분", "성함", "연락처", "이메일", "국가", "작품제목", "작품크기", "작가명", "접수일시"};
+        String[] headers = {"연번", "유형", "구분", "성함", "연락처", "이메일", "국가", "작품제목", "작품크기", "작가명", "접수일시"};
         for(int i = 0; i < headers.length; i++) {
             Cell cell = headerRow.createCell(i);
             cell.setCellValue(headers[i]);
@@ -106,15 +106,16 @@ public class AdminInquiryController {
         for (InquiryVO vo : list) {
             Row row = sheet.createRow(rowNum++);
             row.createCell(0).setCellValue(vo.getInquiryId());
-            row.createCell(1).setCellValue(vo.getCategory() != null ? vo.getCategory() : "");
-            row.createCell(2).setCellValue(vo.getClientName() != null ? vo.getClientName() : "");
-            row.createCell(3).setCellValue(vo.getCountryCode() + " " + vo.getContact());
-            row.createCell(4).setCellValue(vo.getEmail() != null ? vo.getEmail() : "");
-            row.createCell(5).setCellValue(vo.getCountry() != null ? vo.getCountry() : "");
-            row.createCell(6).setCellValue(vo.getArtworkTitle() != null ? vo.getArtworkTitle() : "");
-            row.createCell(7).setCellValue(vo.getArtworkSize() != null ? vo.getArtworkSize() : "");
-            row.createCell(8).setCellValue(vo.getArtistName() != null ? vo.getArtistName() : "");
-            row.createCell(9).setCellValue(vo.getCreatedAt() != null ? vo.getCreatedAt() : "");
+            row.createCell(1).setCellValue(vo.getInquiryType() != null ? vo.getInquiryType() : "");
+            row.createCell(2).setCellValue(vo.getCategory() != null ? vo.getCategory() : "");
+            row.createCell(3).setCellValue(vo.getClientName() != null ? vo.getClientName() : "");
+            row.createCell(4).setCellValue(vo.getCountryCode() + " " + vo.getContact());
+            row.createCell(5).setCellValue(vo.getEmail() != null ? vo.getEmail() : "");
+            row.createCell(6).setCellValue(vo.getCountry() != null ? vo.getCountry() : "");
+            row.createCell(7).setCellValue(vo.getArtworkTitle() != null ? vo.getArtworkTitle() : "");
+            row.createCell(8).setCellValue(vo.getArtworkSize() != null ? vo.getArtworkSize() : "");
+            row.createCell(9).setCellValue(vo.getArtistName() != null ? vo.getArtistName() : "");
+            row.createCell(10).setCellValue(vo.getCreatedAt() != null ? vo.getCreatedAt() : "");
         }
 
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");

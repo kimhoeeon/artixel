@@ -35,7 +35,7 @@ public class InquiryService {
     private String bucketName;
 
     @Transactional(rollbackFor = Exception.class)
-    public String insertInquiry(InquiryVO inquiryVO, MultipartFile file, String clientIp) throws Exception {
+    public String insertInquiry(InquiryVO inquiryVO, List<MultipartFile> files, String clientIp) throws Exception {
 
         // 1. 스팸 방지 검사
         int recentCount = inquiryMapper.selectRecentInquiryCountByIp(clientIp);
@@ -44,36 +44,52 @@ public class InquiryService {
             return "SPAM_BLOCKED";
         }
 
-        // 2. 첨부파일 Naver Object Storage 업로드 (의뢰인별 폴더 자동 분류)
-        if (file != null && !file.isEmpty()) {
-            String originalFileName = file.getOriginalFilename();
-            String extension = "";
-            if (originalFileName != null && originalFileName.lastIndexOf(".") > -1) {
-                extension = originalFileName.substring(originalFileName.lastIndexOf("."));
-            }
+        // 다중 파일 정보를 저장할 리스트
+        List<String> originNames = new ArrayList<>();
+        List<String> filePaths = new ArrayList<>();
+        List<String> fileUrls = new ArrayList<>();
 
-            // 날짜와 의뢰인 이름을 활용한 폴더 경로 생성 (특수문자 제거)
+        // 2. 첨부파일 Naver Object Storage 업로드 (의뢰인별 폴더 자동 분류)
+        if (files != null && !files.isEmpty()) {
             String dateStr = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
             String safeName = inquiryVO.getClientName().replaceAll("[^a-zA-Z0-9가-힣]", "_");
             String folderPath = "inquiries/" + dateStr + "_" + safeName + "/";
 
-            String savedFileName = folderPath + UUID.randomUUID().toString() + extension;
+            // [핵심 수정] 파일 리스트를 순회하며 모두 오브젝트 스토리지에 업로드
+            for (MultipartFile file : files) {
+                if (file.isEmpty()) continue;
 
-            ObjectMetadata metadata = new ObjectMetadata();
-            metadata.setContentType(file.getContentType());
-            metadata.setContentLength(file.getSize());
+                String originalFileName = file.getOriginalFilename();
+                String extension = "";
+                if (originalFileName != null && originalFileName.lastIndexOf(".") > -1) {
+                    extension = originalFileName.substring(originalFileName.lastIndexOf("."));
+                }
 
-            try (InputStream inputStream = file.getInputStream()) {
-                PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, savedFileName, inputStream, metadata);
-                putObjectRequest.withCannedAcl(CannedAccessControlList.PublicRead);
-                amazonS3.putObject(putObjectRequest);
+                String savedFileName = folderPath + UUID.randomUUID().toString() + extension;
+
+                ObjectMetadata metadata = new ObjectMetadata();
+                metadata.setContentType(file.getContentType());
+                metadata.setContentLength(file.getSize());
+
+                try (InputStream inputStream = file.getInputStream()) {
+                    PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, savedFileName, inputStream, metadata);
+                    putObjectRequest.withCannedAcl(CannedAccessControlList.PublicRead);
+                    amazonS3.putObject(putObjectRequest);
+                }
+
+                String fileUrl = amazonS3.getUrl(bucketName, savedFileName).toString();
+
+                originNames.add(originalFileName);
+                filePaths.add(savedFileName);
+                fileUrls.add(fileUrl);
             }
+        }
 
-            String fileUrl = amazonS3.getUrl(bucketName, savedFileName).toString();
-            inquiryVO.setFileOriginName(originalFileName);
-            inquiryVO.setFilePath(savedFileName);
-            inquiryVO.setFileUrl(fileUrl);
-
+        // 업로드된 파일이 있으면 파이프(|)로 묶어서 VO에 세팅
+        if (!fileUrls.isEmpty()) {
+            inquiryVO.setFileOriginName(String.join("|", originNames));
+            inquiryVO.setFilePath(String.join("|", filePaths));
+            inquiryVO.setFileUrl(String.join("|", fileUrls));
         } else if (inquiryVO.getFileUrl() != null && !inquiryVO.getFileUrl().isEmpty()) {
             inquiryVO.setFileOriginName("URL_LINK");
             inquiryVO.setFilePath("URL_LINK");

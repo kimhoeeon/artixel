@@ -258,8 +258,7 @@
                                 </td>
                                 <td class="naeyong">
                                     <p class="file_box">
-                                        <input type="file" id="uploadFile" name="uploadFile" style="display:none;">
-
+                                        <input type="file" id="uploadFile" name="uploadFile" multiple style="display:none;">
                                         <input type="text" class="upload_name" value="파일선택" disabled="disabled">
                                         <button type="button" class="btn_file" onclick="$('#uploadFile').click();">
                                             파일 선택
@@ -412,23 +411,19 @@
             }
 
             // 1. 실시간 특수문자 및 숫자 차단 (이름, 작가명)
-            // 허용: 한글, 영문 대소문자, 공백
+            // 한글 자음과 모음(ㄱ-ㅎ, ㅏ-ㅣ)을 추가로 허용하여 타이핑 도중 글자가 끊기지 않도록 방어
             $('#clientName, #artistName').on('input', function() {
                 var val = $(this).val();
-                var filtered = val.replace(/[^a-zA-Z가-힣\s]/g, '');
-                if (val !== filtered) {
-                    $(this).val(filtered);
-                }
+                var filtered = val.replace(/[^a-zA-Z가-힣ㄱ-ㅎㅏ-ㅣ\s]/g, '');
+                if (val !== filtered) { $(this).val(filtered); }
             });
 
             // 2. 실시간 특수문자 제한 (작품 제목)
-            // 허용: 한글, 영문 대소문자, 숫자, 공백, 기본 기호(- _ . , ! ?)
+            // 한글 자음과 모음(ㄱ-ㅎ, ㅏ-ㅣ) 추가 허용
             $('#artworkTitle').on('input', function() {
                 var val = $(this).val();
-                var filtered = val.replace(/[^a-zA-Z0-9가-힣\s\-\_\.\,\!\?]/g, '');
-                if (val !== filtered) {
-                    $(this).val(filtered);
-                }
+                var filtered = val.replace(/[^a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ\s\-\_\.\,\!\?]/g, '');
+                if (val !== filtered) { $(this).val(filtered); }
             });
 
             // 3. 비속어(금칙어) 사전 배열
@@ -495,18 +490,29 @@
 
             // 4. 첨부파일 용량 제한 및 파일명 표시 (UI 연동)
             $('#uploadFile').on('change', function() {
-                var file = this.files[0];
-                if (file) {
-                    var maxSize = 100 * 1024 * 1024; // 100MB
-                    if (file.size > maxSize) {
-                        alert('첨부파일은 최대 100MB까지 업로드 가능합니다.');
+                var files = this.files;
+                if (files.length > 0) {
+                    var totalSize = 0;
+                    var maxSize = 100 * 1024 * 1024; // 전체 합산 100MB 제한
+                    var fileNames = [];
+
+                    for(var i=0; i<files.length; i++) {
+                        totalSize += files[i].size;
+                        fileNames.push(files[i].name);
+                    }
+
+                    if (totalSize > maxSize) {
+                        alert('첨부파일의 총 용량은 최대 100MB까지 업로드 가능합니다.');
                         $(this).val('');
                         $('.upload_name').val('파일선택');
                         return;
                     }
-                    // 정상 파일 첨부 시 화면에 파일명 표시
-                    var fileName = $(this).val().split('\\').pop();
-                    $('.upload_name').val(fileName);
+
+                    if (files.length === 1) {
+                        $('.upload_name').val(fileNames[0]);
+                    } else {
+                        $('.upload_name').val(fileNames[0] + ' 외 ' + (files.length - 1) + '건');
+                    }
                 } else {
                     $('.upload_name').val('파일선택');
                 }

@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Slf4j
 @Controller
@@ -29,7 +30,7 @@ public class ContactController {
     @PostMapping("/submit")
     public String submitContact(
             @ModelAttribute InquiryVO inquiryVO,
-            @RequestParam(value = "uploadFile", required = false) MultipartFile uploadFile,
+            @RequestParam(value = "uploadFile", required = false) List<MultipartFile> uploadFiles,
             HttpServletRequest request,
             RedirectAttributes rttr) {
 
@@ -38,7 +39,7 @@ public class ContactController {
             String clientIp = getClientIp(request);
 
             // 서비스로 데이터와 파일을 넘겨 비즈니스 로직 실행
-            String result = inquiryService.insertInquiry(inquiryVO, uploadFile, clientIp);
+            String result = inquiryService.insertInquiry(inquiryVO, uploadFiles, clientIp);
 
             // 결과에 따른 피드백 메시지 설정
             if ("SPAM_BLOCKED".equals(result)) {

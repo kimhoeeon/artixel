@@ -58,7 +58,7 @@ public class GlobalController {
                 if (currentUri.equals(menu.getUrl())) {
                     isSelfActive = true;
                 }
-                // (2) [수정] 서브 페이지 진입 시 유지 로직 개선
+                // (2) 서브 페이지 진입 시 유지 로직 개선
                 // 메뉴의 URL에서 마지막 경로(예: /list)를 제외한 부모 경로(예: /mng/inquiry/)를 추출하여,
                 // 현재 URL이 그 부모 경로에 포함되면 하위 상세 페이지로 간주하고 활성화시킴.
                 // 단, "/" 나 "/mng/" 처럼 너무 짧은 공통 경로에서 오작동하지 않도록 뎁스(depth) 검증.

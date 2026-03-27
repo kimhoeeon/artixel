@@ -128,6 +128,19 @@
                             <tbody>
                             <tr class="radio">
                                 <td class="gubun req">
+                                    유형
+                                </td>
+                                <td class="naeyong">
+                                    <label>
+                                        <input type="radio" id="type_appraisal" name="inquiryType" value="감정의뢰" checked><label for="type_appraisal">감정의뢰</label>
+                                    </label>
+                                    <label>
+                                        <input type="radio" id="type_general" name="inquiryType" value="일반문의"><label for="type_general">일반문의</label>
+                                    </label>
+                                </td>
+                            </tr>
+                            <tr class="radio">
+                                <td class="gubun req">
                                     구분
                                 </td>
                                 <td class="naeyong">
@@ -517,6 +530,13 @@
                         alert('입력하신 내용에 금칙어(비속어)가 포함되어 있습니다. 바른 말을 사용해주세요.');
                         return; // 전송 중단
                     }
+                }
+
+                // 유형 필수 검사
+                var inquiryTypeVal = $('input[name="inquiryType"]:checked').val();
+                if (!inquiryTypeVal) {
+                    alert('유형을 선택해주세요.');
+                    return;
                 }
 
                 // 구분 (라디오 버튼) 및 기타 직접입력 처리

@@ -134,9 +134,11 @@ public class AdminInquiryController {
     @GetMapping("/download")
     public void downloadFile(@RequestParam String fileUrl, @RequestParam String fileName, HttpServletResponse response) {
         try {
-            // 보안: 네이버 클라우드 스토리지 URL만 허용 (서버 탈취 공격, SSRF 방지용 안전장치)
-            if (!fileUrl.startsWith("https://kr.object.ncloudstorage.com")) {
-                response.sendError(HttpServletResponse.SC_FORBIDDEN, "잘못된 파일 접근입니다.");
+            // [핵심 수정 1] 버킷명이 도메인 앞에 붙는 것을 고려하여 contains 로 유연하게 검증
+            if (!fileUrl.contains("ncloudstorage.com")) {
+                response.setContentType("text/html; charset=UTF-8");
+                response.getWriter().write("<script>alert('잘못된 파일 접근입니다.'); history.back();</script>");
+                response.getWriter().flush();
                 return;
             }
 
@@ -145,6 +147,15 @@ public class AdminInquiryController {
             conn.setRequestMethod("GET");
             conn.setConnectTimeout(5000);
             conn.setReadTimeout(5000);
+
+            // [핵심 수정 2] 파일이 지워졌거나 권한이 없는 경우(403, 404)를 사전 차단
+            int responseCode = conn.getResponseCode();
+            if (responseCode != HttpURLConnection.HTTP_OK) {
+                response.setContentType("text/html; charset=UTF-8");
+                response.getWriter().write("<script>alert('파일을 찾을 수 없거나 접근 권한이 없습니다. (상태코드: " + responseCode + ")'); history.back();</script>");
+                response.getWriter().flush();
+                return;
+            }
 
             // 파일명 URL 인코딩 (한글 깨짐 방지)
             String encodedFileName = URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", "%20");
@@ -158,10 +169,21 @@ public class AdminInquiryController {
                 while ((bytesRead = in.read(buffer)) != -1) {
                     out.write(buffer, 0, bytesRead);
                 }
-                out.flush();
+                out.flush(); // 응답을 완벽히 커밋하여 Spring이 jsp를 찾지 않도록 함
             }
+
         } catch (Exception e) {
             log.error("파일 프록시 다운로드 중 오류 발생: {}", fileUrl, e);
+            try {
+                // [핵심 수정 3] 에러 발생 시 404 페이지로 넘어가지 않도록 응답 직접 전송
+                if (!response.isCommitted()) {
+                    response.setContentType("text/html; charset=UTF-8");
+                    response.getWriter().write("<script>alert('파일 다운로드 중 시스템 오류가 발생했습니다.'); history.back();</script>");
+                    response.getWriter().flush();
+                }
+            } catch (Exception ex) {
+                // 무시
+            }
         }
     }
 

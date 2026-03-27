@@ -16,6 +16,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.List;
 
 @Slf4j
@@ -124,4 +129,40 @@ public class AdminInquiryController {
         workbook.write(response.getOutputStream());
         workbook.close();
     }
+
+    // 5. 프록시 다운로드 (크롬 피싱 경고 완벽 우회용)
+    @GetMapping("/download")
+    public void downloadFile(@RequestParam String fileUrl, @RequestParam String fileName, HttpServletResponse response) {
+        try {
+            // 보안: 네이버 클라우드 스토리지 URL만 허용 (서버 탈취 공격, SSRF 방지용 안전장치)
+            if (!fileUrl.startsWith("https://kr.object.ncloudstorage.com")) {
+                response.sendError(HttpServletResponse.SC_FORBIDDEN, "잘못된 파일 접근입니다.");
+                return;
+            }
+
+            URL url = new URL(fileUrl);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setConnectTimeout(5000);
+            conn.setReadTimeout(5000);
+
+            // 파일명 URL 인코딩 (한글 깨짐 방지)
+            String encodedFileName = URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", "%20");
+            response.setContentType("application/octet-stream");
+            response.setHeader("Content-Disposition", "attachment; filename=\"" + encodedFileName + "\"");
+
+            // 스트림 복사 (네이버 S3 -> 웹 서버 -> 사용자 브라우저)
+            try (InputStream in = conn.getInputStream(); OutputStream out = response.getOutputStream()) {
+                byte[] buffer = new byte[8192];
+                int bytesRead;
+                while ((bytesRead = in.read(buffer)) != -1) {
+                    out.write(buffer, 0, bytesRead);
+                }
+                out.flush();
+            }
+        } catch (Exception e) {
+            log.error("파일 프록시 다운로드 중 오류 발생: {}", fileUrl, e);
+        }
+    }
+
 }

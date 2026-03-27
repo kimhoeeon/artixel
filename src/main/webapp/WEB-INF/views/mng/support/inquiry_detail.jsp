@@ -142,7 +142,11 @@
                                                                 <c:if test="${inquiry.fileOriginName != 'URL_LINK'}">
                                                                     <div class="d-flex flex-column gap-3">
                                                                         <c:forEach items="${urlList}" var="url" varStatus="st">
-                                                                            <a href="${url}" target="_blank" class="d-inline-flex align-items-center text-info text-hover-primary fw-bold bg-light-info px-4 py-2 rounded" style="width: fit-content;">
+                                                                            <c:url value="/mng/inquiry/download" var="downloadUrl">
+                                                                                <c:param name="fileUrl" value="${url}" />
+                                                                                <c:param name="fileName" value="${nameList[st.index]}" />
+                                                                            </c:url>
+                                                                            <a href="${downloadUrl}" class="d-inline-flex align-items-center text-info text-hover-primary fw-bold bg-light-info px-4 py-2 rounded" style="width: fit-content;">
                                                                                 <i class="ki-outline ki-file-down fs-3 me-2"></i> 첨부파일 ${st.count}: ${nameList[st.index]} 다운로드
                                                                             </a>
                                                                         </c:forEach>
@@ -178,7 +182,7 @@
                                                                     <i class="ki-outline ki-information-5 fs-5 me-1 text-info"></i> 이미지 ${st.count}
                                                                 </div>
                                                                 <button type="button" class="btn btn-outline btn-outline-dashed btn-outline-info btn-active-light-info" onclick="loadLargeImage('${url}', 'img-preview-box-${st.index}')">
-                                                                    <i class="ki-outline ki-eye fs-2 me-2"></i> 미리보기 로드
+                                                                    <i class="ki-outline ki-eye fs-2 me-2"></i> 원본 이미지 불러오기
                                                                 </button>
                                                             </div>
                                                         </c:if>
@@ -203,39 +207,12 @@
 
     <script>
 
-        // 이미지가 브라우저에서 열리지 않도록 강제로 다운로드 처리하는 함수
-        function forceDownload(url, fileName) {
-            // 1. fetch API로 파일을 바이너리(Blob) 형태로 가져옴
-            fetch(url, { method: 'GET' })
-                .then(response => {
-                    if(!response.ok) throw new Error('네트워크 응답 오류');
-                    return response.blob();
-                })
-                .then(blob => {
-                    // 2. a 태그를 임시로 만들어 클릭 이벤트(다운로드)를 발생시킴
-                    const urlBlob = window.URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.style.display = 'none';
-                    a.href = urlBlob;
-                    a.download = fileName;
-                    document.body.appendChild(a);
-                    a.click();
-                    window.URL.revokeObjectURL(urlBlob);
-                    document.body.removeChild(a);
-                })
-                .catch(error => {
-                    // 3. 만약 S3 CORS 설정 등의 이유로 fetch가 차단되면, 기존처럼 새 창에서 열기 (안전장치)
-                    console.warn('CORS 등의 이유로 강제 다운로드가 제한되어 새 창에서 엽니다.', error);
-                    window.open(url, '_blank');
-                });
-        }
-
         // 이미지 미리보기 로드 함수
         function loadLargeImage(url, boxId) {
             var $box = $('#' + boxId);
             $box.html(
                 '<div class="spinner-border text-info mb-3" role="status"></div>' +
-                '<div class="text-muted fs-6 mt-2">이미지를 다운로드 중입니다...</div>'
+                '<div class="text-muted fs-6 mt-2">대용량 이미지를 다운로드 중입니다...</div>'
             );
             var $img = $('<img>').attr('src', url)
                 .addClass('img-fluid rounded shadow-sm mt-3')

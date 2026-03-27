@@ -92,22 +92,24 @@
                                         <table class="table table-bordered detail-table align-middle fs-5 gy-5">
                                             <tbody>
                                                 <tr>
+                                                    <th>유 형</th>
+                                                    <td style="width: 35%;"><span class="badge badge-light-primary fw-bolder">${inquiry.inquiryType}</span></td>
                                                     <th>구 분</th>
                                                     <td style="width: 35%;"><span class="text-primary fw-bolder">${inquiry.category}</span></td>
-                                                    <th>의뢰인(기업)명</th>
-                                                    <td style="width: 35%;">${inquiry.clientName}</td>
                                                 </tr>
                                                 <tr>
+                                                    <th>문의자명</th>
+                                                    <td>${inquiry.clientName}</td>
                                                     <th>연 락 처</th>
                                                     <td><span class="text-gray-400 me-2">${inquiry.countryCode}</span> ${inquiry.contact}</td>
-                                                    <th>이 메 일</th>
-                                                    <td>
-                                                        <a href="mailto:${inquiry.email}" class="text-white text-hover-primary">${inquiry.email}</a>
-                                                    </td>
                                                 </tr>
                                                 <tr>
+                                                    <th>이 메 일</th>
+                                                    <td>${inquiry.email}</td>
                                                     <th>국 가</th>
                                                     <td>${inquiry.country}</td>
+                                                </tr>
+                                                <tr>
                                                     <th>개인정보 동의</th>
                                                     <td>
                                                         <c:choose>
@@ -115,25 +117,37 @@
                                                             <c:otherwise><span class="badge badge-light-danger">미동의 (N)</span></c:otherwise>
                                                         </c:choose>
                                                     </td>
-                                                </tr>
-                                                <tr>
-                                                    <th>작 가 명</th>
-                                                    <td>${inquiry.artistName}</td>
                                                     <th>작품 제목</th>
                                                     <td>${inquiry.artworkTitle}</td>
                                                 </tr>
                                                 <tr>
+                                                    <th>작 가 명</th>
+                                                    <td>${inquiry.artistName}</td>
                                                     <th>작품 크기</th>
-                                                    <td colspan="3">${inquiry.artworkSize}</td>
+                                                    <td>${inquiry.artworkSize}</td>
                                                 </tr>
                                                 <tr>
                                                     <th>첨부 파일 / URL</th>
                                                     <td colspan="3">
                                                         <c:choose>
                                                             <c:when test="${not empty inquiry.fileUrl}">
-                                                                <a href="${inquiry.fileUrl}" target="_blank" class="d-inline-flex align-items-center text-info text-hover-primary fw-bold bg-light-info px-4 py-2 rounded">
-                                                                    <i class="ki-outline ki-file-down fs-3 me-2"></i> ${inquiry.fileOriginName} 다운로드 및 확인
-                                                                </a>
+                                                                <c:set var="urlList" value="${fn:split(inquiry.fileUrl, '|')}" />
+                                                                <c:set var="nameList" value="${fn:split(inquiry.fileOriginName, '|')}" />
+
+                                                                <c:if test="${fn:length(urlList) == 1 and inquiry.fileOriginName == 'URL_LINK'}">
+                                                                    <a href="${inquiry.fileUrl}" target="_blank" class="d-inline-flex align-items-center text-info text-hover-primary fw-bold bg-light-info px-4 py-2 rounded">
+                                                                        <i class="ki-outline ki-link fs-3 me-2"></i> 외부 등록 URL 바로가기
+                                                                    </a>
+                                                                </c:if>
+                                                                <c:if test="${inquiry.fileOriginName != 'URL_LINK'}">
+                                                                    <div class="d-flex flex-column gap-3">
+                                                                        <c:forEach items="${urlList}" var="url" varStatus="st">
+                                                                            <a href="${url}" target="_blank" class="d-inline-flex align-items-center text-info text-hover-primary fw-bold bg-light-info px-4 py-2 rounded" style="width: fit-content;">
+                                                                                <i class="ki-outline ki-file-down fs-3 me-2"></i> 첨부파일 ${st.count}: ${nameList[st.index]} 다운로드
+                                                                            </a>
+                                                                        </c:forEach>
+                                                                    </div>
+                                                                </c:if>
                                                             </c:when>
                                                             <c:otherwise>
                                                                 <span class="text-muted"><i class="ki-outline ki-file-deleted fs-4 me-2"></i>첨부된 파일이나 링크가 없습니다.</span>
@@ -149,47 +163,28 @@
                                             <div class="glass-box text-white fs-5 lh-lg" style="white-space: pre-wrap; min-height: 150px;">${inquiry.content}</div>
                                         </div>
 
-                                        <c:if test="${not empty inquiry.fileUrl and (fn:endsWith(fn:toLowerCase(inquiry.fileUrl), '.jpg') or fn:endsWith(fn:toLowerCase(inquiry.fileUrl), '.jpeg') or fn:endsWith(fn:toLowerCase(inquiry.fileUrl), '.png') or fn:endsWith(fn:toLowerCase(inquiry.fileUrl), '.gif'))}">
+                                        <c:if test="${not empty inquiry.fileUrl and inquiry.fileOriginName != 'URL_LINK'}">
                                             <div class="mt-10 text-center">
                                                 <h4 class="text-gray-400 mb-5 d-flex align-items-center justify-content-center">
-                                                    <i class="ki-outline ki-picture fs-3 me-2"></i> 첨부 이미지 확인
+                                                    <i class="ki-outline ki-picture fs-3 me-2"></i> 첨부 이미지 다중 확인
                                                 </h4>
 
-                                                <div class="glass-box d-inline-block p-8 text-center" id="img-preview-box" style="min-width: 300px;">
-                                                    <div class="text-muted mb-5 fs-6">
-                                                        <i class="ki-outline ki-information-5 fs-5 me-1 text-info"></i>
-                                                        대용량 이미지일 수 있으므로 트래픽 절약을 위해 수동으로 로드합니다.
-                                                    </div>
-                                                    <button type="button" class="btn btn-outline btn-outline-dashed btn-outline-info btn-active-light-info" onclick="loadLargeImage('${inquiry.fileUrl}')">
-                                                        <i class="ki-outline ki-eye fs-2 me-2"></i> 원본 이미지 불러오기
-                                                    </button>
+                                                <div class="d-flex flex-wrap justify-content-center gap-5">
+                                                    <c:forEach items="${fn:split(inquiry.fileUrl, '|')}" var="url" varStatus="st">
+                                                        <c:set var="lowerUrl" value="${fn:toLowerCase(url)}" />
+                                                        <c:if test="${fn:endsWith(lowerUrl, '.jpg') or fn:endsWith(lowerUrl, '.jpeg') or fn:endsWith(lowerUrl, '.png') or fn:endsWith(lowerUrl, '.gif')}">
+                                                            <div class="glass-box d-inline-block p-8 text-center" id="img-preview-box-${st.index}" style="min-width: 300px;">
+                                                                <div class="text-muted mb-5 fs-6">
+                                                                    <i class="ki-outline ki-information-5 fs-5 me-1 text-info"></i> 이미지 ${st.count}
+                                                                </div>
+                                                                <button type="button" class="btn btn-outline btn-outline-dashed btn-outline-info btn-active-light-info" onclick="loadLargeImage('${url}', 'img-preview-box-${st.index}')">
+                                                                    <i class="ki-outline ki-eye fs-2 me-2"></i> 미리보기 로드
+                                                                </button>
+                                                            </div>
+                                                        </c:if>
+                                                    </c:forEach>
                                                 </div>
                                             </div>
-
-                                            <script>
-                                                function loadLargeImage(url) {
-                                                    var $box = $('#img-preview-box');
-
-                                                    // 버튼을 숨기고 로딩 스피너 표출
-                                                    $box.html(
-                                                        '<div class="spinner-border text-info mb-3" role="status"></div>' +
-                                                        '<div class="text-muted fs-6 mt-2">대용량 이미지를 다운로드 중입니다...</div>'
-                                                    );
-
-                                                    // 백그라운드에서 이미지 객체 생성 및 로드
-                                                    var $img = $('<img>').attr('src', url)
-                                                        .addClass('img-fluid rounded shadow-sm')
-                                                        .css({'max-height': '800px', 'object-fit': 'contain', 'display': 'none'})
-                                                        .on('load', function() {
-                                                            // 로드 완료 시 스피너를 지우고 이미지를 페이드인 효과로 노출
-                                                            $box.empty().append($img);
-                                                            $img.fadeIn(400);
-                                                        })
-                                                        .on('error', function() {
-                                                            $box.html('<span class="text-danger"><i class="ki-outline ki-cross-circle fs-2 me-1"></i> 이미지 로드에 실패했습니다. (URL 만료 또는 손상)</span>');
-                                                        });
-                                                }
-                                            </script>
                                         </c:if>
 
                                     </div>
@@ -207,6 +202,53 @@
     <script src="/assets/js/scripts.bundle.js"></script>
 
     <script>
+
+        // 이미지가 브라우저에서 열리지 않도록 강제로 다운로드 처리하는 함수
+        function forceDownload(url, fileName) {
+            // 1. fetch API로 파일을 바이너리(Blob) 형태로 가져옴
+            fetch(url, { method: 'GET' })
+                .then(response => {
+                    if(!response.ok) throw new Error('네트워크 응답 오류');
+                    return response.blob();
+                })
+                .then(blob => {
+                    // 2. a 태그를 임시로 만들어 클릭 이벤트(다운로드)를 발생시킴
+                    const urlBlob = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.style.display = 'none';
+                    a.href = urlBlob;
+                    a.download = fileName;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(urlBlob);
+                    document.body.removeChild(a);
+                })
+                .catch(error => {
+                    // 3. 만약 S3 CORS 설정 등의 이유로 fetch가 차단되면, 기존처럼 새 창에서 열기 (안전장치)
+                    console.warn('CORS 등의 이유로 강제 다운로드가 제한되어 새 창에서 엽니다.', error);
+                    window.open(url, '_blank');
+                });
+        }
+
+        // 이미지 미리보기 로드 함수
+        function loadLargeImage(url, boxId) {
+            var $box = $('#' + boxId);
+            $box.html(
+                '<div class="spinner-border text-info mb-3" role="status"></div>' +
+                '<div class="text-muted fs-6 mt-2">이미지를 다운로드 중입니다...</div>'
+            );
+            var $img = $('<img>').attr('src', url)
+                .addClass('img-fluid rounded shadow-sm mt-3')
+                .css({'max-height': '800px', 'object-fit': 'contain', 'display': 'none'})
+                .on('load', function() {
+                    $box.empty().append($img);
+                    $img.fadeIn(400);
+                })
+                .on('error', function() {
+                    $box.html('<span class="text-danger"><i class="ki-outline ki-cross-circle fs-2 me-1"></i> 이미지 로드에 실패했습니다. (URL 만료 또는 손상)</span>');
+                });
+        }
+
         function updateInquiryStatus(id, newStatus) {
             $.ajax({
                 url: '/mng/inquiry/updateStatus',

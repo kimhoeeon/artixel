@@ -15,12 +15,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
+import java.net.URLEncoder;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -55,7 +53,7 @@ public class InquiryService {
             String safeName = inquiryVO.getClientName().replaceAll("[^a-zA-Z0-9가-힣]", "_");
             String folderPath = "inquiries/" + dateStr + "_" + safeName + "/";
 
-            // [핵심 수정] 파일 리스트를 순회하며 모두 오브젝트 스토리지에 업로드
+            // 파일 리스트를 순회하며 모두 오브젝트 스토리지에 업로드
             for (MultipartFile file : files) {
                 if (file.isEmpty()) continue;
 
@@ -70,6 +68,10 @@ public class InquiryService {
                 ObjectMetadata metadata = new ObjectMetadata();
                 metadata.setContentType(file.getContentType());
                 metadata.setContentLength(file.getSize());
+
+                // 브라우저가 이미지를 열지 않고 무조건 다운로드 하도록 Content-Disposition 속성 강제 주입
+                String encodedFilename = URLEncoder.encode(Objects.requireNonNull(originalFileName), "UTF-8").replaceAll("\\+", "%20");
+                metadata.setContentDisposition("attachment; filename=\"" + encodedFilename + "\"");
 
                 try (InputStream inputStream = file.getInputStream()) {
                     PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, savedFileName, inputStream, metadata);

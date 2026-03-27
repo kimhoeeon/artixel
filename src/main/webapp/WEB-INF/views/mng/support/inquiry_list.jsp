@@ -92,6 +92,7 @@
                                                 <thead>
                                                     <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0 border-bottom border-gray-800">
                                                         <th class="w-60px text-center">NO</th>
+                                                        <th class="min-w-100px text-center">유형</th>
                                                         <th class="min-w-100px text-center">구분</th>
                                                         <th class="min-w-150px">문의자명</th>
                                                         <th class="min-w-150px">연락처 / 이메일</th>
@@ -105,7 +106,7 @@
                                                     <c:choose>
                                                         <c:when test="${empty list}">
                                                             <tr>
-                                                                <td colspan="8" class="text-center py-10 text-muted">등록된 문의 내역이 없습니다.</td>
+                                                                <td colspan="9" class="text-center py-10 text-muted">등록된 문의 내역이 없습니다.</td>
                                                             </tr>
                                                         </c:when>
                                                         <c:otherwise>
@@ -113,18 +114,21 @@
                                                                 <tr>
                                                                     <td class="text-center text-gray-500">${item.inquiryId}</td>
                                                                     <td class="text-center">
+                                                                        <span class="badge badge-light-primary fw-bold px-3 py-2">${item.inquiryType}</span>
+                                                                    </td>
+                                                                    <td class="text-center">
                                                                         <span class="badge badge-light-dark text-gray-300 px-3 py-2">${item.category}</span>
                                                                     </td>
                                                                     <td>
                                                                         <div class="d-flex align-items-center">
-                                                                            <div class="symbol symbol-circle symbol-40px overflow-hidden me-3">
+                                                                            <%--<div class="symbol symbol-circle symbol-40px overflow-hidden me-3">
                                                                                 <div class="symbol-label fs-3 bg-light-primary text-primary">
                                                                                     ${fn:substring(item.clientName, 0, 1)}
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="d-flex flex-column">
+                                                                            <div class="d-flex flex-column">--%>
                                                                                 <a href="/mng/inquiry/detail?inquiryId=${item.inquiryId}" class="text-white text-hover-primary mb-1 fw-bold fs-6">${item.clientName}</a>
-                                                                            </div>
+                                                                            <%--</div>--%>
                                                                         </div>
                                                                     </td>
                                                                     <td>

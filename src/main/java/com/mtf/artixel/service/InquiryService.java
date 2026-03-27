@@ -92,6 +92,7 @@ public class InquiryService {
 
                 StringBuilder body = new StringBuilder();
                 body.append("Artixel 홈페이지에 새로운 문의/의뢰가 접수되었습니다.<br><br>");
+                body.append("■ 유형: ").append(inquiryVO.getInquiryType()).append("<br>");
                 body.append("■ 구분: ").append(inquiryVO.getCategory()).append("<br>");
                 body.append("■ 의뢰인(기업명): ").append(inquiryVO.getClientName()).append("<br>");
                 body.append("■ 연락처: ").append(inquiryVO.getCountryCode()).append(" ").append(inquiryVO.getContact()).append("<br>");

@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class InquiryVO {
     private Long inquiryId;          // 의뢰 번호
+    private String inquiryType;      // 문의 유형 (감정의뢰 / 일반문의)
     private String category;         // 구분
     private String clientName;       // 성함
     private String countryCode;      // 국가번호

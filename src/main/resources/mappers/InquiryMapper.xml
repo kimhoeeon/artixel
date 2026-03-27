@@ -4,11 +4,11 @@
 
     <insert id="insertInquiry" parameterType="com.mtf.artixel.vo.InquiryVO" useGeneratedKeys="true"
             keyProperty="inquiryId">
-        INSERT INTO inquiry (category, client_name, country_code, contact, email, country,
+        INSERT INTO inquiry (inquiry_type, category, client_name, country_code, contact, email, country,
                              artwork_title, artwork_size, artist_name, content,
                              file_url, file_path, file_origin_name, agree_privacy,
                              status, client_ip, created_at, updated_at)
-        VALUES (#{category}, #{clientName}, #{countryCode}, #{contact}, #{email}, #{country},
+        VALUES (#{inquiryType}, #{category}, #{clientName}, #{countryCode}, #{contact}, #{email}, #{country},
                 #{artworkTitle}, #{artworkSize}, #{artistName}, #{content},
                 #{fileUrl}, #{filePath}, #{fileOriginName}, #{agreePrivacy},
                 'PENDING', #{clientIp}, NOW(), NOW())
@@ -24,7 +24,7 @@
     <select id="selectInquiryList" parameterType="com.mtf.artixel.vo.InquiryVO"
             resultType="com.mtf.artixel.vo.InquiryVO">
         SELECT
-        inquiry_id AS inquiryId, category, client_name AS clientName,
+        inquiry_id AS inquiryId, inquiry_type AS inquiryType, category, client_name AS clientName,
         country_code AS countryCode, contact, email, country,
         artwork_title AS artworkTitle, artwork_size AS artworkSize, artist_name AS artistName,
         content, file_url AS fileUrl, file_path AS filePath, file_origin_name AS fileOriginName,
@@ -61,6 +61,7 @@
 
     <select id="selectInquiryDetail" parameterType="Long" resultType="com.mtf.artixel.vo.InquiryVO">
         SELECT inquiry_id       AS inquiryId,
+               inquiry_type     AS inquiryType,
                category,
                client_name      AS clientName,
                country_code     AS countryCode,
@@ -101,16 +102,26 @@
         VALUES (#{clientIp}, NOW())
     </insert>
 
-    <select id="selectTotalInquiryCount" resultType="int"> SELECT COUNT(*)
-                                                           FROM inquiry </select>
-    <select id="selectTodayInquiryCount" resultType="int"> SELECT COUNT(*)
-                                                           FROM inquiry
-                                                           WHERE DATE(created_at) = CURDATE() </select>
+    <select id="selectTotalInquiryCount" resultType="int">
+        SELECT COUNT(*)
+        FROM inquiry
+    </select>
 
-    <select id="selectTotalVisitors" resultType="int"> SELECT COUNT(*)
-                                                       FROM visit_logs </select>
-    <select id="selectTotalUniqueVisitors" resultType="int"> SELECT COUNT(DISTINCT client_ip)
-                                                             FROM visit_logs </select>
+    <select id="selectTodayInquiryCount" resultType="int">
+        SELECT COUNT(*)
+        FROM inquiry
+        WHERE DATE(created_at) = CURDATE()
+    </select>
+
+    <select id="selectTotalVisitors" resultType="int">
+        SELECT COUNT(*)
+        FROM visit_logs
+    </select>
+
+    <select id="selectTotalUniqueVisitors" resultType="int">
+        SELECT COUNT(DISTINCT client_ip)
+        FROM visit_logs
+    </select>
 
     <select id="selectVisitorTrend" resultType="java.util.Map">
         SELECT

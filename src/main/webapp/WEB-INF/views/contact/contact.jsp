@@ -26,7 +26,7 @@
     <meta property="og:description" content="이미지를 픽셀 단위로 해체해 작가 고유의 필치, 색의 흐름, 구도, 붓질의 리듬과 질감 등을 AI로 분석하고, 축적된 작가별 데이터를 기반으로 진위 가능성을 보고서 형식으로 제시합니다.">
     <meta name="keywords" content="아티셀, artixel, 그림 AI 분석, AI 그림 분석, 미술 작품 분석, 작품 분석 플랫폼, 이미지 AI 분석, 그림 분석 플랫폼, AI 이미지 분석, 미술 AI, 작품 AI 분석">
     <meta property="og:url" content="https://artixel.kr"/>
-    <meta property="og:image" content="https://artixel.kr/static/img/og/og_img.jpg">
+    <meta property="og:image" content="https://artixel.kr/img/og_img.jpg">
 
     <!-- swiper 외부 라이브러리 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>

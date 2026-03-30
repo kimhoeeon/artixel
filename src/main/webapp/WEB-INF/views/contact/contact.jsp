@@ -228,7 +228,7 @@
                                     </select>
                                 </td>
                             </tr>
-                            <tr>
+                            <tr class="appraisal_only">
                                 <td class="gubun req">
                                     작품 크기
                                 </td>
@@ -236,7 +236,7 @@
                                     <input type="text" id="artworkSize" name="artworkSize" placeholder="그림의 실제 사이즈를 작성해주세요">
                                 </td>
                             </tr>
-                            <tr class="w100">
+                            <tr class="w100 appraisal_only">
                                 <td class="gubun">
                                     작가명
                                 </td>
@@ -244,7 +244,7 @@
                                     <input type="text" id="artistName" name="artistName" placeholder="작가명을 입력해주세요">
                                 </td>
                             </tr>
-                            <tr class="w100">
+                            <tr class="w100 appraisal_only">
                                 <td class="gubun">
                                     작품 제목
                                 </td>
@@ -252,7 +252,7 @@
                                     <input type="text" id="artworkTitle" name="artworkTitle" placeholder="작품 제목을 입력해주세요">
                                 </td>
                             </tr>
-                            <tr class="file_info">
+                            <tr class="file_info appraisal_only">
                                 <td class="gubun req">
                                     작품 사진 첨부
                                 </td>
@@ -268,7 +268,7 @@
                                 </td>
                                 <td>
                                     <ul>
-                                        <li>작품 이미지는 파일로 업로드하거나, 이미지가 저장된 드라이브 URL을 등록해 주세요.</li>
+                                        <li>여러 개의 이미지를 한번에 선택하여 첨부해 주시거나, 이미지가 저장된 드라이브 URL을 등록해 주세요.</li>
                                         <li>첨부파일은 <span>최대 100MB</span>까지 업로드 가능합니다. 업로드 전 ‘작품 사진 촬영 가이드’를 꼭 확인해 주세요.</li>
                                         <li>작품 의뢰가 여러 건이거나, 더 큰 파일을 첨부해야 하는 경우 contact@artixel.kr로 문의해 주세요</li>
                                     </ul>
@@ -410,6 +410,27 @@
                 $('#alertPopup').css('display', 'flex').hide().fadeIn(300);
             }
 
+            // [신규 추가] 유형 라디오 버튼 변경 시 UI 토글 및 데이터 초기화
+            $('input[name="inquiryType"]').on('change', function() {
+                var typeVal = $(this).val();
+                if (typeVal === '일반문의') {
+                    // 일반문의일 경우 작품 관련 항목 숨김
+                    $('.appraisal_only').hide();
+                    // 숨겨진 상태에서 데이터가 전송되지 않도록 값 초기화
+                    $('#artworkSize, #artistName, #artworkTitle, #fileUrl').val('');
+                    $('#uploadFile').val('');
+                    $('.upload_name').val('파일선택');
+                    $('#content').attr('placeholder', '문의하실 내용을 자유롭게 작성해주세요.');
+                } else {
+                    // 감정의뢰일 경우 다시 보여줌
+                    $('.appraisal_only').show();
+                    $('#content').attr('placeholder', '목적 : (매입/전시/보험/거래)\n작가 :\n연도 :');
+                }
+            });
+
+            // 초기 로딩 시 한 번 강제 트리거하여 상태를 맞춰줌
+            $('input[name="inquiryType"]:checked').trigger('change');
+
             // 1. 실시간 특수문자 및 숫자 차단 (이름, 작가명)
             // 한글 자음과 모음(ㄱ-ㅎ, ㅏ-ㅣ)을 추가로 허용하여 타이핑 도중 글자가 끊기지 않도록 방어
             $('#clientName, #artistName').on('input', function() {
@@ -493,7 +514,7 @@
                 var files = this.files;
                 if (files.length > 0) {
                     var totalSize = 0;
-                    var maxSize = 100 * 1024 * 1024; // 전체 합산 100MB 제한
+                    var maxSize = 100 * 1024 * 1024; // 100MB
                     var fileNames = [];
 
                     for(var i=0; i<files.length; i++) {
@@ -531,7 +552,7 @@
                     $('#content').val()
                 ];
 
-                for (var i = 0; i < inputsToCheck.length; i++) {
+                for (let i = 0; i < inputsToCheck.length; i++) {
                     if (containsBadWord(inputsToCheck[i])) {
                         alert('입력하신 내용에 금칙어(비속어)가 포함되어 있습니다. 바른 말을 사용해주세요.');
                         return; // 전송 중단
@@ -540,34 +561,20 @@
 
                 // 유형 필수 검사
                 var inquiryTypeVal = $('input[name="inquiryType"]:checked').val();
-                if (!inquiryTypeVal) {
-                    alert('유형을 선택해주세요.');
-                    return;
-                }
+                if (!inquiryTypeVal) { alert('유형을 선택해주세요.'); return; }
 
                 // 구분 (라디오 버튼) 및 기타 직접입력 처리
                 var categoryVal = $('input[name="category"]:checked').val();
-                if (!categoryVal) {
-                    alert('구분을 선택해주세요.');
-                    return;
-                }
+                if (!categoryVal) { alert('구분을 선택해주세요.'); return; }
                 if (categoryVal === '기타') {
                     var etcVal = $('.etc_input').val().trim();
-                    if (!etcVal) {
-                        alert('기타 세부항목을 직접 입력해주세요.');
-                        $('.etc_input').focus();
-                        return;
-                    }
+                    if (!etcVal) { alert('기타 세부항목을 직접 입력해주세요.'); $('.etc_input').focus(); return; }
                     // 전송 직전에 라디오 버튼의 값을 "기타 - 입력내용" 으로 변경하여 서버로 전송
                     $('#cat_etc').val('기타 - ' + etcVal);
                 }
 
                 // 성함
-                if (!$('#clientName').val().trim()) {
-                    alert('성함을 입력해주세요.');
-                    $('#clientName').focus();
-                    return;
-                }
+                if (!$('#clientName').val().trim()) { alert('성함을 입력해주세요.'); $('#clientName').focus(); return; }
 
                 // 이메일 조합
                 var email1 = $('#email1').val().trim();
@@ -580,53 +587,31 @@
                 $('#fullEmail').val(email1 + '@' + emailDomain);
 
                 // 연락처
-                if (!$('#contact').val().trim()) {
-                    alert('연락처를 입력해주세요.');
-                    $('#contact').focus();
-                    return;
-                }
+                if (!$('#contact').val().trim()) { alert('연락처를 입력해주세요.'); $('#contact').focus(); return; }
 
                 // 국가 선택
-                if (!$('#country').val().trim()) {
-                    alert('국가를 선택해주세요.');
-                    $('#country').focus();
-                    return;
+                if (!$('#country').val().trim()) { alert('국가를 선택해주세요.'); $('#country').focus(); return; }
+
+                // 감정의뢰일 때만 필수 검사 수행
+                if (inquiryTypeVal === '감정의뢰') {
+                    if (!$('#artworkSize').val().trim()) { alert('작품 크기를 입력해주세요.'); $('#artworkSize').focus(); return; }
+
+                    var uploadFile = $('#uploadFile').val();
+                    var fileUrl = $('#fileUrl').val().trim();
+                    if (!uploadFile && !fileUrl) { alert('작품 이미지 파일이나 URL을 첨부해주세요.'); return; }
+                    if (fileUrl && !fileUrl.startsWith('https://')) {
+                        alert('URL은 반드시 https:// 로 시작해야 합니다.'); $('#fileUrl').focus(); return;
+                    }
                 }
 
                 // 작품 크기
-                if (!$('#artworkSize').val().trim()) {
-                    alert('작품 크기를 입력해주세요.');
-                    $('#artworkSize').focus();
-                    return;
-                }
-
-                // 첨부파일 & URL 확인
-                var uploadFile = $('#uploadFile').val();
-                var fileUrl = $('#fileUrl').val().trim();
-
-                if (!uploadFile && !fileUrl) {
-                    alert('작품 이미지 파일이나 URL을 첨부해주세요.');
-                    return;
-                }
-
-                if (fileUrl && !fileUrl.startsWith('https://')) {
-                    alert('URL은 반드시 https:// 로 시작해야 합니다.');
-                    $('#fileUrl').focus();
-                    return;
-                }
+                if (!$('#artworkSize').val().trim()) { alert('작품 크기를 입력해주세요.'); $('#artworkSize').focus(); return; }
 
                 // 문의 내용
-                if (!$('#content').val().trim()) {
-                    alert('문의 내용을 입력해주세요.');
-                    $('#content').focus();
-                    return;
-                }
+                if (!$('#content').val().trim()) { alert('문의 내용을 입력해주세요.'); $('#content').focus(); return; }
 
                 // 개인정보 동의
-                if (!$('#agreePrivacy').is(':checked')) {
-                    alert('개인정보 수집 및 이용에 동의해주세요.');
-                    return;
-                }
+                if (!$('#agreePrivacy').is(':checked')) { alert('개인정보 수집 및 이용에 동의해주세요.'); return; }
 
                 // 모든 유효성 검사를 통과하면 즉시 오버레이 스피너 표출 (화면 클릭 및 뒤로가기 차단)
                 $('#global-upload-loader').addClass('active');

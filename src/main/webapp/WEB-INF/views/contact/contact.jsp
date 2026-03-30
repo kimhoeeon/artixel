@@ -604,9 +604,6 @@
                     }
                 }
 
-                // 작품 크기
-                if (!$('#artworkSize').val().trim()) { alert('작품 크기를 입력해주세요.'); $('#artworkSize').focus(); return; }
-
                 // 문의 내용
                 if (!$('#content').val().trim()) { alert('문의 내용을 입력해주세요.'); $('#content').focus(); return; }
 

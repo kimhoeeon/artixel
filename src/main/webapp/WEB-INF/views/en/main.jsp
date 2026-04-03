@@ -44,6 +44,8 @@
 
     <title>Artixel</title>
 
+    <link rel="preload" href="/fonts/Pretendard-Regular.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/fonts/Pretendard-Bold.woff2" as="font" type="font/woff2" crossorigin>
 </head>
 
 <body>

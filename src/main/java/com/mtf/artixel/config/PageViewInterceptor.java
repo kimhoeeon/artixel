@@ -30,6 +30,18 @@ public class PageViewInterceptor implements HandlerInterceptor {
         } else if ("/contact".equals(uri)) {
             pageName = "Contact";
         }
+        // ==========================================
+        // 영문 페이지 URL 매핑 및 조회수 카운팅
+        // ==========================================
+        else if ("/en".equals(uri) || "/en/".equals(uri)) {
+            pageName = "[EN] 메인 (Home)";
+        } else if ("/en/about".equals(uri)) {
+            pageName = "[EN] Our Technology";
+        } else if ("/en/product".equals(uri)) {
+            pageName = "[EN] Start Analysis";
+        } else if ("/en/contact".equals(uri)) {
+            pageName = "[EN] Contact";
+        }
 
         if (!pageName.isEmpty()) {
             // 1. 해당 페이지의 단순 뷰(View) 카운트는 매번 증가

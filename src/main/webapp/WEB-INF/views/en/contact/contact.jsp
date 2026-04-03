@@ -299,7 +299,7 @@
                                         <input type="checkbox" id="agreePrivacy" name="agreePrivacy" value="Y" required>
                                         <span class="chk_box"></span>
                                         <span class="txt">
-                                            <span href="" class="btn_terms btn-open-terms" data-terms="service">Collection and Use of Personal Information</span> Agreement
+                                            <span href="" class="btn_terms btn-open-terms" data-terms="serviceEn">Collection and Use of Personal Information</span> Agreement
                                         </span>
                                     </label>
                                 </td>

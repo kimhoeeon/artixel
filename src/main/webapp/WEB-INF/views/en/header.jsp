@@ -2,7 +2,7 @@
 <!-- header -->
 <div id="header">
     <div class="inner">
-        <div class="logo"><a href="/"><img src="/img/logo.png"></a></div>
+        <div class="logo"><a href="/en"><img src="/img/logo.png"></a></div>
         <div class="nav_wrap">
             <ul class="menu">
                 <li>
@@ -16,7 +16,7 @@
                 </li>
             </ul>
             <div class="lang">
-                <a>KOR</a>
+                <a>ENG</a>
                 <div class="langmenu">
                     <a href="/">KOR</a>
                     <a href="/en" class="active">ENG</a>

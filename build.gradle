@@ -7,7 +7,6 @@ plugins {
 
 // Spring Framework 버전을 보안 패치된 최신 버전(5.3.39)으로 강제 지정
 ext['spring-framework.version'] = '5.3.39'
-ext['tomcat.version'] = '8.5.96'
 
 group = 'com.mtf'
 version = '0.0.1-SNAPSHOT'

@@ -109,15 +109,15 @@
 
     <div id="global-upload-loader">
         <div class="loader-spinner"></div>
-        <div class="loader-text">대용량 파일과 데이터를 안전하게 전송 중입니다.</div>
-        <div class="loader-sub-text">잠시만 기다려주세요. 화면을 벗어나거나 새로고침하지 마세요.</div>
+        <div class="loader-text">It is safely transferring large files and data.</div>
+        <div class="loader-sub-text">Please wait a moment. Do not leave the screen or refresh.</div>
     </div>
 
     <!-- container -->
     <div id="container">
 
         <!-- section -->
-        <div class="sub_wrap contact_wrap">
+        <div class="sub_wrap contact_wrap en">
             <div class="inner">
                 <div class="sec_box">
                     <div class="title">
@@ -125,10 +125,10 @@
                             Contact
                         </div>
                         <div class="small">
-                            제출하신 정보는 <br />
-                            문의 응대 목적으로만 사용됩니다.
+                            The information you submit<br />
+                            will be used only for responding to inquiries.
                         </div>
-                        <div class="btn guide">작품 촬영 가이드<img src="/img/arrow-right_w.png" alt="화살표"></div>
+                        <div class="btn guide">Artwork Photography Guide<img src="/img/arrow-right_w.png" alt="Arrow"></div>
                     </div>
                     <form id="inquiryForm" class="contact_form" action="/contact/submit" method="post" enctype="multipart/form-data">
                         <input type="hidden" id="fullEmail" name="email">
@@ -137,55 +137,55 @@
                             <tbody>
                             <tr class="radio">
                                 <td class="gubun req">
-                                    유형
+                                    Type
                                 </td>
                                 <td class="naeyong">
                                     <label>
-                                        <input type="radio" id="type_appraisal" name="inquiryType" value="감정의뢰" checked><label for="type_appraisal">감정의뢰</label>
+                                        <input type="radio" id="type_appraisal" name="inquiryType" value="감정의뢰" checked><label for="type_appraisal">Appraisal Request</label>
                                     </label>
                                     <label>
-                                        <input type="radio" id="type_general" name="inquiryType" value="일반문의"><label for="type_general">일반문의</label>
+                                        <input type="radio" id="type_general" name="inquiryType" value="일반문의"><label for="type_general">General Inquiry</label>
                                     </label>
                                 </td>
                             </tr>
-                            <tr class="radio">
+                            <tr class="radio w100">
                                 <td class="gubun req">
-                                    구분
+                                    Category
                                 </td>
                                 <td class="naeyong">
                                     <label>
-                                        <input type="radio" id="cat_corp" name="category" value="기업" checked><label for="cat_corp">기업</label>
+                                        <input type="radio" id="cat_corp" name="category" value="기업" checked><label for="cat_corp">Company</label>
                                     </label>
                                     <label>
-                                        <input type="radio" id="cat_person" name="category" value="개인"><label for="cat_person">개인</label>
+                                        <input type="radio" id="cat_person" name="category" value="개인"><label for="cat_person">Individual</label>
                                     </label>
                                     <label>
-                                        <input type="radio" id="cat_org" name="category" value="기관"><label for="cat_org">기관</label>
+                                        <input type="radio" id="cat_org" name="category" value="기관"><label for="cat_org">Organization</label>
                                     </label>
                                     <label class="etc_wrap">
-                                        <input type="radio" id="cat_etc" name="category" value="기타"><label for="cat_etc">기타</label>
+                                        <input type="radio" id="cat_etc" name="category" value="기타"><label for="cat_etc">Others</label>
                                     </label>
-                                    <input type="text" class="etc_input" placeholder="직접입력">
+                                    <input type="text" class="etc_input" placeholder="Direct">
                                 </td>
                             </tr>
                             <tr>
                                 <td class="gubun req">
-                                    성함
+                                    Name
                                 </td>
                                 <td class="naeyong">
-                                    <input type="text" id="clientName" name="clientName" placeholder="담당자명을 입력해주세요">
+                                    <input type="text" id="clientName" name="clientName" placeholder="Please enter the contact name">
                                 </td>
                             </tr>
                             <tr class="email_info">
                                 <td class="gubun req">
-                                    이메일
+                                    Email
                                 </td>
                                 <td class="naeyong">
-                                    <input type="text" id="email1" maxlength="40" value="" placeholder="이메일" autocomplete="off">
+                                    <input type="text" id="email1" maxlength="40" value="" placeholder="Email" autocomplete="off">
                                     <span>@</span>
-                                    <input type="text" id="emailDomain" placeholder="직접입력">
+                                    <input type="text" id="emailDomain" placeholder="Direct">
                                     <select id="emailDomainSelect">
-                                        <option value="direct">직접입력</option>
+                                        <option value="direct">Direct</option>
                                         <option value="naver.com">naver.com</option>
                                         <option value="daum.net">daum.net</option>
                                         <option value="kakao.com">kakao.com</option>
@@ -198,20 +198,20 @@
                             </tr>
                             <tr class="number_info">
                                 <td class="gubun req">
-                                    연락처
+                                    Contact Number
                                 </td>
                                 <td class="naeyong">
                                     <select id="countryCode" name="countryCode">
-                                        <option value="+82">대한민국 (+82)</option>
-                                        <option value="+1">미국/캐나다 (+1)</option>
-                                        <option value="+81">일본 (+81)</option>
-                                        <option value="+86">중국 (+86)</option>
-                                        <option value="+49">독일 (+49)</option>
-                                        <option value="+33">프랑스 (+33)</option>
-                                        <option value="+44">영국 (+44)</option>
-                                        <option value="+61">호주 (+61)</option>
-                                        <option value="+84">베트남 (+84)</option>
-                                        <option value="+66">태국 (+66)</option>
+                                        <option value="+82">South Korea (+82)</option>
+                                        <option value="+1">United States/Canada (+1)</option>
+                                        <option value="+81">Japan (+81)</option>
+                                        <option value="+86">China (+86)</option>
+                                        <option value="+49">Germany (+49)</option>
+                                        <option value="+33">France (+33)</option>
+                                        <option value="+44">United Kingdom (+44)</option>
+                                        <option value="+61">Australia (+61)</option>
+                                        <option value="+84">Vietnam (+84)</option>
+                                        <option value="+66">Thailand (+66)</option>
                                     </select>
                                     <span>-</span>
                                     <input type="text" id="contact" name="contact" placeholder="010-1234-5678">
@@ -219,76 +219,76 @@
                             </tr>
                             <tr class="country_info">
                                 <td class="gubun req">
-                                    국가 선택
+                                    Select Country
                                 </td>
                                 <td class="naeyong">
                                     <select id="country" name="country">
-                                        <option value="대한민국" selected>대한민국 (South Korea)</option>
-                                        <option value="미국">미국 (United States)</option>
-                                        <option value="캐나다">캐나다 (Canada)</option>
-                                        <option value="일본">일본 (Japan)</option>
-                                        <option value="중국">중국 (China)</option>
-                                        <option value="독일">독일 (Germany)</option>
-                                        <option value="프랑스">프랑스 (France)</option>
-                                        <option value="영국">영국 (United Kingdom)</option>
-                                        <option value="호주">호주 (Australia)</option>
-                                        <option value="베트남">베트남 (Vietnam)</option>
-                                        <option value="태국">태국 (Thailand)</option>
+                                        <option value="대한민국" selected>South Korea</option>
+                                        <option value="미국">United States</option>
+                                        <option value="캐나다">Canada</option>
+                                        <option value="일본">Japan</option>
+                                        <option value="중국">China</option>
+                                        <option value="독일">Germany</option>
+                                        <option value="프랑스">France</option>
+                                        <option value="영국">United Kingdom</option>
+                                        <option value="호주">Australia</option>
+                                        <option value="베트남">Vietnam</option>
+                                        <option value="태국">Thailand</option>
                                     </select>
                                 </td>
                             </tr>
                             <tr class="appraisal_only">
                                 <td class="gubun req">
-                                    작품 크기
+                                    Artwork Size
                                 </td>
                                 <td class="naeyong">
-                                    <input type="text" id="artworkSize" name="artworkSize" placeholder="그림의 실제 사이즈를 작성해주세요">
+                                    <input type="text" id="artworkSize" name="artworkSize" placeholder="Please enter the actual size of the artwork">
                                 </td>
                             </tr>
                             <tr class="w100 appraisal_only">
                                 <td class="gubun">
-                                    작가명
+                                    Artist Name
                                 </td>
                                 <td class="naeyong">
-                                    <input type="text" id="artistName" name="artistName" placeholder="작가명을 입력해주세요">
+                                    <input type="text" id="artistName" name="artistName" placeholder="Please enter the artist name">
                                 </td>
                             </tr>
                             <tr class="w100 appraisal_only">
                                 <td class="gubun">
-                                    작품 제목
+                                    Artwork Title
                                 </td>
                                 <td class="naeyong">
-                                    <input type="text" id="artworkTitle" name="artworkTitle" placeholder="작품 제목을 입력해주세요">
+                                    <input type="text" id="artworkTitle" name="artworkTitle" placeholder="Please enter the artwork title">
                                 </td>
                             </tr>
                             <tr class="file_info appraisal_only">
                                 <td class="gubun req">
-                                    작품 사진 첨부
+                                    Upload Artwork Images
                                 </td>
                                 <td class="naeyong">
                                     <p class="file_box">
                                         <input type="file" id="uploadFile" name="uploadFile" multiple style="display:none;">
-                                        <input type="text" class="upload_name" value="파일선택" disabled="disabled">
+                                        <input type="text" class="upload_name" value="Select File" disabled="disabled">
                                         <button type="button" class="btn_file" onclick="$('#uploadFile').click();">
-                                            파일 선택
+                                            Select File
                                         </button>
-                                        <input type="text" id="fileUrl" name="fileUrl" placeholder="URL 입력 (https://)">
+                                        <input type="text" id="fileUrl" name="fileUrl" placeholder="Enter URL (https://)">
                                     </p>
                                 </td>
                                 <td>
                                     <ul>
-                                        <li>여러 개의 이미지를 한번에 선택하여 첨부해 주시거나, 이미지가 저장된 드라이브 URL을 등록해 주세요.</li>
-                                        <li>첨부파일은 <span>최대 100MB</span>까지 업로드 가능합니다. 업로드 전 ‘작품 사진 촬영 가이드’를 꼭 확인해 주세요.</li>
-                                        <li>작품 의뢰가 여러 건이거나, 더 큰 파일을 첨부해야 하는 경우 contact@artixel.kr로 문의해 주세요</li>
+                                        <li>Please select and upload multiple images at once, or provide a drive URL where the images are stored.</li>
+                                        <li>Attachments can be uploaded up to <span>100MB</span>. Please check the ‘Artwork Photography Guide’ before uploading.</li>
+                                        <li>If you have multiple requests or need to attach larger files, please contact contact@artixel.kr</li>
                                     </ul>
                                 </td>
                             </tr>
                             <tr class="textarea_info">
                                 <td class="gubun req">
-                                    문의 내용
+                                    Inquiry Details
                                 </td>
                                 <td class="naeyong">
-                                    <textarea id="content" name="content" placeholder="목적 : (매입/전시/보험/거래)&#13;&#10;작가 :&#13;&#10;연도 :"></textarea>
+                                    <textarea id="content" name="content" placeholder="Purpose: (Purchase/Exhibition/Insurance/Transaction)&#13;&#10;Artist:&#13;&#10;Year:"></textarea>
                                 </td>
                             </tr>
                             <tr class="agree_info">
@@ -297,7 +297,7 @@
                                         <input type="checkbox" id="agreePrivacy" name="agreePrivacy" value="Y" required>
                                         <span class="chk_box"></span>
                                         <span class="txt">
-                                            <span href="" class="btn_terms btn-open-terms" data-terms="service">개인정보 수집 이용</span> 동의
+                                            <span href="" class="btn_terms btn-open-terms" data-terms="service">Collection and Use of Personal Information</span> Agreement
                                         </span>
                                     </label>
                                 </td>
@@ -307,7 +307,7 @@
                         </table>
                         <div class="btn_wrap">
                             <div class="send">
-                                <a href="#" id="btnSubmit">문의하기</a>
+                                <a href="#" id="btnSubmit">Submit Inquiry</a>
                             </div>
                         </div>
                     </form>
@@ -328,45 +328,45 @@
             <div class="popup-content">
                 <div class="guide-top">
                     <div class="tit">
-                        작품 촬영 가이드
+                        Artwork Photography Guide
                     </div>
                     <div class="guide-txt">
                         <ul>
-                            <li>• 디지털 카메라 혹은 스마트폰으로도 촬영이 가능합니다. <span>RAW파일 혹은 고화질 모드</span>로 촬영하시기 바랍니다.</li>
-                            <li>• 촬영 각도에 의한 왜곡이 발생하지 않도록 <span>정면에서 촬영</span>해야 합니다.</li>
-                            <li>• 카메라 필터나 보정에 의해 왜곡이 발생하지 않도록 <span>기본 촬영 모드</span>에서 촬영해야 합니다.</li>
-                            <li>• 조명이나 직사광선에 의한 <span>빛 반사 현상이 없어야</span> 합니다.</li>
-                            <li>• <span>그림자가 생기지 않도록</span> 유의해서 촬영해야 합니다.</li>
+                            <li>• You can take photos using a digital camera or smartphone. Please shoot in <span>RAW format or high-resolution mode</span>.</li>
+                            <li>• To avoid distortion caused by shooting angles, take the photo <span>from the front</span>.</li>
+                            <li>• To prevent distortion caused by camera filters or adjustments, shoot in <span>default mode</span>.</li>
+                            <li>• There should be <span>no light reflection</span> caused by lighting or direct sunlight.</li>
+                            <li>• Make sure <span>no shadows appear</span> when taking photos.</li>
                         </ul>
-                        <img src="/img/guide_img01.png" alt="가이드 이미지">
+                        <img src="/img/guide_img01.png" alt="Guide image">
                     </div>
                 </div>
                 <div class="guide-content">
                     <ul>
                         <li class="bold">
-                            <span>1</span>백색의 기준을 잡기 위해 A4용지를 그림과 함께 두고 그림 전체가 나오도록 촬영합니다.
+                            <span>1</span>Place an A4 sheet next to the artwork to establish a white reference, and capture the entire artwork in the photo.
                         </li>
-                        <li>* 필요 사진 수: 1장</li>
+                        <li>* Required number of photos: 1</li>
                         <li>
-                            <img src="/img/guide_img02.png" alt="가이드 이미지">
+                            <img src="/img/guide_img02_en.png" alt="Guide image">
                         </li>
                     </ul>
                     <ul>
                         <li class="bold">
-                            <span>2</span>마치 도록에 있는 사진처럼 액자 등의 노출을 최소화하고 그림 전체가 사진에 가득차게 촬영합니다.
+                            <span>2</span>Minimize the exposure of frames and capture the artwork so that it fills the entire image, similar to catalog photos.
                         </li>
-                        <li>* 필요 사진 수: 1장</li>
+                        <li>* Required number of photos: 1</li>
                         <li>
-                            <img src="/img/guide_img03.png" alt="가이드 이미지">
+                            <img src="/img/guide_img03_en.png" alt="Guide image">
                         </li>
                     </ul>
                     <ul>
                         <li class="bold">
-                            <span>3</span>종이의 질감이 느껴질 정도로 가까이에서 촬영합니다. 최소 3컷 이상의 근접 사진이 필요합니다.
+                            <span>3</span>Take close-up shots so that the texture of the paper is visible. At least 3 close-up images are required.
                         </li>
-                        <li>* 필요 사진 수: 3장</li>
+                        <li>* Required number of photos: 3</li>
                         <li>
-                            <img src="/img/guide_img04.png" alt="가이드 이미지">
+                            <img src="/img/guide_img04_en.png" alt="Guide image">
                         </li>
                     </ul>
                 </div>
@@ -385,7 +385,7 @@
             </div>
             <div class="one_btn">
                 <button type="button" class="btn btn-primary st2" data-popup="center-confirm">
-                    확인
+                    Confirm
                 </button>
             </div>
         </div>
@@ -396,11 +396,11 @@
     <div class="center-popup-backdrop" id="alertPopup" style="display: none; z-index: 99999;">
         <div class="center-popup" style="text-align: center;">
             <div class="center-popup_body" style="padding-top: 30px; padding-bottom: 10px;">
-                <div class="center-popup_title" style="margin-bottom: 15px;">알림</div>
+                <div class="center-popup_title" style="margin-bottom: 15px;">Alert</div>
                 <div class="center-popup_txt" id="alertPopupTxt" style="word-break: keep-all; line-height: 1.5;"></div>
             </div>
             <div class="one_btn">
-                <button type="button" class="btn btn-primary st2" onclick="$('#alertPopup').fadeOut(200);">확인</button>
+                <button type="button" class="btn btn-primary st2" onclick="$('#alertPopup').fadeOut(200);">Confirm</button>
             </div>
         </div>
     </div>
@@ -420,7 +420,7 @@
                 $('#alertPopup').css('display', 'flex').hide().fadeIn(300);
             }
 
-            // [신규 추가] 유형 라디오 버튼 변경 시 UI 토글 및 데이터 초기화
+            // 유형 라디오 버튼 변경 시 UI 토글 및 데이터 초기화
             $('input[name="inquiryType"]').on('change', function() {
                 var typeVal = $(this).val();
                 if (typeVal === '일반문의') {
@@ -429,12 +429,12 @@
                     // 숨겨진 상태에서 데이터가 전송되지 않도록 값 초기화
                     $('#artworkSize, #artistName, #artworkTitle, #fileUrl').val('');
                     $('#uploadFile').val('');
-                    $('.upload_name').val('파일선택');
-                    $('#content').attr('placeholder', '문의하실 내용을 자유롭게 작성해주세요.');
+                    $('.upload_name').val('Select File');
+                    $('#content').attr('placeholder', 'Please feel free to write your inquiry.');
                 } else {
                     // 감정의뢰일 경우 다시 보여줌
                     $('.appraisal_only').show();
-                    $('#content').attr('placeholder', '목적 : (매입/전시/보험/거래)\n작가 :\n연도 :');
+                    $('#content').attr('placeholder', 'Purpose: (Purchase/Exhibition/Insurance/Transaction)\nArtist:\nYear:');
                 }
             });
 
@@ -457,7 +457,6 @@
                 if (val !== filtered) { $(this).val(filtered); }
             });
 
-            // 3. 비속어(금칙어) 사전 배열
             // [요청 1 반영] 영문 비속어 추가 (대표적인 영문 금칙어 포함)
             const badWords = [
                 '씨발', '시발', '개새끼', '병신', '지랄', '좆', '썅', '미친',
@@ -537,19 +536,19 @@
                     }
 
                     if (totalSize > maxSize) {
-                        alert('첨부파일의 총 용량은 최대 100MB까지 업로드 가능합니다.');
+                        alert('The total size of attachments can be up to 100MB.');
                         $(this).val('');
-                        $('.upload_name').val('파일선택');
+                        $('.upload_name').val('Select File');
                         return;
                     }
 
                     if (files.length === 1) {
                         $('.upload_name').val(fileNames[0]);
                     } else {
-                        $('.upload_name').val(fileNames[0] + ' 외 ' + (files.length - 1) + '건');
+                        $('.upload_name').val(fileNames[0] + ' and ' + (files.length - 1) + ' more');
                     }
                 } else {
-                    $('.upload_name').val('파일선택');
+                    $('.upload_name').val('Select File');
                 }
             });
 
@@ -568,61 +567,67 @@
 
                 for (let i = 0; i < inputsToCheck.length; i++) {
                     if (containsBadWord(inputsToCheck[i])) {
-                        alert('입력하신 내용에 금칙어(비속어)가 포함되어 있습니다. 바른 말을 사용해주세요.');
-                        return; // 전송 중단
+                        alert('Your input contains prohibited words (profanity). Please use appropriate language.');
+                        return;
                     }
                 }
 
                 // 유형 필수 검사
                 var inquiryTypeVal = $('input[name="inquiryType"]:checked').val();
-                if (!inquiryTypeVal) { alert('유형을 선택해주세요.'); return; }
+                if (!inquiryTypeVal) { alert('Please select a type.'); return; }
 
                 // 구분 (라디오 버튼) 및 기타 직접입력 처리
                 var categoryVal = $('input[name="category"]:checked').val();
-                if (!categoryVal) { alert('구분을 선택해주세요.'); return; }
+                if (!categoryVal) { alert('Please select a category.'); return; }
                 if (categoryVal === '기타') {
                     var etcVal = $('.etc_input').val().trim();
-                    if (!etcVal) { alert('기타 세부항목을 직접 입력해주세요.'); $('.etc_input').focus(); return; }
-                    // 전송 직전에 라디오 버튼의 값을 "기타 - 입력내용" 으로 변경하여 서버로 전송
-                    $('#cat_etc').val('기타 - ' + etcVal);
+                    if (!etcVal) { alert('Please enter the details for Others.'); $('.etc_input').focus(); return; }
+                    $('#cat_etc').val('Others - ' + etcVal);
                 }
 
                 // 성함
-                if (!$('#clientName').val().trim()) { alert('성함을 입력해주세요.'); $('#clientName').focus(); return; }
+                if (!$('#clientName').val().trim()) { alert('Please enter your name.'); $('#clientName').focus(); return; }
 
                 // 이메일 조합
                 var email1 = $('#email1').val().trim();
                 var emailDomain = $('#emailDomain').val().trim();
                 if (!email1 || !emailDomain) {
-                    alert('이메일을 정확히 입력해주세요.');
+                    alert('Please enter a valid email address.');
                     $('#email1').focus();
                     return;
                 }
                 $('#fullEmail').val(email1 + '@' + emailDomain);
 
                 // 연락처
-                if (!$('#contact').val().trim()) { alert('연락처를 입력해주세요.'); $('#contact').focus(); return; }
+                if (!$('#contact').val().trim()) { alert('Please enter your contact number.'); $('#contact').focus(); return; }
 
                 // 국가 선택
-                if (!$('#country').val().trim()) { alert('국가를 선택해주세요.'); $('#country').focus(); return; }
+                if (!$('#country').val().trim()) { alert('Please select a country.'); $('#country').focus(); return; }
 
                 // 감정의뢰일 때만 필수 검사 수행
                 if (inquiryTypeVal === '감정의뢰') {
-                    if (!$('#artworkSize').val().trim()) { alert('작품 크기를 입력해주세요.'); $('#artworkSize').focus(); return; }
+                    if (!$('#artworkSize').val().trim()) { alert('Please enter the artwork size.'); $('#artworkSize').focus(); return; }
 
                     var uploadFile = $('#uploadFile').val();
                     var fileUrl = $('#fileUrl').val().trim();
-                    if (!uploadFile && !fileUrl) { alert('작품 이미지 파일이나 URL을 첨부해주세요.'); return; }
+                    if (!uploadFile && !fileUrl) { alert('Please attach an artwork image file or URL.'); return; }
                     if (fileUrl && !fileUrl.startsWith('https://')) {
-                        alert('URL은 반드시 https:// 로 시작해야 합니다.'); $('#fileUrl').focus(); return;
+                        alert('The URL must start with https://.'); $('#fileUrl').focus(); return;
                     }
                 }
 
                 // 문의 내용
-                if (!$('#content').val().trim()) { alert('문의 내용을 입력해주세요.'); $('#content').focus(); return; }
+                if (!$('#content').val().trim()) { alert('Please enter your inquiry details.'); $('#content').focus(); return; }
 
                 // 개인정보 동의
-                if (!$('#agreePrivacy').is(':checked')) { alert('개인정보 수집 및 이용에 동의해주세요.'); return; }
+                if (!$('#agreePrivacy').is(':checked')) { alert('Please agree to the collection and use of personal information.'); return; }
+
+                // [요청 2 반영] 모든 유효성 검사 통과 후 폼 전송 직전에 영문 페이지 꼬리표 부착!
+                // 백엔드/DB 수정 없이 관리자 페이지에서 "[EN] 감정의뢰" 라고 출력되게 만듭니다.
+                var selectedType = $('input[name="inquiryType"]:checked');
+                if (!selectedType.val().startsWith('[EN]')) {
+                    selectedType.val('[EN] ' + selectedType.val());
+                }
 
                 // 모든 유효성 검사를 통과하면 즉시 오버레이 스피너 표출 (화면 클릭 및 뒤로가기 차단)
                 $('#global-upload-loader').addClass('active');

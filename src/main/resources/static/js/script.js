@@ -302,6 +302,138 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 </div>
             `.trim()
+        },
+        serviceEn:{
+            title: 'Consent to Collection and Use of Personal Information (Required)',
+            text: `
+                <div class="stack mt-24 terms_wrap">
+                    <div class="sec">
+                        <div class="text">
+                            <span>Artixel (hereinafter referred to as the "Company")</span> collects and uses personal information as follows for inquiry handling, responses, and service consultation. <br class="terms_br">
+                            Please review the details and provide your consent.
+                        </div>
+                    </div>
+                    <div class="sec">
+                        <div class="tit">
+                            1. Items Collected
+                        </div>
+                        <div class="text">
+                            ① Collected Items
+                            <ul>
+                                <li><span>Required:</span> Name, Category (Company/Individual), Contact Number, Email, Country, Inquiry Details</li>
+                                <li><span>Optional:</span> Artwork Title</li>
+                                <li><span>Attachments:</span> Artwork image files and/or URLs (may include artwork images)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="sec">
+                        <div class="tit">
+                            2. Purpose of Collection and Use
+                        </div>
+                        <div class="text">
+                            <ul>
+                                <li>Inquiry submission and identity verification</li>
+                                <li>Review of inquiry details, response, and guidance (contact/email reply)</li>
+                                <li>Service consultation, quotations, and communication related to service processing</li>
+                                <li>Dispute resolution, complaint handling, and internal reference for service quality improvement (within non-identifiable and minimal scope)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="sec">
+                        <div class="tit">
+                            3. Retention and Use Period
+                        </div>
+                        <div class="text">
+                            <span>Retained for 1 year from the date of inquiry completion and then destroyed</span><br class="terms_br">
+                            However, if retention is required by applicable laws, it will be stored for the period specified by such laws.
+                        </div>
+                    </div>
+                    <div class="sec">
+                        <div class="tit">
+                            4. Right to Refuse Consent and Disadvantages
+                        </div>
+                        <div class="text">
+                            Users have the right to refuse consent to the collection and use of personal information.<br class="terms_br">
+                            However, if you refuse to agree to or provide required items, <span>submission of inquiries and provision of responses may be restricted</span>.
+                        </div>
+                    </div>
+                    <div class="sec">
+                        <div class="tit">
+                            5. Notes on Attachments (Artwork Images)
+                        </div>
+                        <div class="text">
+                            Attachments may include artwork images and related information, and the Company will use them <span>only within the scope of inquiry handling and consultation purposes</span>.<br class="terms_br">
+                            Please do not enter or attach sensitive information (e.g., resident registration number, bank account number).
+                        </div><br class="terms_br">
+                    </div>
+                </div>
+            `.trim()
+        },
+        privacyEn: {
+            title: 'Consent to Collection and Use of Personal Information (Required)',
+            text: `
+                <div class="stack mt-24 terms_wrap">
+                    <div class="sec">
+                        <div class="text">
+                            <span>Artixel (hereinafter referred to as the "Company")</span> collects and uses personal information as follows for inquiry handling, responses, and service consultation.
+                            
+                        </div>
+                    </div>
+                    <div class="sec">
+                        <div class="tit">
+                            1. Items Collected
+                        </div>
+                        <div class="text">
+                            ① Collected Items
+                            <ul>
+                                <li><span>Required:</span> Name, Category (Company/Individual), Contact Number, Email, Country, Inquiry Details</li>
+                                <li><span>Optional:</span> Artwork Title</li>
+                                <li><span>Attachments:</span> Artwork image files and/or URLs (may include artwork images)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="sec">
+                        <div class="tit">
+                            2. Purpose of Collection and Use
+                        </div>
+                        <div class="text">
+                            <ul>
+                                <li>Inquiry submission and identity verification</li>
+                                <li>Review of inquiry details, response, and guidance (contact/email reply)</li>
+                                <li>Service consultation, quotations, and communication related to service processing</li>
+                                <li>Dispute resolution, complaint handling, and internal reference for service quality improvement (within non-identifiable and minimal scope)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="sec">
+                        <div class="tit">
+                            3. Retention and Use Period
+                        </div>
+                        <div class="text">
+                            <span>Retained for 1 year from the date of inquiry completion and then destroyed</span><br class="terms_br">
+                            However, if retention is required by applicable laws, it will be stored for the period specified by such laws.
+                        </div>
+                    </div>
+                    <div class="sec">
+                        <div class="tit">
+                            4. Right to Refuse Consent and Disadvantages
+                        </div>
+                        <div class="text">
+                            Users have the right to refuse consent to the collection and use of personal information.<br class="terms_br">
+                            However, if you refuse to agree to or provide required items, <span>submission of inquiries and provision of responses may be restricted</span>.
+                        </div>
+                    </div>
+                    <div class="sec">
+                        <div class="tit">
+                            5. Notes on Attachments (Artwork Images)
+                        </div>
+                        <div class="text">
+                            Attachments may include artwork images and related information, and the Company will use them <span>only within the scope of inquiry handling and consultation purposes</span>.<br class="terms_br">
+                            Please do not enter or attach sensitive information (e.g., resident registration number, bank account number).
+                        </div><br class="terms_br">
+                    </div>
+                </div>
+            `.trim()
         }
     };
 

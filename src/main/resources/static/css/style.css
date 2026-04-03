@@ -180,7 +180,7 @@
 .form_box tbody tr td.req::after{content: '*';}
 .form_box tbody tr td input{border: 1px solid #ddd; width: 100%; border-radius: 8px; height: 44px;}
 .form_box tbody tr.radio td input{height: inherit;margin-top: 0;margin-left: 0;}
-.form_box tbody tr.radio td label{display: flex;gap: 5px; align-items: center; }
+.form_box tbody tr.radio td label{display: flex;flex-shrink: 0; gap: 5px; align-items: center; }
 .form_box tbody tr.radio .naeyong{height: 44px; gap: 16px;}
 .form_box tbody tr.radio .naeyong input[type='radio']:checked{background-color: #000;}
 .form_box tbody tr.radio td input[type="radio"] {accent-color: #000;}
@@ -230,3 +230,7 @@ body.popup-open{overflow:hidden;}
 .guide-content ul li.bold{font-weight: 600;}
 .guide-content ul li:last-child{margin: 30px 0 60px;}
 .guide-content ul li span{background: #000;flex-shrink: 0;color: #fff;width: 36px;height: 36px;border-radius: 5px;display: inline-flex;align-items: center;justify-content: center;}
+
+/* 0402추가 */
+.en.contact_wrap .btn{max-width: 360px;}
+.form_box .file_info ul li:first-child{font-weight: 700;}

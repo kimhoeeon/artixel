@@ -18,13 +18,13 @@
             <div class="lang">
                 <a>KOR</a>
                 <div class="langmenu">
-                    <a href="/" class="active">KOR</a>
-                    <a href="/en">ENG</a>
+                    <a href="/">KOR</a>
+                    <a href="/en" class="active">ENG</a>
                 </div>
             </div>
         </div>
         <div class="hamberg">
-            <span>메뉴</span>
+            <span>Menu</span>
         </div>
     </div>
 </div>

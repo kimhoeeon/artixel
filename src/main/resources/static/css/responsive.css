@@ -252,5 +252,7 @@
     .sub_wrap.think_wrap .sec_box .title .small{font-size: 16px;}
 
     .guide-content ul li.bold{margin-bottom: 5px;}
+
+    .form_box tbody tr.radio .naeyong{flex-wrap: wrap;}
     
 }

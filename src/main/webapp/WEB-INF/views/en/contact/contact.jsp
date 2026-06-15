@@ -281,7 +281,7 @@
                                     <ul>
                                         <li>Please select and upload multiple images at once, or provide a drive URL where the images are stored.</li>
                                         <li>Attachments can be uploaded up to <span>100MB</span>. Please check the ‘Artwork Photography Guide’ before uploading.</li>
-                                        <li>If you have multiple requests or need to attach larger files, please contact contact@artixel.kr</li>
+                                        <li>If you have multiple requests or need to attach larger files, please contact art@artixel.kr</li>
                                     </ul>
                                 </td>
                             </tr>

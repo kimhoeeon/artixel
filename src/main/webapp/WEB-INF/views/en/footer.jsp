@@ -7,7 +7,7 @@
                 <a href="/en" class="ft_logo"><img src="/img/logo.png"></a>
                 <ul class="menu">
                     <li>
-                        <span>Company</span>Y1&Co., Ltd.
+                        <span>Company</span>Artixel Co., Ltd
                     </li>
                     <li>
                         <span>CEO</span>Song Ho-yong
@@ -16,13 +16,13 @@
                         <span>Phone</span>070-8949-8960
                     </li>
                     <li>
-                        <span>Biz Reg. No.</span>818-86-02892
+                        <span>Biz Reg. No.</span>670-87-03767
                     </li>
                     <li>
-                        <span>Email</span>contact@artixel.kr
+                        <span>Email</span>art@artixel.kr
                     </li>
                     <li>
-                        <span>Address</span>B1, 333-4 Siheung-daero, <br />Geumcheon-gu, Seoul 08604, South Korea
+                        <span>Address</span>F3, 333-4 Siheung-daero, <br />Geumcheon-gu, Seoul 08604, South Korea
                     </li>
                 </ul>
             </div>
